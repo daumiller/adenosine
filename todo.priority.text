@@ -1,0 +1,10 @@
+GtkComboBox
+GtkToggleButton
+GtkCheckButton
+GtkRadioButton
+GtkNotebook
+GtkTextView
+
+GtkTool*
+GtkMenu*
+GtkTree*

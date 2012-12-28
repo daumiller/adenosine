@@ -86,7 +86,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initWithExistingNative:(void *)native
 {
-  self = [super initWithExistingNative:native]; //not sure what to do (if anything?) about the warning we get here...?
+  self = [super initWithExistingNative:native]; //not sure what to do (if anything?) about the warning we get here...
   if(self)
   {
     g_signal_connect(_native, "destroy", G_CALLBACK(ConnectionProxy_DidClose),NULL);
