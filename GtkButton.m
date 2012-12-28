@@ -51,7 +51,6 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
     _native = (void *)gtk_button_new_with_mnemonic([text UTF8String]);
   [pool drain];
   [self installNativeLookup];
-  _connections = [[OFMutableArray alloc] init];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 + button                           { return [[[self alloc] init              ] autorelease]; }
@@ -78,35 +77,14 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   if(self) [self commonInit:text isAccel:YES];
   return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)dealloc
-{
-  if(GTK_IS_WIDGET(NATIVE_WIDGET))
-  {
-    self.delegate = nil;
-    [_connections release];
-  }
-  else
-    [_delegate release];
-  [super dealloc];
-}
 
 //==================================================================================================================================
 // Properites
 //==================================================================================================================================
--(id <GtkButtonDelegate>)delegate { return _delegate; }
--(void)setDelegate:(id <GtkButtonDelegate>)delegate
+-(void)setDelegate:(id)delegate
 {
-  if(_connections)
-  {
-    for(OFNumber *idNumber in _connections)
-      g_signal_handler_disconnect(_native, [idNumber unsignedLongValue]);
-    [_connections release];
-  }
-  _connections = [[OFMutableArray alloc] init];
-
-  if(_delegate) [_delegate release];
-  _delegate = [delegate retain];
+  [super setDelegate:delegate];
+  
   if(_delegate)
   {
     if([_delegate respondsToSelector:@selector(gtkButtonClicked:)])

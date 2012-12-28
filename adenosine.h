@@ -18,7 +18,10 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <adenosine/GtkRuntime.h>
+#import <adenosine/GtkWidget.h>
+#import <adenosine/GtkDrawingArea.h>
 #import <adenosine/GtkWindow.h>
 #import <adenosine/GtkButton.h>
 #import <adenosine/GtkLabel.h>
 #import <adenosine/GtkGrid.h>
+#import <adenosine/GtkFrame.h>

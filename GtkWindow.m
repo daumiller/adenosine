@@ -46,9 +46,27 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
++ window
+{
+  return [[[self alloc] init] autorelease];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 + windowWithType:(GtkWindowType)type;
 {
   return [[[self alloc] initWithType:type] autorelease];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- init
+{
+  self = [super init];
+  if(self)
+  {
+    _native = (void *)gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    [self installNativeLookup];
+    _connections = [[OFMutableArray alloc] init];
+    g_signal_connect(_native, "destroy", G_CALLBACK(ConnectionProxy_DidClose),NULL);
+  }
+  return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initWithType:(GtkWindowType)type
@@ -63,37 +81,16 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
   }
   return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)dealloc
-{
-  if(GTK_IS_WIDGET(NATIVE_WIDGET))
-  {
-    self.delegate = nil;
-    [_connections release];
-  }
-  else
-    [_delegate release];
-  [super dealloc];
-}
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
 @synthesize quitOnClose = _quitOnClose;
 //----------------------------------------------------------------------------------------------------------------------------------
--(id <GtkWindowDelegate>)delegate { return _delegate; }
--(void)setDelegate:(id <GtkWindowDelegate>)delegate
+-(void)setDelegate:(id)delegate
 {
-  if(_connections)
-  {
-    for(OFNumber *idNumber in _connections)
-      g_signal_handler_disconnect(_native, [idNumber unsignedLongValue]);
-    [_connections release];
-  }
-  _connections = [[OFMutableArray alloc] init];
+  [super setDelegate:delegate];
 
-  if(_delegate) [_delegate release];
-  _delegate = [delegate retain];
   if(_delegate)
   {
     if([_delegate respondsToSelector:@selector(gtkWindowShouldClose:)])
@@ -113,23 +110,23 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 -(GtkWidget *)modalParent                      { return [GtkWidget nativeToWrapper:gtk_window_get_transient_for(NATIVE_WINDOW)]; }
 -(void)setModalParent:(GtkWidget *)modalParent { gtk_window_set_transient_for(NATIVE_WINDOW, modalParent.native);                }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)isResizable                      { return gtk_window_get_resizable(NATIVE_WINDOW);       }
--(void)setIsResizable:(BOOL)isResizable { gtk_window_set_resizable(NATIVE_WINDOW, isResizable); }
+-(BOOL)isResizable                             { return gtk_window_get_resizable(NATIVE_WINDOW);                                 }
+-(void)setIsResizable:(BOOL)isResizable        { gtk_window_set_resizable(NATIVE_WINDOW, isResizable);                           }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)isModal                  { return gtk_window_get_modal(NATIVE_WINDOW);   }
--(void)setIsModal:(BOOL)isModal { gtk_window_set_modal(NATIVE_WINDOW, isModal); }
+-(BOOL)isModal                                 { return gtk_window_get_modal(NATIVE_WINDOW);                                     }
+-(void)setIsModal:(BOOL)isModal                { gtk_window_set_modal(NATIVE_WINDOW, isModal);                                   }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)isUrgent                   { return gtk_window_get_urgency_hint(NATIVE_WINDOW);    }
--(void)setIsUrgent:(BOOL)isUrgent { gtk_window_set_urgency_hint(NATIVE_WINDOW, isUrgent); }
+-(BOOL)isUrgent                                { return gtk_window_get_urgency_hint(NATIVE_WINDOW);                              }
+-(void)setIsUrgent:(BOOL)isUrgent              { gtk_window_set_urgency_hint(NATIVE_WINDOW, isUrgent);                           }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)isDecorated                      { return gtk_window_get_decorated(NATIVE_WINDOW);       }
--(void)setIsDecorated:(BOOL)isDecorated { gtk_window_set_decorated(NATIVE_WINDOW, isDecorated); }
+-(BOOL)isDecorated                             { return gtk_window_get_decorated(NATIVE_WINDOW);                                 }
+-(void)setIsDecorated:(BOOL)isDecorated        { gtk_window_set_decorated(NATIVE_WINDOW, isDecorated);                           }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)showInTaskbar                        { return !gtk_window_get_skip_taskbar_hint(NATIVE_WINDOW);         }
--(void)setShowInTaskbar:(BOOL)showInTaskbar { gtk_window_set_skip_taskbar_hint(NATIVE_WINDOW, !showInTaskbar); }
+-(BOOL)showInTaskbar                           { return !gtk_window_get_skip_taskbar_hint(NATIVE_WINDOW);                        }
+-(void)setShowInTaskbar:(BOOL)showInTaskbar    { gtk_window_set_skip_taskbar_hint(NATIVE_WINDOW, !showInTaskbar);                }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)showInPager                      { return !gtk_window_get_skip_pager_hint(NATIVE_WINDOW);       }
--(void)setShowInPager:(BOOL)showInPager { gtk_window_set_skip_pager_hint(NATIVE_WINDOW, !showInPager); }
+-(BOOL)showInPager                             { return !gtk_window_get_skip_pager_hint(NATIVE_WINDOW);                          }
+-(void)setShowInPager:(BOOL)showInPager        { gtk_window_set_skip_pager_hint(NATIVE_WINDOW, !showInPager);                    }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(OMSize)size
 {

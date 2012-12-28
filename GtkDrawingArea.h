@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkGrid.m
+// GtkDrawingArea.h
 /*==================================================================================================================================
 Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -17,38 +17,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#import "GtkNative.h"
-#import "GtkGrid.h"
+#import <ObjFW/ObjFW.h>
+#import <adenosine/GtkWidget.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
-#define NATIVE_GRID   ((struct _GtkGrid   *)_native)
-
-//==================================================================================================================================
-@implementation GtkGrid
+@interface GtkDrawingArea : GtkWidget
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+ grid
-{
-  return [[[self alloc] init] autorelease];
-}
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- init
-{
-  self = [super init];
-  if(self)
-  {
-    _native = (void *)gtk_grid_new();
-    [self installNativeLookup];
-  }
-  return self;
-}
-
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)width height:(int)height
-{
-  gtk_grid_attach(NATIVE_GRID, widget->_native, left, top, width, height);
-}
++ drawingArea;
 
 @end
 //==================================================================================================================================

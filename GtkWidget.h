@@ -18,20 +18,55 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <ObjFW/ObjFW.h>
+#import <atropine/atropine.h>
+
+//==================================================================================================================================
+typedef enum
+{
+  GTKMODIFIER_SHIFT   = 1 <<  0,
+  GTKMODIFIER_LOCK    = 1 <<  1,
+  GTKMODIFIER_CONTROL = 1 <<  2,
+  GTKMODIFIER_MOD1    = 1 <<  3,
+  GTKMODIFIER_MOD2    = 1 <<  4,
+  GTKMODIFIER_MOD3    = 1 <<  5,
+  GTKMODIFIER_MOD4    = 1 <<  6,
+  GTKMODIFIER_MOD5    = 1 <<  7,
+  GTKMODIFIER_BUTTON1 = 1 <<  8,
+  GTKMODIFIER_BUTTON2 = 1 <<  9,
+  GTKMODIFIER_BUTTON3 = 1 << 10,
+  GTKMODIFIER_BUTTON4 = 1 << 11,
+  GTKMODIFIER_BUTTON5 = 1 << 12,
+  GTKMODIFIER_SUPER   = 1 << 26,
+  GTKMODIFIER_HYPER   = 1 << 27,
+  GTKMODIFIER_META    = 1 << 28,
+  GTKMODIFIER_RELEASE = 1 << 30
+} GtkModifiers;
+
+//==================================================================================================================================
+@class GtkWidget;
+@protocol GtkWidgetDelegate <OFObject>
+@optional
+-(BOOL)gtkWidget:(GtkWidget *)widget drawToSurface:(OMSurface *)surface;
+-(BOOL)gtkWidget:(GtkWidget *)widget dimensionsChanged:(OMDimension)dimension;
+-(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget pointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+@end
 
 //==================================================================================================================================
 @interface GtkWidget : OFObject
 {
-  void *_native;
+  void           *_native;
+  id              _delegate;
+  OFMutableArray *_connections;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
 @property (readonly) void *native;
+@property (retain  ) id    delegate;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + nativeToWrapper:(void *)native;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-+ widget;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)installNativeLookup;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,10 +80,22 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 - (void) grabFocus;
 - (void) grabDefault;
 - (BOOL) isFocused;
-- (void) setProperty:(OFString *)property toValue:(void *)value;
-- (void *)getProperty:(OFString *)property;
+- (OMSize) allocatedSize;
+- (void  ) queueDrawDimension:(OMDimension)dimension;
+- (void  ) queueDrawAll;
+- (void  ) setProperty:(OFString *)property toValue:(void *)value;
+- (void *) getProperty:(OFString *)property;
 
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onDrawToSurface:(OMSurface *)surface;
+-(BOOL)onDimensionsChanged:(OMDimension)dimension;
+-(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

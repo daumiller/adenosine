@@ -48,13 +48,10 @@ typedef enum
 //==================================================================================================================================
 @interface GtkWindow : GtkBin
 {
-  id <GtkWindowDelegate> _delegate;
-  OFMutableArray        *_connections;
-  BOOL                   _quitOnClose;
+  BOOL _quitOnClose;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) id <GtkWindowDelegate> delegate;
 @property (assign) OFString *title;
 @property (assign) GtkWidget *modalParent;
 @property (assign) GtkWindowState state;
@@ -69,7 +66,9 @@ typedef enum
 @property (assign) BOOL quitOnClose;
 
 //----------------------------------------------------------------------------------------------------------------------------------
++ window;
 + windowWithType:(GtkWindowType)type;
+- init;
 - initWithType:(GtkWindowType)type;
 
 //----------------------------------------------------------------------------------------------------------------------------------

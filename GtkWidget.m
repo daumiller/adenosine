@@ -25,6 +25,50 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define ADENOSINE_NATIVE_LOOKUP_STRING "_adenosine_wrapper_widget"
 
 //==================================================================================================================================
+// Signal/Event -> Object Proxies
+//==================================================================================================================================
+static BOOL ConnectionProxy_Draw(struct _GtkWidget *widget, void *nativeCairoContext, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  OMSurface *surface = [[OMSurface alloc] initWithCairoContext:nativeCairoContext
+                                                         width:gtk_widget_get_allocated_width(widget)
+                                                        height:gtk_widget_get_allocated_height(widget)];
+  BOOL retval = [obj onDrawToSurface:surface];
+  [surface release];
+  return retval;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_Configure(struct _GtkWidget *widget, GdkEventConfigure *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  return [obj onDimensionsChanged:OMMakeDimensionFloats((float)event->x, (float)event->y, (float)event->width, (float)event->height)];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_ButtonPress(struct _GtkWidget *widget, GdkEventButton *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
+  OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
+  return [obj onButtonPressed:event->button local:local root:root modifiers:(GtkModifiers)event->state];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_ButtonRelease(struct _GtkWidget *widget, GdkEventButton *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
+  OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
+  return [obj onButtonReleased:event->button local:local root:root modifiers:(GtkModifiers)event->state];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMotion *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
+  OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
+  return [obj onPointerMovedAt:local root:root modifiers:(GtkModifiers)event->state];
+}
+
+//==================================================================================================================================
 @implementation GtkWidget
 
 //==================================================================================================================================
@@ -35,18 +79,19 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   if(!GTK_IS_WIDGET(native)) return nil;
   return (GtkWidget *)g_object_get_data((GObject *)native, ADENOSINE_NATIVE_LOOKUP_STRING);
 }
-//----------------------------------------------------------------------------------------------------------------------------------
-+ widget
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- init
 {
-  GtkWidget *widget = [[self alloc] init];
-  widget->_native = (void *)gtk_widget_new(GTK_TYPE_WIDGET, NULL);
-  [widget installNativeLookup];
-  return [widget autorelease];
+  self = [super init];
+  if(self)
+  {
+    _connections = [[OFMutableArray alloc] init];
+  }
+  return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)installNativeLookup
 {
-  //use by subclasses after setting up their _native
   g_object_set_data((gpointer)_native, ADENOSINE_NATIVE_LOOKUP_STRING, (gpointer)self);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -57,6 +102,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)dealloc
 {
+  if(GTK_IS_WIDGET(NATIVE_WIDGET))
+    self.delegate = nil;
+  else
+    [_delegate release];
+
+  [_connections release];
   [self destroy];
   [super dealloc]; 
 }
@@ -65,6 +116,53 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 // Properties
 //==================================================================================================================================
 @synthesize native = _native;
+//----------------------------------------------------------------------------------------------------------------------------------
+-(id)delegate { return _delegate; }
+-(void)setDelegate:(id)delegate
+{
+  for(OFNumber *idNumber in _connections)
+    g_signal_handler_disconnect(_native, [idNumber unsignedLongValue]);
+  [_connections release];
+  _connections = [[OFMutableArray alloc] init];
+
+  if(_delegate) [_delegate release];
+  _delegate = [delegate retain];
+  if(_delegate)
+  {
+    int eventFlags = gtk_widget_get_events(NATIVE_WIDGET);
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:drawToSurface:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "draw", G_CALLBACK(ConnectionProxy_Draw),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:dimensionsChanged:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "configure-event", G_CALLBACK(ConnectionProxy_Configure),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:buttonPressed:local:root:modifiers:)])
+    {
+      eventFlags |= GDK_BUTTON_PRESS_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "button-press-event", G_CALLBACK(ConnectionProxy_ButtonPress),NULL)]];
+    }
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:buttonReleased:local:root:modifiers:)])
+    {
+      eventFlags |= GDK_BUTTON_RELEASE_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "button-release-event", G_CALLBACK(ConnectionProxy_ButtonRelease),NULL)]];
+    }
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:pointerMovedAt:root:modifiers:)])
+    {
+      eventFlags |= GDK_POINTER_MOTION_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "motion-notify-event", G_CALLBACK(ConnectionProxy_PointerMotion),NULL)]];
+    }
+
+    gtk_widget_set_events(_native, eventFlags);
+  }
+}
 
 //==================================================================================================================================
 // Utilities
@@ -76,6 +174,23 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 - (void) grabFocus    { gtk_widget_grab_focus   (NATIVE_WIDGET); }
 - (void) grabDefault  { gtk_widget_grab_default (NATIVE_WIDGET); }
 - (BOOL) isFocused    { return (gtk_widget_is_focus(NATIVE_WIDGET) == TRUE); }
+//----------------------------------------------------------------------------------------------------------------------------------
+- (OMSize) allocatedSize
+{
+  return OMMakeSize((float)gtk_widget_get_allocated_width(NATIVE_WIDGET), (float)gtk_widget_get_allocated_height(NATIVE_WIDGET));
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+- (void) queueDrawDimension:(OMDimension)dimension
+{
+  gtk_widget_queue_draw_area(NATIVE_WIDGET, (int)dimension.origin.x  , (int)dimension.origin.y,
+                                            (int)dimension.size.width, (int)dimension.size.height);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- (void) queueDrawAll
+{
+  gtk_widget_queue_draw_area(NATIVE_WIDGET, 0, 0,
+    gtk_widget_get_allocated_width(NATIVE_WIDGET), gtk_widget_get_allocated_height(NATIVE_WIDGET));
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 - (void) setProperty:(OFString *)property toValue:(void *)value
 {
@@ -91,6 +206,34 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   void *data = (void *)g_object_get_data((GObject *)_native, [property UTF8String]);
   [pool drain];
   return data;
+}
+
+//==================================================================================================================================
+// (Default) Signal Handlers
+//==================================================================================================================================
+-(BOOL)onDrawToSurface:(OMSurface *)surface
+{
+  return [_delegate gtkWidget:self drawToSurface:surface];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onDimensionsChanged:(OMDimension)dimension
+{
+  return [_delegate gtkWidget:self dimensionsChanged:dimension];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+{
+  return [_delegate gtkWidget:self buttonPressed:button local:local root:root modifiers:modifiers];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+{
+  return [_delegate gtkWidget:self buttonReleased:button local:local root:root modifiers:modifiers];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+{
+  return [_delegate gtkWidget:self pointerMovedAt:local root:root modifiers:modifiers];
 }
 
 //==================================================================================================================================

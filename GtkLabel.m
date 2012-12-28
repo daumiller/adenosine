@@ -56,7 +56,6 @@ static void ConnectionProxy_PopulateContext(struct _GtkLabel *label, struct _Gtk
     else
       self.text = string;
   }
-  _connections = [[OFMutableArray alloc] init];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 + label                              { return [[[self alloc] init                 ] autorelease]; }
@@ -83,35 +82,14 @@ static void ConnectionProxy_PopulateContext(struct _GtkLabel *label, struct _Gtk
   if(self) [self commonInit:markup isMarkup:YES];
   return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)dealloc
-{
-  if(GTK_IS_WIDGET(NATIVE_WIDGET))
-  {
-    self.delegate = nil;
-    [_connections release];
-  }
-  else
-    [_delegate release];
-  [super dealloc];
-}
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
--(id <GtkLabelDelegate>)delegate { return _delegate; }
--(void)setDelegate:(id <GtkLabelDelegate>)delegate
+-(void)setDelegate:(id)delegate
 {
-  if(_connections)
-  {
-    for(OFNumber *idNumber in _connections)
-      g_signal_handler_disconnect(_native, [idNumber unsignedLongValue]);
-    [_connections release];
-  }
-  _connections = [[OFMutableArray alloc] init];
+  [super setDelegate:delegate];
 
-  if(_delegate) [_delegate release];
-  _delegate = [delegate retain];
   if(_delegate)
   {
     if([_delegate respondsToSelector:@selector(gtkLabel:populateContextMenu:)])

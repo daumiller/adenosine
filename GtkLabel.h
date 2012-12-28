@@ -30,13 +30,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //==================================================================================================================================
 @interface GtkLabel : GtkMisc
-{
-  id <GtkLabelDelegate> _delegate;
-  OFMutableArray       *_connections;
-}
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (retain) id <GtkLabelDelegate> delegate;
 @property (assign) OFString  *text;
 @property (assign) int        maxCharLength;
 @property (assign) BOOL       useMarkup;

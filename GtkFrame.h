@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkGrid.m
+// GtkFrame.h
 /*==================================================================================================================================
 Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -17,38 +17,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#import "GtkNative.h"
-#import "GtkGrid.h"
+#import <ObjFW/ObjFW.h>
+#import <adenosine/GtkBin.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
-#define NATIVE_GRID   ((struct _GtkGrid   *)_native)
+typedef enum
+{
+  GTKFRAMESHADOW_NONE,
+  GTKFRAMESHADOW_BEVEL_IN,
+  GTKFRAMESHADOW_BEVEL_OUT,
+  GTKFRAMESHADOW_SUNKEN,
+  GTKFRAMESHADOW_RAISED
+} GtkFrameShadow;
 
 //==================================================================================================================================
-@implementation GtkGrid
+@interface GtkFrame : GtkBin
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+ grid
-{
-  return [[[self alloc] init] autorelease];
-}
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- init
-{
-  self = [super init];
-  if(self)
-  {
-    _native = (void *)gtk_grid_new();
-    [self installNativeLookup];
-  }
-  return self;
-}
++ frame;
++ frameWithText:(OFString *)text;
+- init;
+- initWithText:(OFString *)text;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)width height:(int)height
-{
-  gtk_grid_attach(NATIVE_GRID, widget->_native, left, top, width, height);
-}
+@property (assign) OFString      *text;
+@property (assign) GtkFrameShadow shadow;
 
 @end
 //==================================================================================================================================

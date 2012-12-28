@@ -29,10 +29,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //==================================================================================================================================
 @interface GtkButton : GtkBin
-{
-  id <GtkButtonDelegate> _delegate;
-  OFMutableArray        *_connections;
-}
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + button;
@@ -43,7 +39,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 // + stockButton(...)
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (retain) id <GtkButtonDelegate> delegate;
 @property (assign) OFString *text;
 @property (assign) BOOL focusOnClick;
 //image...
