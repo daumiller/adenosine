@@ -41,7 +41,7 @@
   if(button == 1)
     [self drawBrush:widget X:local.x Y:local.y];
   else if(button == 2)
-    [buffer writeToPNG:@"canvas.png"];
+    [(OMBufferSurface *)buffer writeToPNG:@"canvas.png"];
   else if(button == 3)
   {
     [self clear];
@@ -61,8 +61,7 @@
 -(void)drawBrush:(GtkWidget *)widget X:(float)x Y:(float)y
 {
   OMDimension dimension = OMMakeDimensionFloats(x-3.0f, y-3.0f, 6.0f, 6.0f);
-  [buffer setColorR:0.0f G:1.0f B:0.0f];
-  printf("Dimension %f, %f, %f, %f\n", dimension.origin.x, dimension.origin.y, dimension.size.width, dimension.size.height);
+  [buffer setColorR:0.0f G:0.0f B:0.0f];
   [buffer dimension:dimension];
   [buffer fill];
   [widget queueDrawDimension:dimension];

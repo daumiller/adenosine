@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkWindow.h
+// GtkImage.m
 /*==================================================================================================================================
 Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -17,62 +17,71 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#import <ObjFW/ObjFW.h>
-#import <atropine/OMCoordinate.h>
-#import <adenosine/GtkBin.h>
+#import "GtkNative.h"
+#import "GtkImage.h"
 
 //==================================================================================================================================
-typedef enum
+#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
+#define NATIVE_IMAGE  ((struct _GtkImage  *)_native)
+
+//==================================================================================================================================
+@implementation GtkImage
+
+//==================================================================================================================================
+// Constructors/Destructor
+//==================================================================================================================================
++ image
 {
-  GTKWINDOWTYPE_TOPLEVEL,
-  GTKWINDOWTYPE_POPUP
-} GtkWindowType;
+  return [[[self alloc] init] autorelease];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ imageWithFile:(OFString *)filename
+{
+  return [[[self alloc] initWithFile:filename] autorelease];
+}
 //----------------------------------------------------------------------------------------------------------------------------------
-typedef enum
+- init
 {
-  GTKWINDOWSTATE_NORMAL,
-  GTKWINDOWSTATE_MINIMIZED,
-  GTKWINDOWSTATE_MAXIMIZED,
-  GTKWINDOWSTATE_FULLSCREEN,
-  GTKWINDOWSTATE_HIDDEN
-} GtkWindowState;
+  self = [super init];
+  if(self)
+  {
+    _native = (void *)gtk_image_new();
+    [self installNativeLookup];
+  }
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithFile:(OFString *)filename
+{
+ self = [super init];
+  if(self)
+  {
+    OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+    _native = (void *)gtk_image_new_from_file([filename UTF8String]);
+    [pool drain];
+    [self installNativeLookup];
+  }
+  return self; 
+}
 
 //==================================================================================================================================
-@class GtkWindow;
-@protocol GtkWindowDelegate <OFObject>
-@optional
--(BOOL)gtkWindowShouldClose:(GtkWindow *)window;
--(void)gtkWindowDidClose:(GtkWindow *)window;
+// Utilities
+//==================================================================================================================================
+-(void)clearImage
+{
+  gtk_image_clear(NATIVE_IMAGE);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)setImageFromFile:(OFString *)file
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_image_set_from_file(NATIVE_IMAGE, [file UTF8String]);
+  [pool drain];
+}
+
+//==================================================================================================================================
 @end
 
-//==================================================================================================================================
-@interface GtkWindow : GtkBin
-
-//----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) OFString *title;
-@property (assign) GtkWidget *modalParent;
-@property (assign) GtkWindowState state;
-@property (assign) BOOL isResizable;
-@property (assign) BOOL isModal;
-@property (assign) BOOL isUrgent;
-@property (assign) BOOL isDecorated;
-@property (assign) BOOL showInTaskbar;
-@property (assign) BOOL showInPager;
-@property (assign) BOOL quitOnClose;
-@property (assign) OMSize       size;
-@property (assign) OMCoordinate position;
-
-//----------------------------------------------------------------------------------------------------------------------------------
-+ window;
-+ windowWithType:(GtkWindowType)type;
-- init;
-- initWithType:(GtkWindowType)type;
-
-//----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onShouldClose;
--(void)onDidClose;
-
-@end
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -25,3 +25,4 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkLabel.h>
 #import <adenosine/GtkGrid.h>
 #import <adenosine/GtkFrame.h>
+#import <adenosine/GtkImage.h>

@@ -28,9 +28,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkGrid        Native_GtkGrid
 #define GtkFrame       Native_GtkFrame
 #define GtkDrawingArea Native_GtkDrawingArea
+#define GtkImage       Native_GtkImage
 
 #include <gtk/gtk.h>
 
+#undef GtkImage
 #undef GtkDrawingArea
 #undef GtkFrame
 #undef GtkGrid

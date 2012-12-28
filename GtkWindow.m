@@ -63,6 +63,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
   {
     _native = (void *)gtk_window_new(GTK_WINDOW_TOPLEVEL);
     [self installNativeLookup];
+    [self setProperty:@"quitOnClose" toValue:NULL];
     _connections = [[OFMutableArray alloc] init];
     g_signal_connect(_native, "destroy", G_CALLBACK(ConnectionProxy_DidClose),NULL);
   }
@@ -76,6 +77,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
   {
     _native = (void *)gtk_window_new((Native_GtkWindowType)type);
     [self installNativeLookup];
+    [self setProperty:@"quitOnClose" toValue:NULL];
     _connections = [[OFMutableArray alloc] init];
     g_signal_connect(_native, "destroy", G_CALLBACK(ConnectionProxy_DidClose),NULL);
   }
@@ -85,8 +87,6 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
-@synthesize quitOnClose = _quitOnClose;
-//----------------------------------------------------------------------------------------------------------------------------------
 -(void)setDelegate:(id)delegate
 {
   [super setDelegate:delegate];
@@ -127,6 +127,9 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)showInPager                             { return !gtk_window_get_skip_pager_hint(NATIVE_WINDOW);                          }
 -(void)setShowInPager:(BOOL)showInPager        { gtk_window_set_skip_pager_hint(NATIVE_WINDOW, !showInPager);                    }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)quitOnClose                             { return ([self getProperty:@"quitOnClose"] != NULL);                             }
+-(void)setQuitOnClose:(BOOL)quitOnClose        { [self setProperty:@"quitOnClose" toValue:(quitOnClose ? self : NULL)];          }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(OMSize)size
 {
@@ -172,7 +175,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 {
   if([_delegate respondsToSelector:@selector(gtkWindowDidClose:)])
     [_delegate gtkWindowDidClose:self];
-  if(_quitOnClose)
+  if(self.quitOnClose)
     [[GtkRuntime sharedRuntime] mainLoopQuit];
 }
 
