@@ -1,4 +1,6 @@
 adenosine
 =========
 
-Obj-C/ObjFW wrapper for GTK+
+ObjFW GTK+ wrapper
+
+Just some prototyping at the moment; nothing too serious here just yet.
