@@ -29,9 +29,13 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkFrame       Native_GtkFrame
 #define GtkDrawingArea Native_GtkDrawingArea
 #define GtkImage       Native_GtkImage
+#define GtkProgressBar Native_GtkProgressBar
+#define GtkBuilder     Native_GtkBuilder
 
 #include <gtk/gtk.h>
 
+#undef GtkBuilder
+#undef GtkProgressBar
 #undef GtkImage
 #undef GtkDrawingArea
 #undef GtkFrame

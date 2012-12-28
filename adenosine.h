@@ -26,3 +26,5 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkGrid.h>
 #import <adenosine/GtkFrame.h>
 #import <adenosine/GtkImage.h>
+#import <adenosine/GtkProgressBar.h>
+#import <adenosine/GtkBuilder.h>

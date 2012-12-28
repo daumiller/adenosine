@@ -74,6 +74,12 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
++ wrapExistingNative:(void *)native
+{
+  if(native == NULL) return nil;
+  return [[[self alloc] initWithExistingNative:native] autorelease];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 + nativeToWrapper:(void *)native
 {
   if(!GTK_IS_WIDGET(native)) return nil;
@@ -86,6 +92,18 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   if(self)
   {
     _connections = [[OFMutableArray alloc] init];
+  }
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithExistingNative:(void *)native
+{
+  self = [super init];
+  if(self)
+  {
+    _connections = [[OFMutableArray alloc] init];
+    _native      = native;
+    [self installNativeLookup];
   }
   return self;
 }
@@ -130,6 +148,7 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   if(_delegate)
   {
     int eventFlags = gtk_widget_get_events(NATIVE_WIDGET);
+    int original = eventFlags;
 
     if([_delegate respondsToSelector:@selector(gtkWidget:drawToSurface:)])
       [_connections addObject:[OFNumber numberWithUnsignedLong:
@@ -160,7 +179,8 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
         g_signal_connect(_native, "motion-notify-event", G_CALLBACK(ConnectionProxy_PointerMotion),NULL)]];
     }
 
-    gtk_widget_set_events(_native, eventFlags);
+    if(eventFlags != original)
+      gtk_widget_set_events(_native, eventFlags);
   }
 }
 
