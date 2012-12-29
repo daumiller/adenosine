@@ -34,16 +34,20 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + button;
 + buttonWithText:(OFString *)text;
 + buttonWithAccel:(OFString *)text;
++ buttonFromStock:(OFString *)stock;
 - initWithText:(OFString *)text;
 - initWithAccel:(OFString *)text;
-// + stockButton(...)
+- initFromStock:(OFString *)stock;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) OFString *text;
-@property (assign) BOOL focusOnClick;
-//image...
-//imagePosition...
-//imageAlwaysShown
+@property (assign) OFString   *text;
+@property (assign) BOOL        textIsStockId;
+@property (assign) BOOL        textIsAccel;
+@property (assign) BOOL        focusOnClick;
+@property (assign) GtkPosition imagePosition;
+
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void) setImageWidget:(GtkWidget *)imageWidget;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)onClicked;

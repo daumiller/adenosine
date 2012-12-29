@@ -30,15 +30,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ image
-{
-  return [[[self alloc] init] autorelease];
-}
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-+ imageWithFile:(OFString *)filename
-{
-  return [[[self alloc] initWithFile:filename] autorelease];
-}
++ image                                                   { return [[[self alloc] init                         ] autorelease]; }
++ imageWithFile:(OFString *)filename                      { return [[[self alloc] initWithFile:filename        ] autorelease]; }
++ imageFromStock:(OFString *)stock size:(GtkIconSize)size { return [[[self alloc] initFromStock:stock size:size] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
 - init
 {
@@ -53,11 +47,24 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initWithFile:(OFString *)filename
 {
- self = [super init];
+  self = [super init];
   if(self)
   {
     OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
     _native = (void *)gtk_image_new_from_file([filename UTF8String]);
+    [pool drain];
+    [self installNativeLookup];
+  }
+  return self; 
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initFromStock:(OFString *)stock size:(GtkIconSize)size
+{
+  self = [super init];
+  if(self)
+  {
+    OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+    _native = (void *)gtk_image_new_from_stock([stock UTF8String], (Native_GtkIconSize)size);
     [pool drain];
     [self installNativeLookup];
   }
@@ -76,6 +83,13 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 {
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   gtk_image_set_from_file(NATIVE_IMAGE, [file UTF8String]);
+  [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)setImageFromStock:(OFString *)stock size:(GtkIconSize)size
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_image_set_from_stock(NATIVE_IMAGE, [stock UTF8String], (Native_GtkIconSize)size);
   [pool drain];
 }
 

@@ -5,7 +5,12 @@
 @end
 
 @implementation TalkDelegate
--(void)gtkButtonClicked:(GtkButton *)button { printf("Hello World!\n"); }
+-(void)gtkButtonClicked:(GtkButton *)button
+{
+  printf("Hello World!\n");
+  GtkImage *img = (GtkImage *)[button getProperty:@"imageTarget"];
+  [img setImageFromStock:@"gtk-dialog-warning" size:GTKICONSIZE_DIALOG];
+}
 @end
 
 int main(int argc, char **argv)
@@ -18,11 +23,14 @@ int main(int argc, char **argv)
   GtkWindow *wndMain  = [builder windowByName:@"wndMain"];
   wndMain.quitOnClose = YES;
 
-  GtkButton *btnTalk = [builder buttonByName:@"btnTalk"];
-  btnTalk.delegate   = [[[TalkDelegate alloc] init] autorelease];
-
   GtkImage *imgIcon = [builder imageByName:@"imgIcon"];
   [imgIcon setImageFromFile:@"gtkImageLoadTest.png"];
+
+  GtkButton *btnTalk    = [builder buttonByName:@"btnTalk"];
+  btnTalk.delegate      = [[[TalkDelegate alloc] init] autorelease];
+  btnTalk.text          = @"gtk-about";
+  btnTalk.textIsStockId = YES;
+  [btnTalk setProperty:@"imageTarget" toValue:imgIcon];
 
   GtkProgressBar *prgStatus = [builder progressBarByName:@"prgStatus"];
   prgStatus.value    = 0.75f;

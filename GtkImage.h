@@ -26,14 +26,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 + image;
 + imageWithFile:(OFString *)filename;
-//+ imageWithStock:(...)
++ imageFromStock:(OFString *)stock size:(GtkIconSize)size;
 - init;
 - initWithFile:(OFString *)filename;
+- initFromStock:(OFString *)stock size:(GtkIconSize)size;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)clearImage;
 -(void)setImageFromFile:(OFString *)file;
-//-(void)setImageFromStock:(...)
+-(void)setImageFromStock:(OFString *)stock size:(GtkIconSize)size;
 
 //==================================================================================================================================
 @end

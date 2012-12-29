@@ -40,7 +40,26 @@ typedef enum
   GTKMODIFIER_HYPER   = 1 << 27,
   GTKMODIFIER_META    = 1 << 28,
   GTKMODIFIER_RELEASE = 1 << 30
-} GtkModifiers;
+} GtkModifier;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKPOSITION_LEFT,
+  GTKPOSITION_TOP,
+  GTKPOSITION_RIGHT,
+  GTKPOSITION_BOTTOM
+} GtkPosition;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKICONSIZE_INVALID,
+  GTKICONSIZE_MENU,
+  GTKICONSIZE_TOOLBAR_SMALL,
+  GTKICONSIZE_TOOLBAR_LARGE,
+  GTKICONSIZE_BUTTON,
+  GTKICONSIZE_DND,
+  GTKICONSIZE_DIALOG
+} GtkIconSize;
 
 //==================================================================================================================================
 @class GtkWidget;
@@ -48,9 +67,9 @@ typedef enum
 @optional
 -(BOOL)gtkWidget:(GtkWidget *)widget drawToSurface:(OMSurface *)surface;
 -(BOOL)gtkWidget:(GtkWidget *)widget dimensionsChanged:(OMDimension)dimension;
--(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
--(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
--(BOOL)gtkWidget:(GtkWidget *)widget pointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget pointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 @end
 
 //==================================================================================================================================
@@ -90,9 +109,9 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)onDrawToSurface:(OMSurface *)surface;
 -(BOOL)onDimensionsChanged:(OMDimension)dimension;
--(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
--(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
--(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers;
+-(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 
 //==================================================================================================================================
 @end

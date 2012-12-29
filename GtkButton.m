@@ -40,11 +40,13 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
--(void)commonInit:(OFString *)text isAccel:(BOOL)isAccel
+-(void)commonInit:(OFString *)text isAccel:(BOOL)isAccel isStock:(BOOL)isStock;
 {
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   if(text == nil)
     _native = (void *)gtk_button_new();
+  else if(isStock)
+    _native = (void *)gtk_button_new_from_stock([text UTF8String]);
   else if(!isAccel)
     _native = (void *)gtk_button_new_with_label([text UTF8String]);
   else
@@ -53,28 +55,36 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   [self installNativeLookup];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-+ button                           { return [[[self alloc] init              ] autorelease]; }
-+ buttonWithText :(OFString *)text { return [[[self alloc] initWithText:text ] autorelease]; }
-+ buttonWithAccel:(OFString *)text { return [[[self alloc] initWithAccel:text] autorelease]; }
++ button                            { return [[[self alloc] init               ] autorelease]; }
++ buttonWithText :(OFString *)text  { return [[[self alloc] initWithText:text  ] autorelease]; }
++ buttonWithAccel:(OFString *)text  { return [[[self alloc] initWithAccel:text ] autorelease]; }
++ buttonFromStock:(OFString *)stock { return [[[self alloc] initFromStock:stock] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
 - init
 {
   self = [super init];
-  if(self) [self commonInit:nil isAccel:NO];
+  if(self) [self commonInit:nil isAccel:NO isStock:NO];
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initWithText:(OFString *)text
 {
   self = [super init];
-  if(self) [self commonInit:text isAccel:NO];
+  if(self) [self commonInit:text isAccel:NO isStock:NO];
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initWithAccel:(OFString *)text
 {
   self = [super init];
-  if(self) [self commonInit:text isAccel:YES];
+  if(self) [self commonInit:text isAccel:YES isStock:NO];
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initFromStock:(OFString *)stock
+{
+  self = [super init];
+  if(self) [self commonInit:stock isAccel:NO isStock:YES];
   return self;
 }
 
@@ -101,8 +111,29 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   [pool drain];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)focusOnClick                       { return gtk_button_get_focus_on_click(NATIVE_BUTTON);        }
--(void)setFocusOnClick:(BOOL)focusOnClick { gtk_button_set_focus_on_click(NATIVE_BUTTON, focusOnClick); }
+-(BOOL)textIsStockId                               { return gtk_button_get_use_stock(NATIVE_BUTTON);                               }
+-(void)setTextIsStockId:(BOOL)textIsStockId        { gtk_button_set_use_stock(NATIVE_BUTTON, textIsStockId);                       }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)textIsAccel                                { return gtk_button_get_use_underline(NATIVE_BUTTON);                            }
+-(void)setTextIsAccel:(BOOL)textIsAccel            { gtk_button_set_use_underline(NATIVE_BUTTON, textIsAccel);                     }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)focusOnClick                                { return gtk_button_get_focus_on_click(NATIVE_BUTTON);                          }
+-(void)setFocusOnClick:(BOOL)focusOnClick          { gtk_button_set_focus_on_click(NATIVE_BUTTON, focusOnClick);                   }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(GtkPosition)imagePosition                        { return (GtkPosition)gtk_button_get_image_position(NATIVE_BUTTON);             }
+-(void)setImagePosition:(GtkPosition)imagePosition { gtk_button_set_image_position(NATIVE_BUTTON, (GtkPositionType)imagePosition); }
+//----------------------------------------------------------------------------------------------------------------------------------
+//GTK+ >= 3.6
+//-(BOOL)alwaysShowImage                             { return gtk_button_get_always_show_image(NATIVE_BUTTON);                       }
+//-(void)setAlwaysShowImage:(BOOL)alwaysShowImage    { gtk_button_set_always_show_image(NATIVE_BUTTON, alwaysShowImage);             }
+
+//==================================================================================================================================
+// Utilities
+//==================================================================================================================================
+-(void) setImageWidget:(GtkWidget *)imageWidget
+{
+  gtk_button_set_image(NATIVE_BUTTON, (struct _GtkWidget *)(imageWidget.native));
+}
 
 //==================================================================================================================================
 // Signal Handlers

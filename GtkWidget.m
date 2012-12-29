@@ -49,7 +49,7 @@ static BOOL ConnectionProxy_ButtonPress(struct _GtkWidget *widget, GdkEventButto
   GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
   OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
   OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
-  return [obj onButtonPressed:event->button local:local root:root modifiers:(GtkModifiers)event->state];
+  return [obj onButtonPressed:event->button local:local root:root modifiers:(GtkModifier)event->state];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 static BOOL ConnectionProxy_ButtonRelease(struct _GtkWidget *widget, GdkEventButton *event, void *data)
@@ -57,7 +57,7 @@ static BOOL ConnectionProxy_ButtonRelease(struct _GtkWidget *widget, GdkEventBut
   GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
   OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
   OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
-  return [obj onButtonReleased:event->button local:local root:root modifiers:(GtkModifiers)event->state];
+  return [obj onButtonReleased:event->button local:local root:root modifiers:(GtkModifier)event->state];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMotion *event, void *data)
@@ -65,7 +65,7 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
   OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
   OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
-  return [obj onPointerMovedAt:local root:root modifiers:(GtkModifiers)event->state];
+  return [obj onPointerMovedAt:local root:root modifiers:(GtkModifier)event->state];
 }
 
 //==================================================================================================================================
@@ -241,17 +241,17 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   return [_delegate gtkWidget:self dimensionsChanged:dimension];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+-(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   return [_delegate gtkWidget:self buttonPressed:button local:local root:root modifiers:modifiers];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+-(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   return [_delegate gtkWidget:self buttonReleased:button local:local root:root modifiers:modifiers];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifiers)modifiers
+-(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   return [_delegate gtkWidget:self pointerMovedAt:local root:root modifiers:modifiers];
 }
