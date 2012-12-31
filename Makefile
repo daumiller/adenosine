@@ -38,7 +38,8 @@ objects : GtkRuntime.o     \
           GtkDrawingArea.o \
           GtkImage.o       \
           GtkProgressBar.o \
-          GtkBuilder.o
+          GtkBuilder.o     \
+          GtkBox.o
 
 #===================================================================================================================================
 %.o : %.m

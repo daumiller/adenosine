@@ -91,6 +91,7 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   if(native_is_gtk_type_named(native, "GtkLabel"      )) return [[[GtkLabel       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkImage"      )) return [[[GtkImage       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkProgressBar")) return [[[GtkProgressBar alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkBox"        )) return [[[GtkBox         alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkFrame"      )) return [[[GtkFrame       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkGrid"       )) return [[[GtkGrid        alloc] initWithExistingNative:native] autorelease];
 

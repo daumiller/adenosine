@@ -28,3 +28,4 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkImage.h>
 #import <adenosine/GtkProgressBar.h>
 #import <adenosine/GtkBuilder.h>
+#import <adenosine/GtkBox.h>

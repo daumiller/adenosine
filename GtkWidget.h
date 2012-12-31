@@ -89,6 +89,7 @@ typedef enum
 + (id) wrapExistingNative:(void *)native;
 + nativeToWrapper:(void *)native;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithExistingNative:(void *)native;
 -(void)installNativeLookup;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)destroy;

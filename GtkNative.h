@@ -32,9 +32,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkIconSize    Native_GtkIconSize
 #define GtkProgressBar Native_GtkProgressBar
 #define GtkBuilder     Native_GtkBuilder
+#define GtkBox         Native_GtkBox
+#define GtkVBox        Native_GtkVBox
+#define GtkHBox        Native_GtkHBox
 
 #include <gtk/gtk.h>
 
+#undef GtkHBox
+#undef GtkVBox
+#undef GtkBox
 #undef GtkBuilder
 #undef GtkProgressBar
 #undef GtkIconSize
