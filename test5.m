@@ -20,19 +20,20 @@ int main(int argc, char **argv)
 
   GtkBuilder *builder = [GtkBuilder builderWithFile:@"test5.ui"];
 
-  GtkWindow *wndMain  = [builder windowByName:@"wndMain"];
+  GtkWindow *wndMain  = [builder widgetByName:@"wndMain"];
+  [wndMain wrapAllChildren];
   wndMain.quitOnClose = YES;
 
-  GtkImage *imgIcon = [builder imageByName:@"imgIcon"];
+  GtkImage *imgIcon = [builder widgetByName:@"imgIcon"];
   [imgIcon setImageFromFile:@"gtkImageLoadTest.png"];
 
-  GtkButton *btnTalk    = [builder buttonByName:@"btnTalk"];
+  GtkButton *btnTalk    = [builder widgetByName:@"btnTalk"];
   btnTalk.delegate      = [[[TalkDelegate alloc] init] autorelease];
   btnTalk.text          = @"gtk-about";
   btnTalk.textIsStockId = YES;
   [btnTalk setProperty:@"imageTarget" toValue:imgIcon];
 
-  GtkProgressBar *prgStatus = [builder progressBarByName:@"prgStatus"];
+  GtkProgressBar *prgStatus = [builder widgetByName:@"prgStatus"];
   prgStatus.value    = 0.75f;
   prgStatus.text     = @"loading...";
   prgStatus.showText = YES;

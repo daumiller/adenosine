@@ -50,3 +50,5 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef GtkBin
 #undef GtkContainer
 #undef GtkWidget
+
+#define native_is_gtk_type_named(x,y) g_type_is_a(G_OBJECT_TYPE(x), g_type_from_name(y))

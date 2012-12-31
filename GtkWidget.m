@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkWidget.h"
+#import "adenosine.h"
 
 //==================================================================================================================================
 #define NATIVE_WIDGET ((struct _GtkWidget *)_native)
@@ -74,9 +74,26 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ wrapExistingNative:(void *)native
++(BOOL)isWrapped:(void *)native
+{
+  return ([GtkWidget nativeToWrapper:native] != nil);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ (id) wrapExistingNative:(void *)native
 {
   if(native == NULL) return nil;
+
+  //NOTE: be sure to check types in reverse hierarchical order.
+  //(that is, native_is_gtk_type_named() will return YES for any valid ancenstor names)
+  if(native_is_gtk_type_named(native, "GtkWindow"     )) return [[[GtkWindow      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkDrawingArea")) return [[[GtkDrawingArea alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkButton"     )) return [[[GtkButton      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkLabel"      )) return [[[GtkLabel       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkImage"      )) return [[[GtkImage       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkProgressBar")) return [[[GtkProgressBar alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkFrame"      )) return [[[GtkFrame       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkGrid"       )) return [[[GtkGrid        alloc] initWithExistingNative:native] autorelease];
+
   return [[[self alloc] initWithExistingNative:native] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

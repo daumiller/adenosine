@@ -47,7 +47,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)width height:(int)height
 {
-  gtk_grid_attach(NATIVE_GRID, widget->_native, left, top, width, height);
+  gtk_grid_attach(NATIVE_GRID, widget.native, left, top, width, height);
 }
 
 @end

@@ -85,7 +85,8 @@ typedef enum
 @property (retain  ) id    delegate;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+ wrapExistingNative:(void *)native;
++ (BOOL) isWrapped:(void *)native;
++ (id) wrapExistingNative:(void *)native;
 + nativeToWrapper:(void *)native;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)installNativeLookup;

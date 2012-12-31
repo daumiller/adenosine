@@ -40,13 +40,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void *)nativeByName:(OFString *)name;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(GtkWidget      *)widgetByName     :(OFString *)name;
--(GtkLabel       *)labelByName      :(OFString *)name;
--(GtkButton      *)buttonByName     :(OFString *)name;
--(GtkImage       *)imageByName      :(OFString *)name;
--(GtkProgressBar *)progressBarByName:(OFString *)name;
--(GtkWindow      *)windowByName     :(OFString *)name;
+-(id)widgetByName:(OFString *)name;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)addFromFile:(OFString *)filename;

@@ -87,13 +87,14 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   return result;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//NOTE: it's important to call wrapExistingNative for the highest level class needed, in case it needs to initialize extra data
--(GtkWidget      *)widgetByName     :(OFString *)name { return [GtkWidget      wrapExistingNative:[self nativeByName:name]]; }
--(GtkLabel       *)labelByName      :(OFString *)name { return [GtkLabel       wrapExistingNative:[self nativeByName:name]]; }
--(GtkButton      *)buttonByName     :(OFString *)name { return [GtkButton      wrapExistingNative:[self nativeByName:name]]; }
--(GtkImage       *)imageByName      :(OFString *)name { return [GtkImage       wrapExistingNative:[self nativeByName:name]]; }
--(GtkProgressBar *)progressBarByName:(OFString *)name { return [GtkProgressBar wrapExistingNative:[self nativeByName:name]]; }
--(GtkWindow      *)windowByName     :(OFString *)name { return [GtkWindow      wrapExistingNative:[self nativeByName:name]]; }
+-(id)widgetByName:(OFString *)name
+{
+  void *native = [self nativeByName:name];
+  //this object may already have been wrapped; double check before creating a new one
+  GtkWidget *wrap = [GtkWidget nativeToWrapper:native];
+  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:native];
+  return wrap;
+}
 
 //==================================================================================================================================
 // Loaders
