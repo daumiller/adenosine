@@ -1,7 +1,7 @@
 //==================================================================================================================================
 // GtkWindow.h
 /*==================================================================================================================================
-Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
+Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
 This file is part of the adenosine library.
 

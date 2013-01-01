@@ -1,7 +1,7 @@
 //==================================================================================================================================
 // GtkGrid.h
 /*==================================================================================================================================
-Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
+Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
 This file is part of the adenosine library.
 
@@ -23,10 +23,22 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @interface GtkGrid : GtkContainer
 
 //----------------------------------------------------------------------------------------------------------------------------------
+@property (assign) BOOL forceEqualRows;
+@property (assign) BOOL forceEqualColumns;
+@property (assign) unsigned int rowSpacing;
+@property (assign) unsigned int columnSpacing;
+
+//----------------------------------------------------------------------------------------------------------------------------------
 + grid;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)width height:(int)height;
+-(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight;
+-(void)attachWidget:(GtkWidget *)widget nextTo:(GtkWidget *)sibling onSide:(GtkPosition)position width:(int)colWidth height:(int)rowHeight;
+-(GtkWidget *)childAtColumn:(int)x andRow:(int)y;
+-(void *)nativeAtColumn:(int)x andRow:(int)y;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)insertRowAtIndex:(int)index;
+-(void)insertColumnAtIndex:(int)index;
 
 @end
 //==================================================================================================================================

@@ -1,7 +1,7 @@
 //==================================================================================================================================
 // GtkNative.h
 /*==================================================================================================================================
-Copyright © 2012 Dillon Aumiller <dillonaumiller@gmail.com>
+Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
 This file is part of the adenosine library.
 
@@ -33,13 +33,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkProgressBar Native_GtkProgressBar
 #define GtkBuilder     Native_GtkBuilder
 #define GtkBox         Native_GtkBox
-#define GtkVBox        Native_GtkVBox
-#define GtkHBox        Native_GtkHBox
 
 #include <gtk/gtk.h>
 
-#undef GtkHBox
-#undef GtkVBox
 #undef GtkBox
 #undef GtkBuilder
 #undef GtkProgressBar
