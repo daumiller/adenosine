@@ -25,21 +25,23 @@ test5 : test5.o library
 #===================================================================================================================================
 library : objects
 
-objects : GtkRuntime.o     \
-          GtkWidget.o      \
-          GtkContainer.o   \
-          GtkBin.o         \
-          GtkWindow.o      \
-          GtkMisc.o        \
-          GtkLabel.o       \
-          GtkButton.o      \
-          GtkGrid.o        \
-          GtkFrame.o       \
-          GtkDrawingArea.o \
-          GtkImage.o       \
-          GtkProgressBar.o \
-          GtkBuilder.o     \
-          GtkBox.o
+objects : GtkBin.o          \
+          GtkBox.o          \
+          GtkBuilder.o      \
+          GtkButton.o       \
+          GtkComboBox.o     \
+          GtkComboBoxText.o \
+          GtkContainer.o    \
+          GtkDrawingArea.o  \
+          GtkFrame.o        \
+          GtkGrid.o         \
+          GtkImage.o        \
+          GtkLabel.o        \
+          GtkMisc.o         \
+          GtkProgressBar.o  \
+          GtkRuntime.o      \
+          GtkWidget.o       \
+          GtkWindow.o
 
 #===================================================================================================================================
 %.o : %.m
