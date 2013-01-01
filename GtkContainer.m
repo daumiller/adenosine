@@ -40,6 +40,14 @@ static void WrapAllChildren_Proxy(Native_GtkWidget *child, gpointer gp)
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
+- init
+{
+  self = [super init];
+  if(self)
+    _children = [[OFMutableArray alloc] init];
+  return self;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 - initWithExistingNative:(void *)native
 {
   self = [super initWithExistingNative:native];
