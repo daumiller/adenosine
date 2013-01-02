@@ -31,3 +31,4 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkBox.h>
 #import <adenosine/GtkComboBox.h>
 #import <adenosine/GtkComboBoxText.h>
+#import <adenosine/GtkNotebook.h>

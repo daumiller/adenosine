@@ -38,6 +38,7 @@ objects : GtkBin.o          \
           GtkImage.o        \
           GtkLabel.o        \
           GtkMisc.o         \
+          GtkNotebook.o     \
           GtkProgressBar.o  \
           GtkRuntime.o      \
           GtkWidget.o       \

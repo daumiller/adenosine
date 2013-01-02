@@ -35,9 +35,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkBox          Native_GtkBox
 #define GtkComboBox     Native_GtkComboBox
 #define GtkComboBoxText Native_GtkComboBoxText
+#define GtkNotebook     Native_GtkNotebook
 
 #include <gtk/gtk.h>
 
+#undef GtkNotebook
 #undef GtkComboBoxText
 #undef GtkComboBox
 #undef GtkBox
