@@ -35,6 +35,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + buttonWithText:(OFString *)text;
 + buttonWithAccel:(OFString *)text;
 + buttonFromStock:(OFString *)stock;
+- initButton;
 - initWithText:(OFString *)text;
 - initWithAccel:(OFString *)text;
 - initFromStock:(OFString *)stock;

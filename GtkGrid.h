@@ -30,6 +30,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + grid;
+- initGrid;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight;

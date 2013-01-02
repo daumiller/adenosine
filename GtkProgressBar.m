@@ -32,10 +32,10 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 + progressBar
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initProgressBar] autorelease];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initProgressBar
 {
   self = [super init];
   if(self)

@@ -32,10 +32,10 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 + grid
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initGrid] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- init
+- initGrid
 {
   self = [super init];
   if(self)

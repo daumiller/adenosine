@@ -30,11 +30,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ image                                                   { return [[[self alloc] init                         ] autorelease]; }
++ image                                                   { return [[[self alloc] initImage                    ] autorelease]; }
 + imageWithFile:(OFString *)filename                      { return [[[self alloc] initWithFile:filename        ] autorelease]; }
 + imageFromStock:(OFString *)stock size:(GtkIconSize)size { return [[[self alloc] initFromStock:stock size:size] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initImage
 {
   self = [super init];
   if(self)

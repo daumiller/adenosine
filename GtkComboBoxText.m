@@ -31,10 +31,10 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ comboBoxText      { return [[[self alloc] init         ] autorelease]; }
-+ comboBoxTextEntry { return [[[self alloc] initWithEntry] autorelease]; }
++ comboBoxText      { return [[[self alloc] initComboBoxText ] autorelease]; }
++ comboBoxTextEntry { return [[[self alloc] initWithEntry    ] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initComboBoxText
 {
   self = [super init];
   if(self)

@@ -32,7 +32,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 + frame
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initFrame] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 + frameWithText:(OFString *)text;
@@ -40,7 +40,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   return [[[self alloc] initWithText:text] autorelease];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initFrame
 {
   self = [super init];
   if(self)

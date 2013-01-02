@@ -47,6 +47,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + labelWithText:(OFString *)text;
 + labelWithMarkup:(OFString *)markup;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initLabel;
 - initWithText:(OFString *)text;
 - initWithMarkup:(OFString *)markup;
 

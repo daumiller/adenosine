@@ -27,7 +27,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + image;
 + imageWithFile:(OFString *)filename;
 + imageFromStock:(OFString *)stock size:(GtkIconSize)size;
-- init;
+- initImage;
 - initWithFile:(OFString *)filename;
 - initFromStock:(OFString *)stock size:(GtkIconSize)size;
 

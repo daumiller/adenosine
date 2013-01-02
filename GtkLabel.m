@@ -58,11 +58,11 @@ static void ConnectionProxy_PopulateContext(struct _GtkLabel *label, struct _Gtk
   }
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-+ label                              { return [[[self alloc] init                 ] autorelease]; }
++ label                              { return [[[self alloc] initLabel            ] autorelease]; }
 + labelWithText  :(OFString *)text   { return [[[self alloc] initWithText:text    ] autorelease]; }
 + labelWithMarkup:(OFString *)markup { return [[[self alloc] initWithMarkup:markup] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initLabel
 {
   self = [super init];
   if(self) [self commonInit:nil isMarkup:NO];

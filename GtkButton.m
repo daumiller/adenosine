@@ -55,12 +55,12 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   [self installNativeLookup];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-+ button                            { return [[[self alloc] init               ] autorelease]; }
++ button                            { return [[[self alloc] initButton         ] autorelease]; }
 + buttonWithText :(OFString *)text  { return [[[self alloc] initWithText:text  ] autorelease]; }
 + buttonWithAccel:(OFString *)text  { return [[[self alloc] initWithAccel:text ] autorelease]; }
 + buttonFromStock:(OFString *)stock { return [[[self alloc] initFromStock:stock] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
-- init
+- initButton
 {
   self = [super init];
   if(self) [self commonInit:nil isAccel:NO isStock:NO];

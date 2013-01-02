@@ -48,7 +48,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 //==================================================================================================================================
 + window
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initWindow] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 + windowWithType:(GtkWindowType)type;
@@ -56,7 +56,7 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
   return [[[self alloc] initWithType:type] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- init
+- initWindow
 {
   self = [super init];
   if(self)

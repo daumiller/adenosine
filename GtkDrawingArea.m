@@ -31,10 +31,10 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 + (GtkDrawingArea *)drawingArea
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initDrawingArea] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- init
+- initDrawingArea
 {
   self = [super init];
   if(self)
