@@ -89,6 +89,26 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 -(void)insertRowAtIndex:(int)index    { gtk_grid_insert_row(NATIVE_GRID, index);    }
 -(void)insertColumnAtIndex:(int)index { gtk_grid_insert_column(NATIVE_GRID, index); }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight
+{
+  gtk_grid_attach(NATIVE_GRID, gtk_drawing_area_new(), left, top, colWidth, rowHeight);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight hExpand:(BOOL)hExpand hAlign:(GtkAlign)hAlign vExpand:(BOOL)vExpand vAlign:(GtkAlign)vAlign;
+{
+  void *da = gtk_drawing_area_new();
+  gtk_widget_set_hexpand(da, hExpand); gtk_widget_set_halign(da, (Native_GtkAlign)hAlign);
+  gtk_widget_set_vexpand(da, vExpand); gtk_widget_set_valign(da, (Native_GtkAlign)vAlign);
+  gtk_grid_attach(NATIVE_GRID, da, left, top, colWidth, rowHeight);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)attachSpacerLeft:(int)left top:(int)top pixelWidth:(int)width pixelHeight:(int)height
+{
+  void *da = gtk_drawing_area_new();
+  gtk_widget_set_size_request(da, width, height);
+  gtk_grid_attach(NATIVE_GRID, da, left, top, 1, 1);
+}
 
 //==================================================================================================================================
 @end

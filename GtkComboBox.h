@@ -25,7 +25,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @protocol GtkComboBoxDelegate <OFObject>
 @optional
 -(void)gtkComboBoxChanged:(GtkComboBox *)combo;
--(OFString *)gtkComboBox:(GtkComboBox *)combo formatEntry:(OFString *)entryText;
+-(OFString *)gtkComboBox:(GtkComboBox *)combo formatEntry:(OFString *)itemPath;
 @end
 
 //==================================================================================================================================
@@ -47,7 +47,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)onChanged;
--(OFString *)onFormatEntry:(OFString *)entryText;
+-(OFString *)onFormatEntry:(OFString *)itemPath;
 
 @end
 //==================================================================================================================================

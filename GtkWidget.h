@@ -52,6 +52,14 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
+  GTKALIGN_FILL,
+  GTKALIGN_START,
+  GTKALIGN_END,
+  GTKALIGN_CENTER
+} GtkAlign;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
   GTKICONSIZE_INVALID,
   GTKICONSIZE_MENU,
   GTKICONSIZE_TOOLBAR_SMALL,
@@ -81,8 +89,13 @@ typedef enum
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (readonly) void *native;
-@property (retain  ) id    delegate;
+@property (readonly) void    *native;
+@property (retain  ) id       delegate;
+@property (assign  ) OMSize   minimumSize;
+@property (assign  ) GtkAlign horizontalAlign;
+@property (assign  ) BOOL     horizontalExpand;
+@property (assign  ) GtkAlign verticalAlign;
+@property (assign  ) BOOL     verticalExpand;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + (BOOL) isWrapped:(void *)native;

@@ -60,7 +60,7 @@ static void ConnectionProxy_PageChanged(struct _GtkNotebook *notebook, struct _G
 //==================================================================================================================================
 + notebook
 {
-  return [[[self alloc] init] autorelease];
+  return [[[self alloc] initNotebook] autorelease];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 - init

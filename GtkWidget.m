@@ -201,6 +201,30 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
       gtk_widget_set_events(_native, eventFlags);
   }
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(OMSize)minimumSize
+{
+  int iWidth, iHeight;
+  gtk_widget_get_size_request(NATIVE_WIDGET, &iWidth, &iHeight);
+  return OMMakeSize((float)iWidth, (float)iHeight);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)setMinimumSize:(OMSize)minimumSize
+{
+  gtk_widget_set_size_request(NATIVE_WIDGET, (int)minimumSize.width, (int)minimumSize.height);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(GtkAlign)horizontalAlign                          { return (GtkAlign)gtk_widget_get_halign(NATIVE_WIDGET);                  }
+-(void)setHorizontalAlign:(GtkAlign)horizontalAlign { gtk_widget_set_halign(NATIVE_WIDGET, (Native_GtkAlign)horizontalAlign); }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(GtkAlign)verticalAlign                            { return (GtkAlign)gtk_widget_get_valign(NATIVE_WIDGET);                  }
+-(void)setVerticalAlign:(GtkAlign)verticalAlign     { gtk_widget_set_valign(NATIVE_WIDGET, (Native_GtkAlign)verticalAlign);   }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)horizontalExpand                             { return gtk_widget_get_hexpand(NATIVE_WIDGET);                           }
+-(void)setHorizontalExpand:(BOOL)horizontalExpand   { gtk_widget_set_hexpand(NATIVE_WIDGET, horizontalExpand);                }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)verticalExpand                               { return gtk_widget_get_vexpand(NATIVE_WIDGET);                           }
+-(void)setVerticalExpand:(BOOL)verticalExpand       { gtk_widget_set_vexpand(NATIVE_WIDGET, verticalExpand);                  }
 
 //==================================================================================================================================
 // Utilities

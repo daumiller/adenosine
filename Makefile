@@ -2,7 +2,7 @@
 all : tests library
 
 #===================================================================================================================================
-tests : test0 test1 test2 test3 test4 test5
+tests : test0 test1 test2 test3 test4 test5 test6
 
 test0 : test0.o library
 	clang test0.o Gtk*.o -o test0.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
@@ -21,6 +21,9 @@ test4 : test4.o library
 
 test5 : test5.o library
 	clang test5.o Gtk*.o -o test5.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+
+test6 : test6.o library
+	clang test6.o Gtk*.o -o test6.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 #===================================================================================================================================
 library : objects

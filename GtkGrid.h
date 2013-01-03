@@ -40,6 +40,10 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)insertRowAtIndex:(int)index;
 -(void)insertColumnAtIndex:(int)index;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight;
+-(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight hExpand:(BOOL)hExpand hAlign:(GtkAlign)hAlign vExpand:(BOOL)vExpand vAlign:(GtkAlign)vAlign;
+-(void)attachSpacerLeft:(int)left top:(int)top pixelWidth:(int)width pixelHeight:(int)height;
 
 @end
 //==================================================================================================================================

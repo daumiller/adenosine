@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #define GtkWidget       Native_GtkWidget
+#define GtkAlign        Native_GtkAlign
 #define GtkContainer    Native_GtkContainer
 #define GtkBin          Native_GtkBin
 #define GtkWindow       Native_GtkWindow
@@ -57,6 +58,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef GtkWindow
 #undef GtkBin
 #undef GtkContainer
+#undef GtkAlign
 #undef GtkWidget
 
 #define native_is_gtk_type_named(x,y) g_type_is_a(G_OBJECT_TYPE(x), g_type_from_name(y))
