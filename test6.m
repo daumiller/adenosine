@@ -106,13 +106,11 @@ int main(int argc, char **argv)
   wndMain.cmbOptions.horizontalAlign  = GTKALIGN_CENTER;
   wndMain.cmbOptions.delegate = test6D;
   wndMain.lblOptions = [GtkLabel labelWithText:@""];
-
   [gridPage3 attachSpacerLeft:2 top:0 width:1 height:1 hExpand:NO hAlign:GTKALIGN_CENTER vExpand:YES vAlign:GTKALIGN_FILL];
   [gridPage3 attachWidget:wndMain.cmbOptions left:1 top:1 width:3 height:1];
   [gridPage3 attachSpacerLeft:2 top:2 pixelWidth:1 pixelHeight:16];
   [gridPage3 attachWidget:wndMain.lblOptions left:2 top:3 width:1 height:1];
   [gridPage3 attachSpacerLeft:2 top:4 width:1 height:1 hExpand:NO hAlign:GTKALIGN_CENTER vExpand:YES vAlign:GTKALIGN_FILL];
-
   [wndMain.tabPages appendPage:gridPage3 withTextLabel:@"Options" andID:@"tab.options"];
 
   [wndMain.window wrapAllChildren]; //will do all non-toplevel retaining for us
