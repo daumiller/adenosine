@@ -104,9 +104,9 @@ static char *ConnectionProxy_FormatEntry(struct _GtkComboBox *combo, char *text,
   [_delegate gtkComboBoxChanged:self];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(OFString *)onFormatEntry:(OFString *)entryText
+-(OFString *)onFormatEntry:(OFString *)itemPath
 {
-  return [_delegate gtkComboBox:self formatEntry:entryText];
+  return [_delegate gtkComboBox:self formatEntry:itemPath];
 }
 
 //==================================================================================================================================
