@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkNative.h
+// WebKitNative.h
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -39,7 +39,18 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkNotebook              Native_GtkNotebook
 #define GtkScrolledWindow        Native_GtkScrolledWindow
 
+#define WebKitWebView            Native_WebKitWebView
+#define WebKitNavigationResponse Native_WebKitNavigationResponse
+#define WebKitWebViewTargetInfo  Native_WebKitWebViewTargetInfo
+#define WebKitWebViewViewMode    Native_WebKitWebViewViewMode
+
 #include <gtk/gtk.h>
+#include <webkit/webkit.h>
+
+#undef WebKitWebViewViewMode
+#undef WebKitWebViewTargetInfo
+#undef WebKitNavigationResponse
+#undef WebKitWebView
 
 #undef GtkScrolledWindow
 #undef GtkNotebook
@@ -62,5 +73,3 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef GtkContainer
 #undef GtkAlign
 #undef GtkWidget
-
-#define native_is_gtk_type_named(x,y) g_type_is_a(G_OBJECT_TYPE(x), g_type_from_name(y))

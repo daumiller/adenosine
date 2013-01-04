@@ -1,52 +1,63 @@
 #===================================================================================================================================
-all : tests library
+all : tests libgtk libwebkit
 
 #===================================================================================================================================
-tests : test0 test1 test2 test3 test4 test5 test6
+tests : test0 test1 test2 test3 test4 test5 test6 test7
 
-test0 : test0.o library
+test0 : test0.o libgtk
 	clang test0.o Gtk*.o -o test0.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test1 : test1.o library
+test1 : test1.o libgtk
 	clang test1.o Gtk*.o -o test1.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test2 : test2.o library
+test2 : test2.o libgtk
 	clang test2.o Gtk*.o -o test2.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test3 : test3.o library
+test3 : test3.o libgtk
 	clang test3.o Gtk*.o -o test3.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test4 : test4.o library
+test4 : test4.o libgtk
 	clang test4.o Gtk*.o -o test4.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test5 : test5.o library
+test5 : test5.o libgtk
 	clang test5.o Gtk*.o -o test5.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-test6 : test6.o library
+test6 : test6.o libgtk
 	clang test6.o Gtk*.o -o test6.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
-#===================================================================================================================================
-library : objects
+test7 : test7.o libgtk libwebkit
+	clang test7.o Gtk*.o WebKit*.o -o test7.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0 webkitgtk-3.0` `objfw-config --libs`	
 
-objects : GtkBin.o            \
-          GtkBox.o            \
-          GtkBuilder.o        \
-          GtkButton.o         \
-          GtkComboBox.o       \
-          GtkComboBoxText.o   \
-          GtkContainer.o      \
-          GtkDrawingArea.o    \
-          GtkFrame.o          \
-          GtkGrid.o           \
-          GtkImage.o          \
-          GtkLabel.o          \
-          GtkMisc.o           \
-          GtkNotebook.o       \
-          GtkProgressBar.o    \
-          GtkRuntime.o        \
-          GtkScrolledWindow.o \
-          GtkWidget.o         \
-          GtkWindow.o
+#===================================================================================================================================
+libgtk : objgtk
+
+objgtk : GtkBin.o            \
+         GtkBox.o            \
+         GtkBuilder.o        \
+         GtkButton.o         \
+         GtkComboBox.o       \
+         GtkComboBoxText.o   \
+         GtkContainer.o      \
+         GtkDrawingArea.o    \
+         GtkFrame.o          \
+         GtkGrid.o           \
+         GtkImage.o          \
+         GtkLabel.o          \
+         GtkMisc.o           \
+         GtkNotebook.o       \
+         GtkProgressBar.o    \
+         GtkRuntime.o        \
+         GtkScrolledWindow.o \
+         GtkWidget.o         \
+         GtkWindow.o
+
+#===================================================================================================================================
+libwebkit : objwebkit
+
+objwebkit : WebKitWebView.o
+
+WebKitWebView.o : WebKitWebView.m
+	clang -c WebKitWebView.m -o WebKitWebView.o -I ../ `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0 webkitgtk-3.0`
 
 #===================================================================================================================================
 %.o : %.m
