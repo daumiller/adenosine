@@ -52,6 +52,15 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
+  GTKCORNER_TOPLEFT,
+  GTKCORNER_BOTTOMLEFT,
+  GTKCORNER_TOPRIGHT,
+  GTKCORNER_BOTTOMRIGHT,
+  GTKCORNER_UNSET
+} GtkCorner;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
   GTKALIGN_FILL,
   GTKALIGN_START,
   GTKALIGN_END,
@@ -68,6 +77,22 @@ typedef enum
   GTKICONSIZE_DND,
   GTKICONSIZE_DIALOG
 } GtkIconSize;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKFRAMESHADOW_NONE,
+  GTKFRAMESHADOW_BEVEL_IN,
+  GTKFRAMESHADOW_BEVEL_OUT,
+  GTKFRAMESHADOW_SUNKEN,
+  GTKFRAMESHADOW_RAISED
+} GtkBorderShadow;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKSCROLLBARSHOW_ALWAYS,
+  GTKSCROLLBARSHOW_AUTOMATIC,
+  GTKSCROLLBARSHOW_NEVER
+} GtkScrollbarShow;
 
 //==================================================================================================================================
 @class GtkWidget;

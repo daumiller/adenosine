@@ -28,23 +28,24 @@ test6 : test6.o library
 #===================================================================================================================================
 library : objects
 
-objects : GtkBin.o          \
-          GtkBox.o          \
-          GtkBuilder.o      \
-          GtkButton.o       \
-          GtkComboBox.o     \
-          GtkComboBoxText.o \
-          GtkContainer.o    \
-          GtkDrawingArea.o  \
-          GtkFrame.o        \
-          GtkGrid.o         \
-          GtkImage.o        \
-          GtkLabel.o        \
-          GtkMisc.o         \
-          GtkNotebook.o     \
-          GtkProgressBar.o  \
-          GtkRuntime.o      \
-          GtkWidget.o       \
+objects : GtkBin.o            \
+          GtkBox.o            \
+          GtkBuilder.o        \
+          GtkButton.o         \
+          GtkComboBox.o       \
+          GtkComboBoxText.o   \
+          GtkContainer.o      \
+          GtkDrawingArea.o    \
+          GtkFrame.o          \
+          GtkGrid.o           \
+          GtkImage.o          \
+          GtkLabel.o          \
+          GtkMisc.o           \
+          GtkNotebook.o       \
+          GtkProgressBar.o    \
+          GtkRuntime.o        \
+          GtkScrolledWindow.o \
+          GtkWidget.o         \
           GtkWindow.o
 
 #===================================================================================================================================

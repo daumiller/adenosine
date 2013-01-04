@@ -17,18 +17,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#import <adenosine/GtkRuntime.h>
-#import <adenosine/GtkWidget.h>
-#import <adenosine/GtkDrawingArea.h>
-#import <adenosine/GtkWindow.h>
-#import <adenosine/GtkButton.h>
-#import <adenosine/GtkLabel.h>
-#import <adenosine/GtkGrid.h>
-#import <adenosine/GtkFrame.h>
-#import <adenosine/GtkImage.h>
-#import <adenosine/GtkProgressBar.h>
-#import <adenosine/GtkBuilder.h>
+#import <adenosine/GtkBin.h>
 #import <adenosine/GtkBox.h>
+#import <adenosine/GtkBuilder.h>
+#import <adenosine/GtkButton.h>
 #import <adenosine/GtkComboBox.h>
 #import <adenosine/GtkComboBoxText.h>
+#import <adenosine/GtkContainer.h>
+#import <adenosine/GtkDrawingArea.h>
+#import <adenosine/GtkFrame.h>
+#import <adenosine/GtkGrid.h>
+#import <adenosine/GtkImage.h>
+#import <adenosine/GtkLabel.h>
+#import <adenosine/GtkMisc.h>
 #import <adenosine/GtkNotebook.h>
+#import <adenosine/GtkProgressBar.h>
+#import <adenosine/GtkRuntime.h>
+#import <adenosine/GtkScrolledWindow.h>
+#import <adenosine/GtkWidget.h>
+#import <adenosine/GtkWindow.h>

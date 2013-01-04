@@ -17,29 +17,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#define GtkWidget       Native_GtkWidget
-#define GtkAlign        Native_GtkAlign
-#define GtkContainer    Native_GtkContainer
-#define GtkBin          Native_GtkBin
-#define GtkWindow       Native_GtkWindow
-#define GtkWindowType   Native_GtkWindowType
-#define GtkButton       Native_GtkButton
-#define GtkMisc         Native_GtkMisc
-#define GtkLabel        Native_GtkLabel
-#define GtkGrid         Native_GtkGrid
-#define GtkFrame        Native_GtkFrame
-#define GtkDrawingArea  Native_GtkDrawingArea
-#define GtkImage        Native_GtkImage
-#define GtkIconSize     Native_GtkIconSize
-#define GtkProgressBar  Native_GtkProgressBar
-#define GtkBuilder      Native_GtkBuilder
-#define GtkBox          Native_GtkBox
-#define GtkComboBox     Native_GtkComboBox
-#define GtkComboBoxText Native_GtkComboBoxText
-#define GtkNotebook     Native_GtkNotebook
+#define GtkWidget         Native_GtkWidget
+#define GtkAlign          Native_GtkAlign
+#define GtkContainer      Native_GtkContainer
+#define GtkBin            Native_GtkBin
+#define GtkWindow         Native_GtkWindow
+#define GtkWindowType     Native_GtkWindowType
+#define GtkButton         Native_GtkButton
+#define GtkMisc           Native_GtkMisc
+#define GtkLabel          Native_GtkLabel
+#define GtkGrid           Native_GtkGrid
+#define GtkFrame          Native_GtkFrame
+#define GtkDrawingArea    Native_GtkDrawingArea
+#define GtkImage          Native_GtkImage
+#define GtkIconSize       Native_GtkIconSize
+#define GtkProgressBar    Native_GtkProgressBar
+#define GtkBuilder        Native_GtkBuilder
+#define GtkBox            Native_GtkBox
+#define GtkComboBox       Native_GtkComboBox
+#define GtkComboBoxText   Native_GtkComboBoxText
+#define GtkNotebook       Native_GtkNotebook
+#define GtkScrolledWindow Native_GtkScrolledWindow
 
 #include <gtk/gtk.h>
 
+#undef GtkScrolledWindow
 #undef GtkNotebook
 #undef GtkComboBoxText
 #undef GtkComboBox

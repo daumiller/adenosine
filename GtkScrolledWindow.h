@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkFrame.h
+// GtkScrolledWindow.h
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -21,17 +21,21 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkBin.h>
 
 //==================================================================================================================================
-@interface GtkFrame : GtkBin
+@interface GtkScrolledWindow : GtkBin
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+ frame;
-+ frameWithText:(OFString *)text;
-- initFrame;
-- initWithText:(OFString *)text;
++scrolledWindow;
+-initScrolledWindow;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) OFString       *text;
-@property (assign) GtkBorderShadow shadow;
+@property (assign) GtkBorderShadow  shadow;
+@property (assign) GtkCorner        placement;
+@property (assign) GtkScrollbarShow horizontalPolicy;
+@property (assign) GtkScrollbarShow verticalPolicy;
+@property (assign) OMSize           minimumContentSize;
+
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)addWithViewport:(GtkWidget *)child;
 
 @end
 //==================================================================================================================================

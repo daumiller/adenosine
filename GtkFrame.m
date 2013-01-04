@@ -74,8 +74,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   [pool drain];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(GtkFrameShadow)shadow                 { return (GtkFrameShadow)gtk_frame_get_shadow_type(NATIVE_FRAME); }
--(void)setShadow:(GtkFrameShadow)shadow { gtk_frame_set_shadow_type(NATIVE_FRAME, (GtkShadowType)shadow); }
+-(GtkBorderShadow)shadow                 { return (GtkBorderShadow)gtk_frame_get_shadow_type(NATIVE_FRAME); }
+-(void)setShadow:(GtkBorderShadow)shadow { gtk_frame_set_shadow_type(NATIVE_FRAME, (GtkShadowType)shadow); }
 
 //==================================================================================================================================
 @end
