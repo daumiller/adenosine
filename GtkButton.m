@@ -55,10 +55,10 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   [self installNativeLookup];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-+ button                            { return [[[self alloc] initButton         ] autorelease]; }
-+ buttonWithText :(OFString *)text  { return [[[self alloc] initWithText:text  ] autorelease]; }
-+ buttonWithAccel:(OFString *)text  { return [[[self alloc] initWithAccel:text ] autorelease]; }
-+ buttonFromStock:(OFString *)stock { return [[[self alloc] initFromStock:stock] autorelease]; }
++ button                              { return [[[self alloc] initButton           ] autorelease]; }
++ buttonWithText :(OFString *)text    { return [[[self alloc] initWithText:text    ] autorelease]; }
++ buttonWithAccel:(OFString *)text    { return [[[self alloc] initWithAccel:text   ] autorelease]; }
++ buttonFromStock:(OFString *)stockId { return [[[self alloc] initFromStock:stockId] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
 - initButton
 {
@@ -81,10 +81,10 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initFromStock:(OFString *)stock
+- initFromStock:(OFString *)stockId
 {
   self = [super init];
-  if(self) [self commonInit:stock isAccel:NO isStock:YES];
+  if(self) [self commonInit:stockId isAccel:NO isStock:YES];
   return self;
 }
 
@@ -143,7 +143,9 @@ static void ConnectionProxy_Clicked(struct _GtkButton *button, void *data)
   [_delegate gtkButtonClicked:self];
 }
 
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -38,20 +38,36 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkComboBoxText          Native_GtkComboBoxText
 #define GtkNotebook              Native_GtkNotebook
 #define GtkScrolledWindow        Native_GtkScrolledWindow
+#define GtkMenuItem              Native_GtkMenuItem
+#define GtkImageMenuItem         Native_GtkImageMenuItem
+#define GtkCheckMenuItem         Native_GtkCheckMenuItem
+#define GtkRadioMenuItem         Native_GtkRadioMenuItem
+#define GtkMenuShell             Native_GtkMenuShell
+#define GtkMenuBar               Native_GtkMenuBar
+#define GtkMenu                  Native_GtkMenu
 
 #define WebKitWebView            Native_WebKitWebView
 #define WebKitNavigationResponse Native_WebKitNavigationResponse
 #define WebKitWebViewTargetInfo  Native_WebKitWebViewTargetInfo
 #define WebKitWebViewViewMode    Native_WebKitWebViewViewMode
+#define WebKitLoadStatus         Native_WebKitLoadStatus
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
+#undef WebKitLoadStatus
 #undef WebKitWebViewViewMode
 #undef WebKitWebViewTargetInfo
 #undef WebKitNavigationResponse
 #undef WebKitWebView
 
+#undef GtkMenu
+#undef GtkMenuBar
+#undef GtkMenuShell
+#undef GtkRadioMenuItem
+#undef GtkCheckMenuItem
+#undef GtkImageMenuItem
+#undef GtkMenuItem
 #undef GtkScrolledWindow
 #undef GtkNotebook
 #undef GtkComboBoxText

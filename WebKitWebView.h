@@ -26,6 +26,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @protocol WebKitWebViewDelegate <OFObject>
 @optional
 -(void)webkitWebView:(WebKitWebView *)webview titleChanged:(OFString *)title;
+-(void)webkitWebView:(WebKitWebView *)webview loadStatusChanged:(WebKitLoadStatus)loadStatus;
 @end
 
 //==================================================================================================================================
@@ -47,7 +48,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //   webkit_web_view_get_icon_pixbuf
 //   webkit_web_view_try_get_favicon_pixbuf
 //   webkit_web_view_get_inspector
-//   webkit_web_view_get_load_status
 //   webkit_web_view_get_main_frame
 //   webkit_web_view_get_progress
 //   webkit_web_view_get_settings
@@ -117,12 +117,13 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (readonly) BOOL canGoBack;
 @property (readonly) BOOL canGoForward;
 @property (readonly) BOOL hasSelection;
-@property (readonly) double    progress;
-@property (assign)   float     zoomLevel;
-@property (readonly) OFString *title;
-@property (readonly) OFString *uri;
-@property (readonly) OFString *encoding;
-@property (assign)   OFString *customEncoding;
+@property (readonly) WebKitLoadStatus loadStatus;
+@property (readonly) double           progress;
+@property (assign)   float            zoomLevel;
+@property (readonly) OFString        *title;
+@property (readonly) OFString        *uri;
+@property (readonly) OFString        *encoding;
+@property (assign)   OFString        *customEncoding;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)canGoBackOrForward:(int)steps;
@@ -150,6 +151,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)onTitleChanged;
+-(void)onLoadStatusChanged;
 
 @end
 //==================================================================================================================================

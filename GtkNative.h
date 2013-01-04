@@ -38,9 +38,25 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkComboBoxText          Native_GtkComboBoxText
 #define GtkNotebook              Native_GtkNotebook
 #define GtkScrolledWindow        Native_GtkScrolledWindow
+#define GtkMenuItem              Native_GtkMenuItem
+#define GtkSeparatorMenuItem     Native_GtkMenuSeparatorItem
+#define GtkImageMenuItem         Native_GtkImageMenuItem
+#define GtkCheckMenuItem         Native_GtkCheckMenuItem
+#define GtkRadioMenuItem         Native_GtkRadioMenuItem
+#define GtkMenuShell             Native_GtkMenuShell
+#define GtkMenuBar               Native_GtkMenuBar
+#define GtkMenu                  Native_GtkMenu
 
 #include <gtk/gtk.h>
 
+#undef GtkMenu
+#undef GtkMenuBar
+#undef GtkMenuShell
+#undef GtkRadioMenuItem
+#undef GtkCheckMenuItem
+#undef GtkImageMenuItem
+#undef GtkSeparatorMenuItem
+#undef GtkMenuItem
 #undef GtkScrolledWindow
 #undef GtkNotebook
 #undef GtkComboBoxText

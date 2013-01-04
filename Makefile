@@ -2,7 +2,7 @@
 all : tests libgtk libwebkit
 
 #===================================================================================================================================
-tests : test0 test1 test2 test3 test4 test5 test6 test7
+tests : test0 test1 test2 test3 test4 test5 test6 test7 test8
 
 test0 : test0.o libgtk
 	clang test0.o Gtk*.o -o test0.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
@@ -28,6 +28,9 @@ test6 : test6.o libgtk
 test7 : test7.o libgtk libwebkit
 	clang test7.o Gtk*.o WebKit*.o -o test7.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0 webkitgtk-3.0` `objfw-config --libs`	
 
+test8 : test8.o libgtk
+	clang test8.o Gtk*.o -o test8.bin -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+
 #===================================================================================================================================
 libgtk : objgtk
 
@@ -43,6 +46,14 @@ objgtk : GtkBin.o            \
          GtkGrid.o           \
          GtkImage.o          \
          GtkLabel.o          \
+         GtkMenu.o           \
+         GtkMenuBar.o        \
+         GtkMenuCheck.o      \
+         GtkMenuImage.o      \
+         GtkMenuItem.o       \
+         GtkMenuRadio.o      \
+         GtkMenuSeparator.o  \
+         GtkMenuShell.o      \
          GtkMisc.o           \
          GtkNotebook.o       \
          GtkProgressBar.o    \

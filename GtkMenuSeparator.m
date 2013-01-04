@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkGrid.h
+// GtkMenuSeparator.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -17,36 +17,38 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
-#import <adenosine/GtkContainer.h>
+#import "GtkNative.h"
+#import <adenosine/adenosine.h>
 
 //==================================================================================================================================
-@interface GtkGrid : GtkContainer
+#define NATIVE_WIDGET    ((struct _GtkWidget            *)_native)
+#define NATIVE_SEPARATOR ((struct _GtkSeparatorMenuItem *)_native)
 
-//----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) BOOL forceEqualRows;
-@property (assign) BOOL forceEqualColumns;
-@property (assign) unsigned int rowSpacing;
-@property (assign) unsigned int columnSpacing;
+//==================================================================================================================================
+@implementation GtkMenuSeparator
 
-//----------------------------------------------------------------------------------------------------------------------------------
-+ grid;
-- initGrid;
-
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top;
--(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight;
--(void)attachWidget:(GtkWidget *)widget nextTo:(GtkWidget *)sibling onSide:(GtkPosition)position width:(int)colWidth height:(int)rowHeight;
--(GtkWidget *)childAtColumn:(int)x andRow:(int)y;
--(void *)nativeAtColumn:(int)x andRow:(int)y;
+//==================================================================================================================================
+// Constructors/Destructor
+//==================================================================================================================================
++ separator
+{
+  return [[[self alloc] initSeparator] autorelease];
+}
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)insertRowAtIndex:(int)index;
--(void)insertColumnAtIndex:(int)index;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight;
--(void)attachSpacerLeft:(int)left top:(int)top width:(int)colWidth height:(int)rowHeight hExpand:(BOOL)hExpand hAlign:(GtkAlign)hAlign vExpand:(BOOL)vExpand vAlign:(GtkAlign)vAlign;
--(void)attachSpacerLeft:(int)left top:(int)top pixelWidth:(int)width pixelHeight:(int)height;
+- initSeparator
+{
+  self = [super init];
+  if(self)
+  {
+    _native = gtk_separator_menu_item_new();
+    [self installNativeLookup];
+  }
+  return self;
+}
 
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

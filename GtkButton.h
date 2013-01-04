@@ -34,11 +34,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + button;
 + buttonWithText:(OFString *)text;
 + buttonWithAccel:(OFString *)text;
-+ buttonFromStock:(OFString *)stock;
++ buttonFromStock:(OFString *)stockId;
 - initButton;
 - initWithText:(OFString *)text;
 - initWithAccel:(OFString *)text;
-- initFromStock:(OFString *)stock;
+- initFromStock:(OFString *)stockId;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 @property (assign) OFString   *text;
@@ -53,7 +53,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)onClicked;
 
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -35,6 +35,15 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
+  WEBKIT_LOADSTATUS_PROVISIONAL,
+  WEBKIT_LOADSTATUS_COMMITTED,
+  WEBKIT_LOADSTATUS_FINISHED,
+  WEBKIT_LOADSTATUS_FIRST_VISUAL,
+  WEBKIT_LOADSTATUS_FAILED
+} WebKitLoadStatus;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
   WEBKIT_WEBVIEWMODE_WINDOWED,
   WEBKIT_WEBVIEWMODE_FLOATING,
   WEBKIT_WEBVIEWMODE_FULLSCREEN,

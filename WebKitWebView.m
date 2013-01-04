@@ -30,8 +30,18 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 static void ConnectionProxy_TitleChanged(struct _WebKitWebView *webView, void *pspec, void *data)
 {
+  g_object_freeze_notify((GObject *)webView);
   WebKitWebView *obj = (WebKitWebView *)[GtkWidget nativeToWrapper:(void *)webView];
   [obj onTitleChanged];
+  g_object_thaw_notify((GObject *)webView);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static void ConnectionProxy_LoadStatusChanged(struct _WebKitWebView *webView, void *pspec, void *data)
+{
+  g_object_freeze_notify((GObject *)webView);
+  WebKitWebView *obj = (WebKitWebView *)[GtkWidget nativeToWrapper:(void *)webView];
+  [obj onLoadStatusChanged];
+  g_object_thaw_notify((GObject *)webView);
 }
 
 //==================================================================================================================================
@@ -55,17 +65,18 @@ static void ConnectionProxy_TitleChanged(struct _WebKitWebView *webView, void *p
 //==================================================================================================================================
 // Properites
 //==================================================================================================================================
--(BOOL)canCopyClipboard              { return webkit_web_view_can_copy_clipboard(NATIVE_WEBVIEW);   }
--(BOOL)canCutClipboard               { return webkit_web_view_can_cut_clipboard(NATIVE_WEBVIEW);    }
--(BOOL)canPasteClipboard             { return webkit_web_view_can_paste_clipboard(NATIVE_WEBVIEW);  }
--(BOOL)canUndo                       { return webkit_web_view_can_undo(NATIVE_WEBVIEW);             }
--(BOOL)canRedo                       { return webkit_web_view_can_redo(NATIVE_WEBVIEW);             }
--(BOOL)canGoBack                     { return webkit_web_view_can_go_back(NATIVE_WEBVIEW);          }
--(BOOL)canGoForward                  { return webkit_web_view_can_go_forward(NATIVE_WEBVIEW);       }
--(BOOL)hasSelection                  { return webkit_web_view_has_selection(NATIVE_WEBVIEW);        }
--(double)progress                    { return webkit_web_view_get_progress(NATIVE_WEBVIEW);         }
--(float)zoomLevel                    { return webkit_web_view_get_zoom_level(NATIVE_WEBVIEW);       }
--(void)setZoomLevel:(float)zoomLevel { webkit_web_view_set_zoom_level(NATIVE_WEBVIEW, zoomLevel);   }
+-(BOOL)canCopyClipboard              { return webkit_web_view_can_copy_clipboard(NATIVE_WEBVIEW);                     }
+-(BOOL)canCutClipboard               { return webkit_web_view_can_cut_clipboard(NATIVE_WEBVIEW);                      }
+-(BOOL)canPasteClipboard             { return webkit_web_view_can_paste_clipboard(NATIVE_WEBVIEW);                    }
+-(BOOL)canUndo                       { return webkit_web_view_can_undo(NATIVE_WEBVIEW);                               }
+-(BOOL)canRedo                       { return webkit_web_view_can_redo(NATIVE_WEBVIEW);                               }
+-(BOOL)canGoBack                     { return webkit_web_view_can_go_back(NATIVE_WEBVIEW);                            }
+-(BOOL)canGoForward                  { return webkit_web_view_can_go_forward(NATIVE_WEBVIEW);                         }
+-(BOOL)hasSelection                  { return webkit_web_view_has_selection(NATIVE_WEBVIEW);                          }
+-(WebKitLoadStatus)loadStatus        { return (WebKitLoadStatus)webkit_web_view_get_load_status(NATIVE_WEBVIEW);      }
+-(double)progress                    { return webkit_web_view_get_progress(NATIVE_WEBVIEW);                           }
+-(float)zoomLevel                    { return webkit_web_view_get_zoom_level(NATIVE_WEBVIEW);                         }
+-(void)setZoomLevel:(float)zoomLevel { webkit_web_view_set_zoom_level(NATIVE_WEBVIEW, zoomLevel);                     }
 -(OFString *)title                   { const char *str = webkit_web_view_get_title          (NATIVE_WEBVIEW); if(!str) return nil; return [OFString stringWithUTF8String:str]; }
 -(OFString *)uri                     { const char *str = webkit_web_view_get_uri            (NATIVE_WEBVIEW); if(!str) return nil; return [OFString stringWithUTF8String:str]; }
 -(OFString *)encoding                { const char *str = webkit_web_view_get_encoding       (NATIVE_WEBVIEW); if(!str) return nil; return [OFString stringWithUTF8String:str]; }
@@ -88,6 +99,10 @@ static void ConnectionProxy_TitleChanged(struct _WebKitWebView *webView, void *p
     if([_delegate respondsToSelector:@selector(webkitWebView:titleChanged:)])
       [_connections addObject:[OFNumber numberWithUnsignedLong:
         g_signal_connect(_native, "notify::title", G_CALLBACK(ConnectionProxy_TitleChanged),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(webkitWebView:loadStatusChanged:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "notify::load-status", G_CALLBACK(ConnectionProxy_LoadStatusChanged),NULL)]];
   }
 }
 
@@ -163,6 +178,11 @@ static void ConnectionProxy_TitleChanged(struct _WebKitWebView *webView, void *p
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   [_delegate webkitWebView:self titleChanged:self.title];
   [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)onLoadStatusChanged
+{
+  [_delegate webkitWebView:self loadStatusChanged:self.loadStatus];
 }
 
 //==================================================================================================================================
