@@ -66,8 +66,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   if(self)
   {
     OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-    _native = gtk_message_dialog_new([parent native], (Native_GtkDialogFlags)flags, (GtkMessageType)type, (GtkButtonsType)buttons, "%s", [primary UTF8String]);
-    gtk_message_dialog_format_secondary_text(NATIVE_DLGMSG, "%s", [secondary UTF8String]);
+    const char *primaryString = primary ? [primary UTF8String] : "";
+    _native = gtk_message_dialog_new([parent native], (Native_GtkDialogFlags)flags, (GtkMessageType)type, (GtkButtonsType)buttons, "%s", primaryString);
+    if(secondary) gtk_message_dialog_format_secondary_text(NATIVE_DLGMSG, "%s", [secondary UTF8String]);
     [self installNativeLookup];
     [pool drain];
   }
