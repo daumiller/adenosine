@@ -32,6 +32,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)prepend:(GtkWidget *)child;
 -(void)insert :(GtkWidget *)child atIndex:(int)index;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)appendSeparator;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)selectFirstItem;
 -(void)selectItem:(GtkWidget *)item;
 -(void)deselectItem;

@@ -35,6 +35,34 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + menuImageWithText:(OFString *)text      { return [[[self alloc] initWithText:text    ] autorelease]; }
 + menuImageWithAccel:(OFString *)text     { return [[[self alloc] initWithAccel:text   ] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
++ menuImageWithDelegate:(id)delegate
+{
+  GtkMenuImage *mimg = [[[self alloc] initMenuImage] autorelease];
+  if(mimg) mimg.delegate = delegate;
+  return mimg;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuImageFromStock:(OFString *)stockId andDelegate:(id)delegate
+{
+  GtkMenuImage *mimg = [[[self alloc] initFromStock:stockId] autorelease];
+  if(mimg) mimg.delegate = delegate;
+  return mimg;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuImageWithText :(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuImage *mimg = [[[self alloc] initWithText:text] autorelease];
+  if(mimg) mimg.delegate = delegate;
+  return mimg;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuImageWithAccel:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuImage *mimg = [[[self alloc] initWithAccel:text] autorelease];
+  if(mimg) mimg.delegate = delegate;
+  return mimg;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 - initMenuImage
 {
   self = [super init];

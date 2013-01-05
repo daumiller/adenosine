@@ -28,6 +28,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + menuImageFromStock:(OFString *)stockId;
 + menuImageWithText:(OFString *)text;
 + menuImageWithAccel:(OFString *)text;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuImageWithDelegate:(id)delegate;
++ menuImageFromStock:(OFString *)stockId andDelegate:(id)delegate;
++ menuImageWithText :(OFString *)text andDelegate:(id)delegate;
++ menuImageWithAccel:(OFString *)text andDelegate:(id)delegate;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initMenuImage;
 - initFromStock:(OFString *)stockId;
 - initWithText:(OFString *)text;

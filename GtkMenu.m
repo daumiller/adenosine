@@ -54,11 +54,13 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 -(void)attach:(GtkWidget *)child column:(int)left row:(int)top 
 {
+  [_children addObject:child];
   gtk_menu_attach(NATIVE_MENU, child.native, left,left, top,top);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)attach:(GtkWidget *)child leftColumn:(int)left rightColumn:(int)right topRow:(int)top bottomRow:(int)bottom
 {
+  [_children addObject:child];
   gtk_menu_attach(NATIVE_MENU, child.native, left, right, top, bottom);
 }
 //----------------------------------------------------------------------------------------------------------------------------------

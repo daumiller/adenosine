@@ -42,6 +42,18 @@ static void ConnectionProxy_Toggled(struct _GtkMenuItem *menuItem, void *data)
 + menuCheck                               { return [[[self alloc] initMenuCheck        ] autorelease]; }
 + menuCheckWithText:(OFString *)text      { return [[[self alloc] initWithText:text    ] autorelease]; }
 + menuCheckWithAccel:(OFString *)text     { return [[[self alloc] initWithAccel:text   ] autorelease]; }
++ menuCheckWithText:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuCheck *chk = [[[self alloc] initWithText:text] autorelease];
+  chk.delegate = delegate;
+  return chk;
+}
++ menuCheckWithAccel:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuCheck *chk = [[[self alloc] initWithAccel:text] autorelease];
+  chk.delegate = delegate;
+  return chk;
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 - initMenuCheck
 {

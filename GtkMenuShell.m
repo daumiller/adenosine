@@ -41,6 +41,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)prepend:(GtkWidget *)child                    { [_children addObject:child]; gtk_menu_shell_prepend(NATIVE_MENUSHELL, child.native);       }
 -(void)insert :(GtkWidget *)child atIndex:(int)index { [_children addObject:child]; gtk_menu_shell_insert(NATIVE_MENUSHELL, child.native, index); }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)appendSeparator { [self append:[GtkMenuSeparator separator]]; }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)selectFirstItem               { gtk_menu_shell_select_first(NATIVE_MENUSHELL, NO);         }
 -(void)selectItem:(GtkWidget *)item  { gtk_menu_shell_select_item(NATIVE_MENUSHELL, item.native); }
 -(void)deselectItem                  { gtk_menu_shell_deselect(NATIVE_MENUSHELL);                 }

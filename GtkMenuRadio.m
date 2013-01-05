@@ -30,52 +30,93 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ menuRadio                           { return [[[self alloc] initMenuRadio     ] autorelease]; }
-+ menuRadioWithText:(OFString *)text  { return [[[self alloc] initWithText:text ] autorelease]; }
-+ menuRadioWithAccel:(OFString *)text { return [[[self alloc] initWithAccel:text] autorelease]; }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-+ menuRadioGroupedWith:(GtkMenuRadio *)groupMember                             { return [[[self alloc] initWithGroup:groupMember              ] autorelease]; }
-+ menuRadioWithText:(OFString *)text groupedWith:(GtkMenuRadio *)groupMember   { return [[[self alloc] initWithText:text  andGroup:groupMember] autorelease]; }
-+ menuRadioWithAccel:(OFString *)text groupedWidth:(GtkMenuRadio *)groupMember { return [[[self alloc] initWithAccel:text andGroup:groupMember] autorelease]; }
++ menuRadioWithGroup:(void *)group                           { return [[[self alloc] initWithGroup:group              ] autorelease]; }
++ menuRadioWithGroup:(void *)group andText:(OFString *)text  { return [[[self alloc] initWithGroup:group andText:text ] autorelease]; }
++ menuRadioWithGroup:(void *)group andAccel:(OFString *)text { return [[[self alloc] initWithGroup:group andAccel:text] autorelease]; }
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember                           { return [[[self alloc] initWithSibling:groupMember              ] autorelease]; }
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember andText :(OFString *)text { return [[[self alloc] initWithSibling:groupMember andText:text ] autorelease]; }
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember andAccel:(OFString *)text { return [[[self alloc] initWithSibling:groupMember andAccel:text] autorelease]; }
 //----------------------------------------------------------------------------------------------------------------------------------
-- initMenuRadio
++ menuRadioWithGroup:(void *)group andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithGroup:group];
+  rdio.delegate = delegate;
+  return rdio;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuRadioWithGroup:(void *)group andText:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithGroup:group andText:text];
+  rdio.delegate = delegate;
+  return rdio;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuRadioWithGroup:(void *)group andAccel:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithGroup:group andAccel:text];
+  rdio.delegate = delegate;
+  return rdio;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithSibling:groupMember];
+  rdio.delegate = delegate;
+  return rdio;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember andText:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithSibling:groupMember andText:text];
+  rdio.delegate = delegate;
+  return rdio;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ menuRadioWithSibling:(GtkMenuRadio *)groupMember andAccel:(OFString *)text andDelegate:(id)delegate
+{
+  GtkMenuRadio *rdio = [self menuRadioWithSibling:groupMember andAccel:text];
+  rdio.delegate = delegate;
+  return rdio;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+- initWithGroup:(void *)group
 {
   self = [super init];
   if(self)
   {
-    _native = gtk_radio_menu_item_new(NULL);
+    _native = gtk_radio_menu_item_new(group);
     [self installNativeLookup];
   }
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithText:(OFString *)text
+- initWithGroup:(void *)group andText:(OFString *)text
 {
   self = [super init];
   if(self)
   {
     OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-    _native = gtk_radio_menu_item_new_with_label(NULL, [text UTF8String]);
+    _native = gtk_radio_menu_item_new_with_label(group, [text UTF8String]);
     [self installNativeLookup];
     [pool drain];
   }
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithAccel:(OFString *)text
+- initWithGroup:(void *)group andAccel:(OFString *)text
 {
   self = [super init];
   if(self)
   {
     OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-    _native = gtk_radio_menu_item_new_with_mnemonic(NULL, [text UTF8String]);
+    _native = gtk_radio_menu_item_new_with_mnemonic(group, [text UTF8String]);
     [self installNativeLookup];
     [pool drain];
   }
   return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
-- initWithGroup:(GtkMenuRadio *)groupMember
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithSibling:(GtkMenuRadio *)groupMember
 {
   self = [super init];
   if(self)
@@ -86,7 +127,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithText:(OFString *)text andGroup:(GtkMenuRadio *)groupMember
+- initWithSibling:(GtkMenuRadio *)groupMember andText:(OFString *)text
 {
   self = [super init];
   if(self)
@@ -99,7 +140,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   return self;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithAccel:(OFString *)text andGroup:(GtkMenuRadio *)groupMember
+- initWithSibling:(GtkMenuRadio *)groupMember andAccel:(OFString *)text
 {
   self = [super init];
   if(self)

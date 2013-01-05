@@ -34,6 +34,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 + menuCheck;
 + menuCheckWithText:(OFString *)text;
 + menuCheckWithAccel:(OFString *)text;
++ menuCheckWithText:(OFString *)text andDelegate:(id)delegate;
++ menuCheckWithAccel:(OFString *)text andDelegate:(id)delegate;
 - initMenuCheck;
 - initWithText:(OFString *)text;
 - initWithAccel:(OFString *)text;
