@@ -48,6 +48,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkDialog                Native_GtkDialog
 #define GtkDialogFlags           Native_GtkDialogFlags
 #define GtkMessageDialog         Native_GtkMessageDialog
+#define GtkEntryBuffer           Native_GtkEntryBuffer
+#define GtkEntry                 Native_GtkEntry
 
 #define WebKitWebView            Native_WebKitWebView
 #define WebKitNavigationResponse Native_WebKitNavigationResponse
@@ -64,6 +66,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef WebKitNavigationResponse
 #undef WebKitWebView
 
+#undef GtkEntry
+#undef GtkEntryBuffer
 #undef GtkMessageDialog
 #undef GtkDialogFlags
 #undef GtkDialog

@@ -80,11 +80,11 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
-  GTKFRAMESHADOW_NONE,
-  GTKFRAMESHADOW_BEVEL_IN,
-  GTKFRAMESHADOW_BEVEL_OUT,
-  GTKFRAMESHADOW_SUNKEN,
-  GTKFRAMESHADOW_RAISED
+  GTKBORDERSHADOW_NONE,
+  GTKBORDERSHADOW_BEVEL_IN,
+  GTKBORDERSHADOW_BEVEL_OUT,
+  GTKBORDERSHADOW_SUNKEN,
+  GTKBORDERSHADOW_RAISED
 } GtkBorderShadow;
 //----------------------------------------------------------------------------------------------------------------------------------
 typedef enum
@@ -93,6 +93,33 @@ typedef enum
   GTKSCROLLBARSHOW_AUTOMATIC,
   GTKSCROLLBARSHOW_NEVER
 } GtkScrollbarShow;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKTEXTINPUT_FREE,
+  GTKTEXTINPUT_ALPHA,
+  GTKTEXTINPUT_DIGITS,
+  GTKTEXTINPUT_NUMBER,
+  GTKTEXTINPUT_PHONE,
+  GTKTEXTINPUT_URL,
+  GTKTEXTINPUT_EMAIL,
+  GTKTEXTINPUT_NAME,
+  GTKTEXTINPUT_PASSWORD,
+  GTKTEXTINPUT_PIN
+} GtkTextInput;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKTEXTINPUT_HINT_NONE              =    0,
+  GTKTEXTINPUT_HINT_SPELLCHECK        = 1<<0,
+  GTKTEXTINPUT_HINT_NOSPELLCHECK      = 1<<1,
+  GTKTEXTINPUT_HINT_WORDCOMPLETION    = 1<<2,
+  GTKTEXTINPUT_HINT_LOWERCASE         = 1<<3,
+  GTKTEXTINPUT_HINT_UPPERCASE         = 1<<4,
+  GTKTEXTINPUT_HINT_UPPERCASEWORD     = 1<<5,
+  GTKTEXTINPUT_HINT_UPPERCASESENTENCE = 1<<6,
+  GTKTEXTINPUT_HINT_INHIBITOSK        = 1<<7
+} GtkTextInputHint;
 
 //==================================================================================================================================
 @class GtkWidget;
@@ -114,13 +141,15 @@ typedef enum
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (readonly) void    *native;
-@property (retain  ) id       delegate;
-@property (assign  ) OMSize   minimumSize;
-@property (assign  ) GtkAlign horizontalAlign;
-@property (assign  ) BOOL     horizontalExpand;
-@property (assign  ) GtkAlign verticalAlign;
-@property (assign  ) BOOL     verticalExpand;
+@property (readonly) void     *native;
+@property (retain)   id        delegate;
+@property (assign)   OMSize    minimumSize;
+@property (assign)   GtkAlign  horizontalAlign;
+@property (assign)   BOOL      horizontalExpand;
+@property (assign)   GtkAlign  verticalAlign;
+@property (assign)   BOOL      verticalExpand;
+@property (assign)   OFString *tooltipText;
+@property (assign)   BOOL      canGrabDefault;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + (BOOL) isWrapped:(void *)native;

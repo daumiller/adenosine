@@ -27,6 +27,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkDialog.h>
 #import <adenosine/GtkDialogMessage.h>
 #import <adenosine/GtkDrawingArea.h>
+#import <adenosine/GtkEntry.h>
+#import <adenosine/GtkEntryBuffer.h>
 #import <adenosine/GtkFrame.h>
 #import <adenosine/GtkGrid.h>
 #import <adenosine/GtkImage.h>

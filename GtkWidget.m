@@ -104,6 +104,7 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   if(native_is_gtk_type_named(native, "GtkBox"          )) return [[[GtkBox           alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkFrame"        )) return [[[GtkFrame         alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkGrid"         )) return [[[GtkGrid          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkEntry"        )) return [[[GtkEntry         alloc] initWithExistingNative:native] autorelease];
 
   return [[[self alloc] initWithExistingNative:native] autorelease];
 }
@@ -235,6 +236,22 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(BOOL)verticalExpand                               { return gtk_widget_get_vexpand(NATIVE_WIDGET);                           }
 -(void)setVerticalExpand:(BOOL)verticalExpand       { gtk_widget_set_vexpand(NATIVE_WIDGET, verticalExpand);                  }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(OFString *)tooltipText
+{
+  char *str = gtk_widget_get_tooltip_text(NATIVE_WIDGET); if(!str) return nil;
+  return [OFString stringWithUTF8String:str];
+}
+-(void)setTooltipText:(OFString *)tooltipText
+{
+  if(!tooltipText) { gtk_widget_set_tooltip_text(NATIVE_WIDGET, NULL); return; }
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_widget_set_tooltip_text(NATIVE_WIDGET, [tooltipText UTF8String]);
+  [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)canGrabDefault                         { return gtk_widget_get_can_default(NATIVE_WIDGET);          }
+-(void)setCanGrabDefault:(BOOL)canGrabDefault { gtk_widget_set_can_default(NATIVE_WIDGET, canGrabDefault); }
 
 //==================================================================================================================================
 // Utilities

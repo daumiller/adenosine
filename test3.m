@@ -92,7 +92,7 @@ int main(int argc, char **argv)
   window.size = OMMakeSize(640.0f, 480.0f);
 
   GtkFrame *frame = [GtkFrame frame];
-  frame.shadow = GTKFRAMESHADOW_BEVEL_IN;
+  frame.shadow = GTKBORDERSHADOW_BEVEL_IN;
   [window add:frame];
 
   GtkDrawingArea *draw = [GtkDrawingArea drawingArea];
