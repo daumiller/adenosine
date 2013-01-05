@@ -16,6 +16,30 @@ GtkWindow  *wndMain;
 {
   if([menuItem.text compare:@"E_xit"] == OF_ORDERED_SAME)
     [[GtkRuntime sharedRuntime] mainLoopQuit];
+  if([menuItem.text compare:@"_Open"] == OF_ORDERED_SAME)
+  {
+    OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+    GtkDialog *dlg = [GtkDialog dialog];
+    [(GtkContainer *)dlg.contentArea add:[GtkLabel labelWithText:@"Some annoying dialog prompt goes here...\nOkay?\n"]];
+    [dlg addButtonWithText:@"Okay" andId:32];
+    [dlg addButtons:@{ [OFNumber numberWithInt:GTKDIALOG_RESPONSE_CANCEL]:@"gtk-cancel",
+                       [OFNumber numberWithInt:GTKDIALOG_RESPONSE_APPLY ]:@"gtk-apply"
+    }];
+    dlg.title = @"File > Open : Dialog";
+    dlg.borderWidth = 12;
+    dlg.defaultResponse = GTKDIALOG_RESPONSE_APPLY;
+    [dlg showAll];
+    [dlg run];
+    [pool drain];
+  }
+  if([menuItem.text compare:@"_Save"] == OF_ORDERED_SAME)
+  {
+    OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+    GtkDialogMessage *dlg = [GtkDialogMessage dialogMessageWithPrimary:@"No sir..." secondary:@"That just won't work..." type:GTKDIALOGMESSAGE_TYPE_ERROR buttons:GTKDIALOGMESSAGE_BUTTONS_OK];
+    dlg.title = @"File > Save : ERROR";
+    [dlg run];
+    [pool drain];
+  }
 }
 -(void)gtkMenuCheck:(GtkMenuCheck *)menuCheck toggled:(BOOL)isChecked
 {

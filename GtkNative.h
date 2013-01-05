@@ -46,9 +46,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkMenuShell             Native_GtkMenuShell
 #define GtkMenuBar               Native_GtkMenuBar
 #define GtkMenu                  Native_GtkMenu
+#define GtkDialog                Native_GtkDialog
+#define GtkDialogFlags           Native_GtkDialogFlags
+#define GtkMessageDialog         Native_GtkMessageDialog
 
 #include <gtk/gtk.h>
 
+#undef GtkMessageDialog
+#undef GtkDialogFlags
+#undef GtkDialog
 #undef GtkMenu
 #undef GtkMenuBar
 #undef GtkMenuShell

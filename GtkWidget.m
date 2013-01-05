@@ -85,15 +85,25 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
 
   //NOTE: be sure to check types in reverse hierarchical order.
   //(that is, native_is_gtk_type_named() will return YES for any valid ancenstor names)
-  if(native_is_gtk_type_named(native, "GtkWindow"     )) return [[[GtkWindow      alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkDrawingArea")) return [[[GtkDrawingArea alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkButton"     )) return [[[GtkButton      alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkLabel"      )) return [[[GtkLabel       alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkImage"      )) return [[[GtkImage       alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkProgressBar")) return [[[GtkProgressBar alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkBox"        )) return [[[GtkBox         alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkFrame"      )) return [[[GtkFrame       alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkGrid"       )) return [[[GtkGrid        alloc] initWithExistingNative:native] autorelease];
+  //also, left side strings are Gtk internal names (ex: "GtkMessageDialog" <-> GtkDialogMessage)
+  if(native_is_gtk_type_named(native, "GtkMessageDialog")) return [[[GtkDialogMessage alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkDialog"       )) return [[[GtkDialog        alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkWindow"       )) return [[[GtkWindow        alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkDrawingArea"  )) return [[[GtkDrawingArea   alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkButton"       )) return [[[GtkButton        alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkLabel"        )) return [[[GtkLabel         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkImage"        )) return [[[GtkImage         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkProgressBar"  )) return [[[GtkProgressBar   alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuImage"    )) return [[[GtkMenuImage     alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuRadio"    )) return [[[GtkMenuRadio     alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuCheck"    )) return [[[GtkMenuCheck     alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuItem"     )) return [[[GtkMenuItem      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuBar"      )) return [[[GtkMenuBar       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenu"         )) return [[[GtkMenu          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkGrid"         )) return [[[GtkGrid          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkBox"          )) return [[[GtkBox           alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkFrame"        )) return [[[GtkFrame         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkGrid"         )) return [[[GtkGrid          alloc] initWithExistingNative:native] autorelease];
 
   return [[[self alloc] initWithExistingNative:native] autorelease];
 }

@@ -24,6 +24,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkComboBox.h>
 #import <adenosine/GtkComboBoxText.h>
 #import <adenosine/GtkContainer.h>
+#import <adenosine/GtkDialog.h>
+#import <adenosine/GtkDialogMessage.h>
 #import <adenosine/GtkDrawingArea.h>
 #import <adenosine/GtkFrame.h>
 #import <adenosine/GtkGrid.h>

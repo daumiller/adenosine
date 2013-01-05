@@ -41,6 +41,8 @@ objgtk : GtkBin.o            \
          GtkComboBox.o       \
          GtkComboBoxText.o   \
          GtkContainer.o      \
+         GtkDialog.o         \
+         GtkDialogMessage.o  \
          GtkDrawingArea.o    \
          GtkFrame.o          \
          GtkGrid.o           \
