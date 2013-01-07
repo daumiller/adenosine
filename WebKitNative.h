@@ -55,6 +55,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkTextTagTable          Native_GtkTextTagTable
 #define GtkTextIter              Native_GtkTextIter
 #define GtkTextMark              Native_GtkTextMark
+#define GtkTextChildAnchor       Native_GtkTextChildAnchor
 
 #define WebKitWebView            Native_WebKitWebView
 #define WebKitNavigationResponse Native_WebKitNavigationResponse
@@ -71,6 +72,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef WebKitNavigationResponse
 #undef WebKitWebView
 
+#undef GtkTextChildAnchor
 #undef GtkTextMark
 #undef GtkTextIter
 #undef GtkTextTagTable

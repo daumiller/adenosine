@@ -37,40 +37,41 @@ test9 : test9.o libgtk
 #===================================================================================================================================
 libgtk : objgtk
 
-objgtk : GtkBin.o            \
-         GtkBox.o            \
-         GtkBuilder.o        \
-         GtkButton.o         \
-         GtkComboBox.o       \
-         GtkComboBoxText.o   \
-         GtkContainer.o      \
-         GtkDialog.o         \
-         GtkDialogMessage.o  \
-         GtkDrawingArea.o    \
-         GtkEntry.o          \
-         GtkEntryBuffer.o    \
-         GtkFrame.o          \
-         GtkGrid.o           \
-         GtkImage.o          \
-         GtkLabel.o          \
-         GtkMenu.o           \
-         GtkMenuBar.o        \
-         GtkMenuCheck.o      \
-         GtkMenuImage.o      \
-         GtkMenuItem.o       \
-         GtkMenuRadio.o      \
-         GtkMenuSeparator.o  \
-         GtkMenuShell.o      \
-         GtkMisc.o           \
-         GtkNotebook.o       \
-         GtkProgressBar.o    \
-         GtkRuntime.o        \
-         GtkScrolledWindow.o \
-         GtkTextIterator.o   \
-         GtkTextMark.o       \
-         GtkTextTag.o        \
-         GtkTextTagTable.o   \
-         GtkWidget.o         \
+objgtk : GtkBin.o             \
+         GtkBox.o             \
+         GtkBuilder.o         \
+         GtkButton.o          \
+         GtkComboBox.o        \
+         GtkComboBoxText.o    \
+         GtkContainer.o       \
+         GtkDialog.o          \
+         GtkDialogMessage.o   \
+         GtkDrawingArea.o     \
+         GtkEntry.o           \
+         GtkEntryBuffer.o     \
+         GtkFrame.o           \
+         GtkGrid.o            \
+         GtkImage.o           \
+         GtkLabel.o           \
+         GtkMenu.o            \
+         GtkMenuBar.o         \
+         GtkMenuCheck.o       \
+         GtkMenuImage.o       \
+         GtkMenuItem.o        \
+         GtkMenuRadio.o       \
+         GtkMenuSeparator.o   \
+         GtkMenuShell.o       \
+         GtkMisc.o            \
+         GtkNotebook.o        \
+         GtkProgressBar.o     \
+         GtkRuntime.o         \
+         GtkScrolledWindow.o  \
+         GtkTextChildAnchor.o \
+         GtkTextIterator.o    \
+         GtkTextMark.o        \
+         GtkTextTag.o         \
+         GtkTextTagTable.o    \
+         GtkWidget.o          \
          GtkWindow.o
 
 #===================================================================================================================================
