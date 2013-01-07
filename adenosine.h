@@ -17,6 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
+#import <adenosine/GtkEnums.h>
+
 #import <adenosine/GtkBin.h>
 #import <adenosine/GtkBox.h>
 #import <adenosine/GtkBuilder.h>
@@ -46,5 +48,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkProgressBar.h>
 #import <adenosine/GtkRuntime.h>
 #import <adenosine/GtkScrolledWindow.h>
+#import <adenosine/GtkTextTag.h>
+#import <adenosine/GtkTextTagTable.h>
 #import <adenosine/GtkWidget.h>
 #import <adenosine/GtkWindow.h>

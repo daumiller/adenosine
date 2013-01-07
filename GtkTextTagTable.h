@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkWidget.h
+// GtkTextTagTable.h
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,69 +18,36 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <ObjFW/ObjFW.h>
-#import <atropine/atropine.h>
 #import <adenosine/GtkEnums.h>
 
 //==================================================================================================================================
-@class GtkWidget;
-@protocol GtkWidgetDelegate <OFObject>
-@optional
--(BOOL)gtkWidget:(GtkWidget *)widget drawToSurface:(OMSurface *)surface;
--(BOOL)gtkWidget:(GtkWidget *)widget dimensionsChanged:(OMDimension)dimension;
--(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
--(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
--(BOOL)gtkWidget:(GtkWidget *)widget pointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
-@end
-
-//==================================================================================================================================
-@interface GtkWidget : OFObject
+@interface GtkTextTagTable : OFObject
 {
   void           *_native;
-  id              _delegate;
-  OFMutableArray *_connections;
+  OFMutableArray *_tags;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (readonly) void     *native;
-@property (retain)   id        delegate;
-@property (assign)   OMSize    minimumSize;
-@property (assign)   GtkAlign  horizontalAlign;
-@property (assign)   BOOL      horizontalExpand;
-@property (assign)   GtkAlign  verticalAlign;
-@property (assign)   BOOL      verticalExpand;
-@property (assign)   OFString *tooltipText;
-@property (assign)   BOOL      canGrabDefault;
++ textTagTable;
+- initTextTagTable;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + (BOOL) isWrapped:(void *)native;
-+ (id) wrapExistingNative:(void *)native;
 + nativeToWrapper:(void *)native;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ wrapExistingNative:(void *)native;
 - initWithExistingNative:(void *)native;
 -(void)installNativeLookup;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)destroy;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-- (void) show;
-- (void) showAll;
-- (void) hide;
-- (void) activate;
-- (void) grabFocus;
-- (void) grabDefault;
-- (BOOL) isFocused;
-- (OMSize) allocatedSize;
-- (void  ) queueDrawDimension:(OMDimension)dimension;
-- (void  ) queueDrawAll;
-- (void  ) setProperty:(OFString *)property toValue:(void *)value;
-- (void *) getProperty:(OFString *)property;
+@property (readonly) int      size;
+@property (readonly) OFArray *tags;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onDrawToSurface:(OMSurface *)surface;
--(BOOL)onDimensionsChanged:(OMDimension)dimension;
--(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
--(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
--(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(void)add:(GtkTextTag *)textTag;
+-(void)remove:(GtkTextTag *)textTag;
+-(GtkTextTag *)findByName:(OFString *)name;
+-(void)forEachTag:(void (^)(GtkTextTag *))block;
 
 //==================================================================================================================================
 @end

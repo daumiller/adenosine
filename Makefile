@@ -66,6 +66,8 @@ objgtk : GtkBin.o            \
          GtkProgressBar.o    \
          GtkRuntime.o        \
          GtkScrolledWindow.o \
+         GtkTextTag.o        \
+         GtkTextTagTable.o   \
          GtkWidget.o         \
          GtkWindow.o
 

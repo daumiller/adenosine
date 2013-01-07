@@ -51,9 +51,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkMessageDialog         Native_GtkMessageDialog
 #define GtkEntryBuffer           Native_GtkEntryBuffer
 #define GtkEntry                 Native_GtkEntry
+#define GtkTextTag               Native_GtkTextTag
+#define GtkTextDirection         Native_GtkTextDirection
+#define GtkTextTagTable          Native_GtkTextTagTable
 
 #include <gtk/gtk.h>
 
+#undef GtkTextTagTable
+#undef GtkTextDirection
+#undef GtkTextTag
 #undef GtkEntry
 #undef GtkEntryBuffer
 #undef GtkMessageDialog
