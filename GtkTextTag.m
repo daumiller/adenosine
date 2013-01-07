@@ -116,7 +116,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)setPriority:(int)priority { gtk_text_tag_set_priority(NATIVE_TEXTTAG, priority); }
 //----------------------------------------------------------------------------------------------------------------------------------
 PROP_GET_STRING(name, "name")
-PROP_SET_STRING(name, "name", setName)
 //----------------------------------------------------------------------------------------------------------------------------------
 PROP_GET_BOOL(accumulativeMargin, "accumulative-margin")
 PROP_SET_BOOL(accumulativeMargin, "accumulative-margin", setAccumulativeMargin)

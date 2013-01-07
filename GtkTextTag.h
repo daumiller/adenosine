@@ -43,7 +43,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (readonly) void *native;
 @property (assign)   int priority;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@property (assign) OFString        *name;
+@property (readonly) OFString      *name;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @property (assign) BOOL             accumulativeMargin;
 @property (assign) BOOL             backgroundFullHeight;

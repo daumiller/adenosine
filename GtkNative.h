@@ -55,9 +55,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkTextDirection         Native_GtkTextDirection
 #define GtkTextTagTable          Native_GtkTextTagTable
 #define GtkTextIter              Native_GtkTextIter
+#define GtkTextMark              Native_GtkTextMark
 
 #include <gtk/gtk.h>
 
+#undef GtkTextMark
 #undef GtkTextIter
 #undef GtkTextTagTable
 #undef GtkTextDirection
