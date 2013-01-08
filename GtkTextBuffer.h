@@ -26,10 +26,31 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //@class GtkClipboard;
 
 //==================================================================================================================================
+@class GtkTextBuffer;
+@protocol GtkTextBufferDelegate <OFObject>
+@optional
+-(void)gtkTextBufferChanged        :(GtkTextBuffer *)buffer;
+-(void)gtkTextBufferModifiedChanged:(GtkTextBuffer *)buffer;
+-(void)gtkTextBufferUserActionBegin:(GtkTextBuffer *)buffer;
+-(void)gtkTextBufferUserActionEnd  :(GtkTextBuffer *)buffer;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer applyTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer deleteRangeFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer insertChildAnchor:(GtkTextChildAnchor *)anchor at:(GtkTextIterator *)location;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer insertText:(OFString *)text at:(GtkTextIterator *)location;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer markDeleted:(GtkTextMark *)mark;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer markSet:(GtkTextMark *)mark at:(GtkTextIterator *)location;
+-(void)gtkTextBuffer:(GtkTextBuffer *)buffer removeTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+//TODO: insertPixbuf (???Pixbuf    *)
+//TODO: pasteDone    (GtkClipboard *)
+@end
+
+//==================================================================================================================================
 @interface GtkTextBuffer : OFObject
 {
   void           *_native;
+  id              _delegate;
   OFMutableArray *_marks;
+  OFMutableArray *_connections;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -57,6 +78,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (readonly) GtkTextMark     *selectionBoundMark;
 @property (assign)   BOOL             modified;
 @property (assign)   OFString        *text;
+@property (assign)   id               delegate;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)insertTextAtCursor:(OFString *)text;
@@ -124,6 +146,19 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   all of the serializing/deserialzing stuff... (implement functs with blocks?)
   all of the TargetList stuff
 */
+
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)onChanged;
+-(void)onModifiedChanged;
+-(void)onUserActionBegin;
+-(void)onUserActionEnd;
+-(void)onApplyTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+-(void)onDeleteRangeFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+-(void)onInsertChildAnchor:(GtkTextChildAnchor *)anchor at:(GtkTextIterator *)location;
+-(void)onInsertText:(OFString *)text at:(GtkTextIterator *)location;
+-(void)onMarkDeleted:(GtkTextMark *)mark;
+-(void)onMarkSet:(GtkTextMark *)mark at:(GtkTextIterator *)location;
+-(void)onRemoveTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end;
 
 //==================================================================================================================================
 @end

@@ -25,6 +25,105 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define ADENOSINE_NATIVE_LOOKUP_STRING "_adenosine_wrapper_textbuffer"
 
 //==================================================================================================================================
+// Signal/Event -> Object Proxies
+//==================================================================================================================================
+static void ConnectionProxy_Changed(struct _GtkTextBuffer *buffer, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  [obj onChanged];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_ModifiedChanged(struct _GtkTextBuffer *buffer, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  [obj onModifiedChanged];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_UserActionBegin(struct _GtkTextBuffer *buffer, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  [obj onUserActionBegin];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_UserActionEnd(struct _GtkTextBuffer *buffer, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  [obj onUserActionEnd];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_ApplyTag(struct _GtkTextBuffer *buffer, struct _GtkTextTag *tag, struct _GtkTextIter *start, struct _GtkTextIter *end, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextTag *wrapTag = [GtkTextTag nativeToWrapper:tag]; if(!wrapTag) wrapTag = [GtkTextTag wrapExistingNative:tag];
+  GtkTextIterator *wrapStart = [GtkTextIterator textIteratorWithNative:start];
+  GtkTextIterator *wrapEnd   = [GtkTextIterator textIteratorWithNative:end  ];
+  [obj onApplyTag:wrapTag from:wrapStart to:wrapEnd];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_DeleteRange(struct _GtkTextBuffer *buffer, struct _GtkTextIter *start, struct _GtkTextIter *end, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextIterator *wrapStart = [GtkTextIterator textIteratorWithNative:start];
+  GtkTextIterator *wrapEnd   = [GtkTextIterator textIteratorWithNative:end  ];
+  [obj onDeleteRangeFrom:wrapStart to:wrapEnd];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_InsertChildAnchor(struct _GtkTextBuffer *buffer, struct _GtkTextIter *location, struct _GtkTextChildAnchor *anchor, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextIterator *wrapLocation = [GtkTextIterator textIteratorWithNative:location];
+  GtkTextChildAnchor *wrapAnchor = [GtkTextChildAnchor nativeToWrapper:anchor]; if(!wrapAnchor) wrapAnchor = [GtkTextChildAnchor wrapExistingNative:anchor];
+  [obj onInsertChildAnchor:wrapAnchor at:wrapLocation];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_InsertText(struct _GtkTextBuffer *buffer, struct _GtkTextIter *location, gchar *text, gint len, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextIterator *wrapLocation = [GtkTextIterator textIteratorWithNative:location];
+  //hope it's safe to ignore 'len', since it specifies Bytes instead of Chars (which we could handle)...
+  OFString *ofText = [OFString stringWithUTF8String:text];
+  [obj onInsertText:ofText at:wrapLocation];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_MarkDeleted(struct _GtkTextBuffer *buffer, struct _GtkTextMark *mark, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextMark *wrapMark = [GtkTextMark nativeToWrapper:mark]; if(!wrapMark) wrapMark = [GtkTextMark wrapExistingNative:mark];
+  [obj onMarkDeleted:wrapMark];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_MarkSet(struct _GtkTextBuffer *buffer, struct _GtkTextIter *location, struct _GtkTextMark *mark, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextIterator *wrapLocation = [GtkTextIterator textIteratorWithNative:location];
+  GtkTextMark *wrapMark = [GtkTextMark nativeToWrapper:mark]; if(!wrapMark) wrapMark = [GtkTextMark wrapExistingNative:mark];
+  [obj onMarkSet:wrapMark at:wrapLocation];
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+static void ConnectionProxy_RemoveTag(struct _GtkTextBuffer *buffer, struct _GtkTextTag *tag, struct _GtkTextIter *start, struct _GtkTextIter *end, gpointer data)
+{
+  GtkTextBuffer *obj = (GtkTextBuffer *)[GtkTextBuffer nativeToWrapper:(void *)buffer];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextIterator *wrapStart = [GtkTextIterator textIteratorWithNative:start];
+  GtkTextIterator *wrapEnd   = [GtkTextIterator textIteratorWithNative:end  ];
+  GtkTextTag *wrapTag = [GtkTextTag nativeToWrapper:tag]; if(!wrapTag) wrapTag = [GtkTextTag wrapExistingNative:tag];
+  [obj onRemoveTag:wrapTag from:wrapStart to:wrapEnd];
+  [pool drain];
+}
+
+//==================================================================================================================================
 @implementation GtkTextBuffer
 
 //==================================================================================================================================
@@ -96,6 +195,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)dealloc
 {
+  self.delegate = nil;
+  [_connections release];
   [_marks release];
   [self destroy];
   [super dealloc]; 
@@ -155,7 +256,64 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   gtk_text_buffer_set_text(NATIVE_TEXTBUFFER, [text UTF8String], -1);
   [pool drain];
 }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(id)delegate { return _delegate; }
+-(void)setDelegate:(id)delegate
+{
+  for(OFNumber *idNumber in _connections)
+    g_signal_handler_disconnect(_native, [idNumber unsignedLongValue]);
+  [_connections release];
+  _connections = [[OFMutableArray alloc] init];
 
+  if(_delegate) [_delegate release];
+  _delegate = [delegate retain];
+  if(_delegate)
+  {
+    if([_delegate respondsToSelector:@selector(gtkTextBufferChanged:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "changed", G_CALLBACK(ConnectionProxy_Changed),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBufferModifiedChanged:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "modified-changed", G_CALLBACK(ConnectionProxy_ModifiedChanged),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBufferUserActionBegin:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "begin-user-action", G_CALLBACK(ConnectionProxy_UserActionBegin),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBufferUserActionEnd:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "end-user-action", G_CALLBACK(ConnectionProxy_UserActionEnd),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:applyTag:from:to:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "apply-tag", G_CALLBACK(ConnectionProxy_ApplyTag),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:deleteRangeFrom:to:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "delete-range", G_CALLBACK(ConnectionProxy_DeleteRange),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:insertChildAnchor:at:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "insert-child-anchor", G_CALLBACK(ConnectionProxy_InsertChildAnchor),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:insertText:at:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "insert-text", G_CALLBACK(ConnectionProxy_InsertText),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:markDeleted:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "mark-deleted", G_CALLBACK(ConnectionProxy_MarkDeleted),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:markSet:at:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "mark-set", G_CALLBACK(ConnectionProxy_MarkSet),NULL)]];
+
+    if([_delegate respondsToSelector:@selector(gtkTextBuffer:removeTag:from:to:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "remove-tag", G_CALLBACK(ConnectionProxy_RemoveTag),NULL)]];
+  }
+}
 
 //==================================================================================================================================
 // Utilities
@@ -477,9 +635,66 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 //==================================================================================================================================
+// Signal Handlers
+//==================================================================================================================================
+-(void)onChanged
+{
+  [_delegate gtkTextBufferChanged:self];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onModifiedChanged
+{
+  [_delegate gtkTextBufferModifiedChanged:self];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onUserActionBegin
+{
+  [_delegate gtkTextBufferUserActionBegin:self];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onUserActionEnd
+{
+  [_delegate gtkTextBufferUserActionEnd:self];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onApplyTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end;
+{
+  [_delegate gtkTextBuffer:self applyTag:tag from:start to:end];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onDeleteRangeFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end
+{
+  [_delegate gtkTextBuffer:self deleteRangeFrom:start to:end];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onInsertChildAnchor:(GtkTextChildAnchor *)anchor at:(GtkTextIterator *)location
+{
+  [_delegate gtkTextBuffer:self insertChildAnchor:anchor at:location];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onInsertText:(OFString *)text at:(GtkTextIterator *)location
+{
+  [_delegate gtkTextBuffer:self insertText:text at:location];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onMarkDeleted:(GtkTextMark *)mark
+{
+  [_delegate gtkTextBuffer:self markDeleted:mark];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onMarkSet:(GtkTextMark *)mark at:(GtkTextIterator *)location
+{
+  [_delegate gtkTextBuffer:self markSet:mark at:location];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)onRemoveTag:(GtkTextTag *)tag from:(GtkTextIterator *)start to:(GtkTextIterator *)end
+{
+  [_delegate gtkTextBuffer:self removeTag:tag from:start to:end];
+}
+
+//==================================================================================================================================
 @end
 
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
