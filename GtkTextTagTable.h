@@ -40,6 +40,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)destroy;
 
 //----------------------------------------------------------------------------------------------------------------------------------
+@property (readonly) void    *native;
 @property (readonly) int      size;
 @property (readonly) OFArray *tags;
 

@@ -48,6 +48,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkProgressBar.h>
 #import <adenosine/GtkRuntime.h>
 #import <adenosine/GtkScrolledWindow.h>
+#import <adenosine/GtkTextBuffer.h>
 #import <adenosine/GtkTextChildAnchor.h>
 #import <adenosine/GtkTextIterator.h>
 #import <adenosine/GtkTextMark.h>

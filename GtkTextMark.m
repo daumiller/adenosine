@@ -131,7 +131,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(BOOL)wasDeleted               { return gtk_text_mark_get_deleted(NATIVE_TEXTMARK);                              }
 -(BOOL)visible                  { return gtk_text_mark_get_visible(NATIVE_TEXTMARK);                              }
 -(void)setVisible:(BOOL)visible { gtk_text_mark_set_visible(NATIVE_TEXTMARK, visible);                            }
-/*
 -(GtkTextBuffer *)buffer
 {
   void *nativeBuffer = gtk_text_mark_get_buffer(NATIVE_TEXTMARK);
@@ -140,7 +139,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   if(!wrap) wrap = [GtkTextBuffer wrapExistingNative:nativeBuffer]; //this shouldn't ever actually be reached
   return wrap;
 }
-*/
 
 //==================================================================================================================================
 @end

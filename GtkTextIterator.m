@@ -70,11 +70,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 -(void *)native { return _native; }
 //----------------------------------------------------------------------------------------------------------------------------------
--(int)charOffset                                   { return gtk_text_iter_get_offset             (NATIVE_ITERATOR);             }
+-(int)offset                                       { return gtk_text_iter_get_offset             (NATIVE_ITERATOR);             }
 -(int)lineNumber                                   { return gtk_text_iter_get_line               (NATIVE_ITERATOR);             }
 -(int)lineOffset                                   { return gtk_text_iter_get_line_offset        (NATIVE_ITERATOR);             }
 -(int)visibleLineOffset                            { return gtk_text_iter_get_visible_line_offset(NATIVE_ITERATOR);             }
--(void)setCharOffset:(int)charOffset               { gtk_text_iter_set_offset             (NATIVE_ITERATOR, charOffset       ); }
+-(void)setOffset:(int)offset                       { gtk_text_iter_set_offset             (NATIVE_ITERATOR, offset           ); }
 -(void)setLineNumber:(int)lineNumber               { gtk_text_iter_set_line               (NATIVE_ITERATOR, lineNumber       ); }
 -(void)setLineOffset:(int)lineOffset               { gtk_text_iter_set_line_offset        (NATIVE_ITERATOR, lineOffset       ); }
 -(void)setVisibleLineOffset:(int)visibleLineOffset { gtk_text_iter_set_visible_line_offset(NATIVE_ITERATOR, visibleLineOffset); }
@@ -96,6 +96,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(int)charsInLine    { return gtk_text_iter_get_chars_in_line(NATIVE_ITERATOR); }
 -(uint32_t)character { return gtk_text_iter_get_char         (NATIVE_ITERATOR); }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(GtkTextChildAnchor *)anchor
+{
+  void *nativeAnchor = gtk_text_iter_get_child_anchor(NATIVE_ITERATOR);
+  if(!nativeAnchor) return nil;
+  GtkTextChildAnchor *wrap = [GtkTextChildAnchor nativeToWrapper:nativeAnchor];
+  if(!wrap) wrap = [GtkTextChildAnchor wrapExistingNative:nativeAnchor];
+  return wrap;
+}
 
 //==================================================================================================================================
 // Utilities
@@ -172,6 +181,25 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   OFArray *retArr = [OFArray arrayWithArray:ofTags];
   [ofTags release];
   return retArr;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(OFArray *)listMarks
+{
+  OFMutableArray *ofMarks = [[OFMutableArray alloc] init];
+  GSList *goMarks = gtk_text_iter_get_marks(NATIVE_ITERATOR);
+  unsigned int goCount = g_slist_length(goMarks);
+  for(unsigned int i=0; i<goCount; i++)
+  {
+    void *nativeMark = g_slist_nth_data(goMarks, i);
+    GtkTextMark *ofMark = [GtkTextMark nativeToWrapper:nativeMark];
+    if(!ofMark) ofMark = [[GtkTextMark alloc] initWithExistingNative:nativeMark];
+    [ofMarks addObject:ofMark];
+  }
+  g_slist_free(goMarks);
+
+  OFArray *retArr = [OFArray arrayWithArray:ofMarks];
+  [ofMarks release];
+  return retArr; 
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------

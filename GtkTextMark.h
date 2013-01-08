@@ -46,7 +46,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (readonly) OFString      *name;
 @property (readonly) BOOL           leftGravity;
 @property (readonly) BOOL           wasDeleted;
-//@property (readonly) GtkTextBuffer *buffer;  // !!! TODO: waiting on GtkTextBuffer implementation !!!
+@property (readonly) GtkTextBuffer *buffer;
 @property (assign)   BOOL           visible;
 
 //==================================================================================================================================

@@ -41,7 +41,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 @property (readonly) void *native;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@property (assign) int charOffset;
+@property (assign) int offset;
 @property (assign) int lineNumber;
 @property (assign) int lineOffset;
 @property (assign) int visibleLineOffset;
@@ -63,6 +63,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @property (readonly) int charsInLine;
 @property (readonly) uint32_t character;
+@property (readonly) GtkTextChildAnchor *anchor;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)beginsTag          :(GtkTextTag *)tag;
@@ -73,6 +74,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(BOOL)backwardToTagToggle:(GtkTextTag *)tag;
 -(OFArray *)listTags;
 -(OFArray *)listToggledTags:(BOOL)onOrOff;
+-(OFArray *)listMarks;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(BOOL)forwardChar;
 -(BOOL)backwardChar;
@@ -121,17 +123,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   //------------------------------------------
   Functions waiting on other classes/code
   //------------------------------------------
-  @property (readonly) GtkTextChildAnchror *childAnchor --> gtk_text_iter_get_child_anchor(native *)
   @property (readonly) Pixbuf *pixbuf --> gtk_text_iter_get_pixbuf(native *)
-  -(OFArray *)listMarks --> gtk_text_iter_get_marks(native *)
 
   //------------------------------------------
   Functions to Add to GtkTextBuffer
   //------------------------------------------
-  getSlice(GtkTextIterator *start, GtkTextIterator *end) --> gtk_text_iter_get_slice(native *start, native *end)
-  getText (GtkTextIterator *start, GtkTextIterator *end) --> gtk_text_iter_get_text (native *start, native *end)
-  getVisibleSlice(GtkTextIterator *start, GtkTextIterator *end) --> gtk_text_iter_get_visible_slice(native *start, native *end)
-  getVisibleText (GtkTextIterator *start, GtkTextIterator *end) --> gtk_text_iter_get_visible_text (native *start, native *end)
   findCharForward(GtkTextIterator *start, GtkTextIterator *max, BOOL (^predicateBlock)(uint32_t)) --> gtk_text_iter_forward_find_char
   findCharBackward(GtkTextIterator *start, GtkTextIterator *min, BOOL (^predicateBlock)(uint32_t)) --> gtk_text_iter_backward_find_char
   findForward(...) --> gtk_text_iter_forward_search

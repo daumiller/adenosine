@@ -114,6 +114,7 @@ static void IterateTagsWithBlock(struct _GtkTextTag *tag, gpointer data)
 //==================================================================================================================================
 // Properites
 //==================================================================================================================================
+-(void *)native  { return _native;                                      }
 -(int)size       { return gtk_text_tag_table_get_size(NATIVE_TAGTABLE); }
 -(OFArray *)tags { return (OFArray *)_tags;                             }
 
