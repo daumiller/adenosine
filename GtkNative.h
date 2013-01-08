@@ -59,9 +59,17 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkTextChildAnchor       Native_GtkTextChildAnchor
 #define GtkTextBuffer            Native_GtkTextBuffer
 #define GtkTextBufferTargetInfo  Native_GtkTextBufferTargetInfo
+#define GtkTextView              Native_GtkTextView
+#define GtkWrapMode              Native_GtkWrapMode
+#define GtkTextWindowType        Native_GtkTextWindowType
+#define GtkTextSearchFlags       Native_GtkTextSearchFlags
 
 #include <gtk/gtk.h>
 
+#undef GtkTextSearchFlags
+#undef GtkTextWindowType
+#undef GtkWrapMode
+#undef GtkTextView
 #undef GtkTextBufferTargetInfo
 #undef GtkTextBuffer
 #undef GtkTextChildAnchor

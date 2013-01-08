@@ -116,22 +116,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(of_comparison_result_t)compare:(GtkTextIterator *)compareTo;
 -(BOOL)isBetween:(GtkTextIterator *)begin and:(GtkTextIterator *)end;
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  TODO:
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*
-  //------------------------------------------
-  Functions waiting on other classes/code
-  //------------------------------------------
+  TODO:
   @property (readonly) Pixbuf *pixbuf --> gtk_text_iter_get_pixbuf(native *)
-
-  //------------------------------------------
-  Functions to Add to GtkTextBuffer
-  //------------------------------------------
-  findCharForward(GtkTextIterator *start, GtkTextIterator *max, BOOL (^predicateBlock)(uint32_t)) --> gtk_text_iter_forward_find_char
-  findCharBackward(GtkTextIterator *start, GtkTextIterator *min, BOOL (^predicateBlock)(uint32_t)) --> gtk_text_iter_backward_find_char
-  findForward(...) --> gtk_text_iter_forward_search
-  findBackward(...) ---> gtk_text_iter_backward_search
 */
 
 

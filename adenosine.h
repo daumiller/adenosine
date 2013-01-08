@@ -52,7 +52,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkTextChildAnchor.h>
 #import <adenosine/GtkTextIterator.h>
 #import <adenosine/GtkTextMark.h>
+#import <adenosine/GtkTextSearchResult.h>
 #import <adenosine/GtkTextTag.h>
 #import <adenosine/GtkTextTagTable.h>
+#import <adenosine/GtkTextView.h>
 #import <adenosine/GtkWidget.h>
 #import <adenosine/GtkWindow.h>

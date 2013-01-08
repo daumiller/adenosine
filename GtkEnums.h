@@ -138,9 +138,25 @@ typedef enum
   GTKTEXT_WRAP_CHAR,
   GTKTEXT_WRAP_WORD,
   GTKTEXT_WRAP_WORDCHAR
-
 } GtkTextWrap;
 //----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKTEXTVIEW_WINDOW_PRIVATE,
+  GTKTEXTVIEW_WINDOW_WIDGET,
+  GTKTEXTVIEW_WINDOW_TEXT,
+  GTKTEXTVIEW_WINDOW_LEFT,
+  GTKTEXTVIEW_WINDOW_RIGHT,
+  GTKTEXTVIEW_WINDOW_TOP,
+  GTKTEXTVIEW_WINDOW_BOTTOM
+} GtkTextViewWindow;
+//----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKTEXT_SEARCH_VISIBLE_ONLY     = 1<<0,
+  GTKTEXT_SEARCH_TEXT_ONLY        = 1<<1,
+  GTKTEXT_SEARCH_CASE_INSENSITIVE = 1<<2
+} GtkTextSearchFlags;
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------

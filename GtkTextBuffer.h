@@ -23,6 +23,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @class GtkTextMark;
 @class GtkTextIterator;
 @class GtkTextChildAnchor;
+@class GtkTextSearchResult;
 //@class GtkClipboard;
 
 //==================================================================================================================================
@@ -129,6 +130,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(GtkTextIterator *)createIteratorForChildAnchor:(GtkTextChildAnchor *)anchor;
 -(GtkTextIterator *)createIteratorForStart;
 -(GtkTextIterator *)createIteratorForEnd;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)findCharForwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)limit withBlock:(BOOL(^)(uint32_t))block;
+-(BOOL)findCharBackwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)limit withBlock:(BOOL (^)(uint32_t))block;
+-(GtkTextSearchResult *)find:(OFString *)string forwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end flags:(GtkTextSearchFlags)flags;
+-(GtkTextSearchResult *)find:(OFString *)string backwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end flags:(GtkTextSearchFlags)flags;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)setText:(OFString *)text ofLength:(int)length;
 -(OFString *)getTextFrom:(GtkTextIterator *)begin to:(GtkTextIterator *)end;

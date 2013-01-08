@@ -97,8 +97,8 @@ static void ConnectionProxy_PopulatePopup(struct _GtkEntry *entry, struct _GtkMe
   if(_buffer) return _buffer;
   void *nativeBuffer = gtk_entry_get_buffer(NATIVE_ENTRY);
   if(!nativeBuffer) return nil;
-  _native = [[GtkEntryBuffer alloc] initWithExistingNative:nativeBuffer];
-  return _native;
+  _buffer = [[GtkEntryBuffer alloc] initWithExistingNative:nativeBuffer];
+  return _buffer;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)setBuffer:(GtkEntryBuffer *)buffer

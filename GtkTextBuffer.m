@@ -25,6 +25,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define ADENOSINE_NATIVE_LOOKUP_STRING "_adenosine_wrapper_textbuffer"
 
 //==================================================================================================================================
+// Callback -> Block Proxies
+//==================================================================================================================================
+static gboolean BlockProxy_FindChar(gunichar ch, gpointer data)
+{
+  BOOL (^block)(uint32_t) = (BOOL (^)(uint32_t))data;
+  return block((uint32_t)ch);
+}
+
+//==================================================================================================================================
 // Signal/Event -> Object Proxies
 //==================================================================================================================================
 static void ConnectionProxy_Changed(struct _GtkTextBuffer *buffer, gpointer data)
@@ -632,6 +641,34 @@ static void ConnectionProxy_RemoveTag(struct _GtkTextBuffer *buffer, struct _Gtk
   OFString *retStr = [OFString stringWithUTF8String:str];
   g_free(str);
   return retStr;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)findCharForwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)limit withBlock:(BOOL(^)(uint32_t))block
+{
+  return gtk_text_iter_forward_find_char(start.native, BlockProxy_FindChar, (gpointer)(void *)block, [limit native]);
+}
+
+-(BOOL)findCharBackwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)limit withBlock:(BOOL (^)(uint32_t))block
+{
+  return gtk_text_iter_backward_find_char(start.native, BlockProxy_FindChar, (gpointer)(void *)block, [limit native]);
+}
+
+-(GtkTextSearchResult *)find:(OFString *)string forwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end flags:(GtkTextSearchFlags)flags
+{
+  struct _GtkTextIter nativeMatchStart, nativeMatchEnd;
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  BOOL match = gtk_text_iter_forward_search(start.native, [string UTF8String], (Native_GtkTextSearchFlags)flags, &nativeMatchStart, &nativeMatchEnd, [end native]);
+  [pool drain];
+  return [GtkTextSearchResult textSearchResultWithMatch:match nativeStart:&nativeMatchStart nativeEnd:&nativeMatchEnd];
+}
+
+-(GtkTextSearchResult *)find:(OFString *)string backwardFrom:(GtkTextIterator *)start to:(GtkTextIterator *)end flags:(GtkTextSearchFlags)flags
+{
+  struct _GtkTextIter nativeMatchStart, nativeMatchEnd;
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  BOOL match = gtk_text_iter_backward_search(start.native, [string UTF8String], (Native_GtkTextSearchFlags)flags, &nativeMatchStart, &nativeMatchEnd, [end native]);
+  [pool drain];
+  return [GtkTextSearchResult textSearchResultWithMatch:match nativeStart:&nativeMatchStart nativeEnd:&nativeMatchEnd];
 }
 
 //==================================================================================================================================
