@@ -56,5 +56,6 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkTextTag.h>
 #import <adenosine/GtkTextTagTable.h>
 #import <adenosine/GtkTextView.h>
+#import <adenosine/GtkViewport.h>
 #import <adenosine/GtkWidget.h>
 #import <adenosine/GtkWindow.h>

@@ -63,9 +63,13 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkWrapMode              Native_GtkWrapMode
 #define GtkTextWindowType        Native_GtkTextWindowType
 #define GtkTextSearchFlags       Native_GtkTextSearchFlags
+#define GtkViewport              Native_GtkViewport
+#define GtkStateFlags            Native_GtkStateFlags
 
 #include <gtk/gtk.h>
 
+#undef GtkStateFlags
+#undef GtkViewport
 #undef GtkTextSearchFlags
 #undef GtkTextWindowType
 #undef GtkWrapMode

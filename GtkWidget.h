@@ -76,6 +76,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 - (void) grabDefault;
 - (BOOL) isFocused;
 - (OMSize) allocatedSize;
+- (void)overrideBackgroundColor:(OMColor)color forState:(GtkWidgetState)state;
+- (void)resetBackgroundColorForState:(GtkWidgetState)state;
 - (void  ) queueDrawDimension:(OMDimension)dimension;
 - (void  ) queueDrawAll;
 - (void  ) setProperty:(OFString *)property toValue:(void *)value;

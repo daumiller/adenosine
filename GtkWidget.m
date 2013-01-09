@@ -95,6 +95,7 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   //NOTE: be sure to check types in reverse hierarchical order.
   //(that is, native_is_gtk_type_named() will return YES for any valid ancenstor names)
   //also, left side strings are Gtk internal names (ex: "GtkMessageDialog" <-> GtkDialogMessage)
+  if(native_is_gtk_type_named(native, "GtkViewport"      )) return [[[GtkViewport       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkTextView"      )) return [[[GtkTextView       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkScrolledWindow")) return [[[GtkScrolledWindow alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkMessageDialog" )) return [[[GtkDialogMessage  alloc] initWithExistingNative:native] autorelease];
@@ -285,6 +286,20 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 - (OMSize) allocatedSize
 {
   return OMMakeSize((float)gtk_widget_get_allocated_width(NATIVE_WIDGET), (float)gtk_widget_get_allocated_height(NATIVE_WIDGET));
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+- (void)overrideBackgroundColor:(OMColor)color forState:(GtkWidgetState)state
+{
+  GdkRGBA gdkColor;
+  gdkColor.red   = (double)color.r;
+  gdkColor.green = (double)color.g;
+  gdkColor.blue  = (double)color.b;
+  gdkColor.alpha = (double)color.a;
+  gtk_widget_override_background_color(NATIVE_WIDGET, (Native_GtkStateFlags)state, &gdkColor);
+}
+- (void)resetBackgroundColorForState:(GtkWidgetState)state
+{
+  gtk_widget_override_background_color(NATIVE_WIDGET, (Native_GtkStateFlags)state, NULL);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 - (void) queueDrawDimension:(OMDimension)dimension

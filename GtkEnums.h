@@ -167,4 +167,15 @@ typedef enum
   GTKSCROLL_DIRECTION_SMOOTH
 } GtkScrollDirection;
 //----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKWIDGET_STATE_NORMAL       = 0,
+  GTKWIDGET_STATE_ACTIVE       = 1<<0,
+  GTKWIDGET_STATE_PRELIGHT     = 1<<1,
+  GTKWIDGET_STATE_SELECTED     = 1<<2,
+  GTKWIDGET_STATE_INSENSITIVE  = 1<<3,
+  GTKWIDGET_STATE_INCONSISTENT = 1<<4,
+  GTKWIDGET_STATE_FOCUSED      = 1<<5,
+  GTKWIDGET_STATE_BACKDROP     = 1<<6
+} GtkWidgetState;
 //----------------------------------------------------------------------------------------------------------------------------------
