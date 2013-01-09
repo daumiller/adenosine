@@ -17,32 +17,38 @@ GtkWindow  *wndHelp;
 -(void)gtkTextBufferChanged:(GtkTextBuffer *)buffer;
 -(void)gtkEntry:(GtkEntry *)entry iconReleased:(GtkEntryIcon)icon withButton:(int)button;
 -(void)updateRegex;
+-(void)highlightRangeFrom:(int)start to:(int)end;
 @end
 //==================================================================================================================================
 @implementation ExtraTestZeroDelegate
+//----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)gtkWindowShouldClose:(GtkWindow *)window
 {
   [window hide];
   return NO;
 }
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)gtkEntryTextChanged:(GtkEntry *)entry
 {
   [self updateRegex];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)gtkTextBufferChanged:(GtkTextBuffer *)buffer
 {
   [self updateRegex];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)gtkEntry:(GtkEntry *)entry iconReleased:(GtkEntryIcon)icon withButton:(int)button
 {
   if(icon == GTKENTRY_ICON_SECONDARY)
     [wndHelp showAll];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)updateRegex
 {
   GtkEntry    *textRegex  = (GtkEntry    *)[wndMain getProperty:@"textRegex" ];
   GtkTextView *textSource = (GtkTextView *)[wndMain getProperty:@"textSource"];
-  GtkTextView *textDest   = (GtkTextView *)[wndMain getProperty:@"textDest"  ];
+  GtkTextView *textDest = (GtkTextView *)[wndMain getProperty:@"textDest"];
 
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   OFString *strRegex = textRegex.text;
@@ -53,7 +59,17 @@ GtkWindow  *wndHelp;
     if(regex.valid)
     {
       textRegex.progressValue = 0.000000f;
-      //HERE: TODO: //get matches from source, highlight in dest
+      //i think OFRegex could maybe use something more friendly here, like a block match iterator?
+      OFString *src = textSource.buffer.text;
+      int maxLen = src.length, index = 0, start;
+      OFArray *matches = [regex execute:src fromIndex:index];
+      while((matches.count > 0) && (index < maxLen))
+      {
+        index   = [[matches objectAtIndex:1] intValue];
+        start   = index - ((OFString *)[matches objectAtIndex:0]).length;
+        [self highlightRangeFrom:start to:index];
+        matches = [regex execute:src fromIndex:index];
+      }
     }
     else
       textRegex.progressValue = 1.0f;
@@ -64,6 +80,17 @@ GtkWindow  *wndHelp;
     textRegex.progressValue = 0.000000f;
   [pool drain];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)highlightRangeFrom:(int)start to:(int)end
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  GtkTextView *textDest = (GtkTextView *)[wndMain getProperty:@"textDest"];
+  [textDest.buffer applyTagNamed: @"highlight"
+                            from: [textDest.buffer createIteratorForOffset:start]
+                              to: [textDest.buffer createIteratorForOffset:end]];
+  [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 @end
 
 //==================================================================================================================================
@@ -120,6 +147,11 @@ int main(int argc, char **argv)
   GtkTextView *textDest = [GtkTextView textView];
   textDest.editable     = NO;
   textDest.marginLeft = textDest.marginRight = 6;
+  //and its highlighter
+  GtkTextTag *tagHighlight   = [GtkTextTag textTagWithName:@"highlight"];
+  tagHighlight.background    = OMMakeColorRGB(1.0f, 1.0f, 0.0f);
+  tagHighlight.backgroundSet = YES;
+  [textDest.buffer.tagTable add:tagHighlight];
   //and its container
   GtkScrolledWindow *scrollDest = [GtkScrolledWindow scrolledWindow];
   scrollDest.horizontalExpand   = scrollDest.verticalExpand = YES;
