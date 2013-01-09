@@ -87,6 +87,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)dealloc
 {
   [self destroy];
+  [_font release];
   [super dealloc]; 
 }
 

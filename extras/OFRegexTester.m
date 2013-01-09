@@ -48,7 +48,7 @@ GtkWindow  *wndHelp;
 {
   GtkEntry    *textRegex  = (GtkEntry    *)[wndMain getProperty:@"textRegex" ];
   GtkTextView *textSource = (GtkTextView *)[wndMain getProperty:@"textSource"];
-  GtkTextView *textDest = (GtkTextView *)[wndMain getProperty:@"textDest"];
+  GtkTextView *textDest   = (GtkTextView *)[wndMain getProperty:@"textDest"  ];
 
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   OFString *strRegex = textRegex.text;
@@ -73,7 +73,7 @@ GtkWindow  *wndHelp;
     }
     else
       textRegex.progressValue = 1.0f;
-    // this (VVV) would be so much nicer, doesn't work anymore because GTK+ theming is retarded...
+    //this (overrideBackgroundColor) would be sooo much nicer, but doesn't work anymore because GTK+ theming is retarded...
     //[textRegex overrideBackgroundColor:OMMakeColorRGB(1.0f, 0.0f, 0.0f) forState:GTKWIDGET_STATE_NORMAL];
   }
   else
