@@ -7,9 +7,20 @@ GtkWindow  *wndMain;
 
 //==================================================================================================================================
 @interface TestTenDelegate : OFObject
+-(void)gtkTextBufferChanged:(GtkTextBuffer *)buffer;
 @end
 //==================================================================================================================================
 @implementation TestTenDelegate
+-(void)gtkTextBufferChanged:(GtkTextBuffer *)buffer
+{
+  if(!buffer.modified)
+  {
+    buffer.modified = YES;
+    OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+    wndMain.title = [wndMain.title stringByAppendingString:@"*"];
+    [pool drain];
+  }
+}
 @end
 
 //==================================================================================================================================
@@ -31,12 +42,23 @@ int main(int argc, char **argv)
   //create TextView
   GtkTextView *tv = [GtkTextView textView];
   tv.buffer.text = @"Hello TextView World!!!";
+  tv.buffer.modified = NO;
+  tv.buffer.delegate = test10Del;
 
   //create ScrolledWindow
   GtkScrolledWindow *scroll = [GtkScrolledWindow scrolledWindow];
   scroll.horizontalPolicy   = scroll.verticalPolicy = GTKSCROLLBARSHOW_AUTOMATIC;
   scroll.horizontalExpand   = scroll.verticalExpand = YES;
   [scroll add:tv];
+  //i really, really HATE this...
+  //a WebKitWebView contained in a ScrolledWindow respect's the System's reverse/natural device scrolling,
+  //but for whatever reason, a TextView in a ScrolledWindow does not.
+  //i found zero answers on #gtk+, and googling turns up nothing but a couple of only-possibly related os-level bug reports.
+  //it would probably be worth putting some global into GtkRuntime that ScrolledWindow's would look up,
+  //but i don't want to look into finding this value per-OS and per-device right now...
+  //for now, we'll rely on per-app user-settings, and a "scrollScale" ScrolledWindow property as work-arounds... :|
+  scroll.scrollScaleY = -1.0f;
+  scroll.scrollScaled = YES;
 
   //create layout Grid
   GtkGrid *grid  = [GtkGrid grid];

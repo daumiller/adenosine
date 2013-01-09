@@ -22,6 +22,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 
 //==================================================================================================================================
 @interface GtkScrolledWindow : GtkBin
+{
+  float _scrollScaleX;
+  float _scrollScaleY;
+  BOOL  _scrollScaled;
+  unsigned long _scaleScrollingConnectionId;
+}
 
 //----------------------------------------------------------------------------------------------------------------------------------
 +scrolledWindow;
@@ -33,9 +39,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (assign) GtkScrollbarShow horizontalPolicy;
 @property (assign) GtkScrollbarShow verticalPolicy;
 @property (assign) OMSize           minimumContentSize;
+@property (assign) float            scrollScaleX;
+@property (assign) float            scrollScaleY;
+@property (assign) BOOL             scrollScaled;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)addWithViewport:(GtkWidget *)child;
+
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onScrollModifier:(GtkScrollDirection *)direction by:(OMCoordinate *)deltas at:(OMCoordinate *)local root:(OMCoordinate *)root modifiers:(GtkModifier *)modifiers;
 
 @end
 //==================================================================================================================================

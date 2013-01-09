@@ -67,6 +67,15 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
   return [obj onPointerMovedAt:local root:root modifiers:(GtkModifier)event->state];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
+  OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
+  double dX, dY; gdk_event_get_scroll_deltas((GdkEvent *)event, &dX, &dY); OMCoordinate deltas = OMMakeCoordinate((float)dX, (float)dY);
+  return [obj onScrolled:(GtkScrollDirection)event->direction by:deltas at:local root:root modifiers:(GtkModifier)event->state];
+}
 
 //==================================================================================================================================
 @implementation GtkWidget
@@ -86,25 +95,27 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
   //NOTE: be sure to check types in reverse hierarchical order.
   //(that is, native_is_gtk_type_named() will return YES for any valid ancenstor names)
   //also, left side strings are Gtk internal names (ex: "GtkMessageDialog" <-> GtkDialogMessage)
-  if(native_is_gtk_type_named(native, "GtkMessageDialog")) return [[[GtkDialogMessage alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkDialog"       )) return [[[GtkDialog        alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkWindow"       )) return [[[GtkWindow        alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkDrawingArea"  )) return [[[GtkDrawingArea   alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkButton"       )) return [[[GtkButton        alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkLabel"        )) return [[[GtkLabel         alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkImage"        )) return [[[GtkImage         alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkProgressBar"  )) return [[[GtkProgressBar   alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenuImage"    )) return [[[GtkMenuImage     alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenuRadio"    )) return [[[GtkMenuRadio     alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenuCheck"    )) return [[[GtkMenuCheck     alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenuItem"     )) return [[[GtkMenuItem      alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenuBar"      )) return [[[GtkMenuBar       alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkMenu"         )) return [[[GtkMenu          alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkGrid"         )) return [[[GtkGrid          alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkBox"          )) return [[[GtkBox           alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkFrame"        )) return [[[GtkFrame         alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkGrid"         )) return [[[GtkGrid          alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkEntry"        )) return [[[GtkEntry         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkTextView"      )) return [[[GtkTextView       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkScrolledWindow")) return [[[GtkScrolledWindow alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMessageDialog" )) return [[[GtkDialogMessage  alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkDialog"        )) return [[[GtkDialog         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkWindow"        )) return [[[GtkWindow         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkDrawingArea"   )) return [[[GtkDrawingArea    alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkButton"        )) return [[[GtkButton         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkLabel"         )) return [[[GtkLabel          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkImage"         )) return [[[GtkImage          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkProgressBar"   )) return [[[GtkProgressBar    alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuImage"     )) return [[[GtkMenuImage      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuRadio"     )) return [[[GtkMenuRadio      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuCheck"     )) return [[[GtkMenuCheck      alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuItem"      )) return [[[GtkMenuItem       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenuBar"       )) return [[[GtkMenuBar        alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkMenu"          )) return [[[GtkMenu           alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkGrid"          )) return [[[GtkGrid           alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkBox"           )) return [[[GtkBox            alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkFrame"         )) return [[[GtkFrame          alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkGrid"          )) return [[[GtkGrid           alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkEntry"         )) return [[[GtkEntry          alloc] initWithExistingNative:native] autorelease];
 
   return [[[self alloc] initWithExistingNative:native] autorelease];
 }
@@ -206,6 +217,13 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
       eventFlags |= GDK_POINTER_MOTION_MASK;
       [_connections addObject:[OFNumber numberWithUnsignedLong:
         g_signal_connect(_native, "motion-notify-event", G_CALLBACK(ConnectionProxy_PointerMotion),NULL)]];
+    }
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:scrolled:by:at:root:modifiers:)])
+    {
+      eventFlags |= GDK_SCROLL_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "scroll-event", G_CALLBACK(ConnectionProxy_Scroll),NULL)]];
     }
 
     if(eventFlags != original)
@@ -323,6 +341,11 @@ static BOOL ConnectionProxy_PointerMotion(struct _GtkWidget *widget, GdkEventMot
 -(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   return [_delegate gtkWidget:self pointerMovedAt:local root:root modifiers:modifiers];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onScrolled:(GtkScrollDirection)direction by:(OMCoordinate)deltas at:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
+{
+  return [_delegate gtkWidget:self scrolled:direction by:deltas at:local root:root modifiers:modifiers];
 }
 
 //==================================================================================================================================

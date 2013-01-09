@@ -25,6 +25,32 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define NATIVE_SCROLLED ((struct _GtkScrolledWindow *)_native)
 
 //==================================================================================================================================
+// Signal/Event -> Object Proxies
+//==================================================================================================================================
+static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *event, void *data)
+{
+  GtkScrolledWindow *obj = (GtkScrolledWindow *)[GtkWidget nativeToWrapper:(void *)widget];
+  //create friendly variables
+  OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
+  OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
+  double dX, dY; gdk_event_get_scroll_deltas((GdkEvent *)event, &dX, &dY); OMCoordinate deltas = OMMakeCoordinate((float)dX, (float)dY);
+  GtkScrollDirection direction = (GtkScrollDirection)event->direction;
+  GtkModifier modifiers = (GtkModifier)event->state;
+  //call our instance
+  BOOL retval = [obj onScrollModifier:&direction by:&deltas at:&local root:&root modifiers:&modifiers];
+  //write (modified) values back to event
+  event->state     = (guint)modifiers;
+  event->x_root    = (gdouble)root.x;
+  event->y_root    = (gdouble)root.y;
+  event->x         = (gdouble)local.x;
+  event->y         = (gdouble)local.y;
+  event->delta_x   = (gdouble)deltas.x;
+  event->delta_y   = (gdouble)deltas.y;
+  event->direction = (GdkScrollDirection)direction;
+  return retval;
+}
+
+//==================================================================================================================================
 @implementation GtkScrolledWindow
 
 //==================================================================================================================================
@@ -38,6 +64,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
   {
     _native = gtk_scrolled_window_new(NULL,NULL);
     [self installNativeLookup];
+    _scrollScaleX   = 1.0f;
+    _scrollScaleY   = 1.0f;
+    _scrollScaled   = NO;
+    _scaleScrollingConnectionId = 0;
+    int eventFlags = gtk_widget_get_events(NATIVE_WIDGET) | GDK_SCROLL_MASK;
+    gtk_widget_set_events(_native, eventFlags);
   }
   return self;
 }
@@ -45,6 +77,19 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Properites
 //==================================================================================================================================
+@synthesize scrollScaleX = _scrollScaleX;
+@synthesize scrollScaleY = _scrollScaleY;
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)scrollScaled { return _scrollScaled; }
+-(void)setScrollScaled:(BOOL)scrollScaled
+{
+  if(scrollScaled == _scrollScaled) return;
+  if(scrollScaled)
+    _scaleScrollingConnectionId = g_signal_connect(_native, "scroll-event", G_CALLBACK(ConnectionProxy_Scroll),NULL);
+  else
+    g_signal_handler_disconnect(_native, _scaleScrollingConnectionId);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 -(GtkBorderShadow)shadow                 { return (GtkBorderShadow)gtk_scrolled_window_get_shadow_type(NATIVE_SCROLLED); }
 -(void)setShadow:(GtkBorderShadow)shadow { gtk_scrolled_window_set_shadow_type(NATIVE_SCROLLED, (GtkShadowType)shadow);  }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -96,6 +141,44 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 -(void)addWithViewport:(GtkWidget *)child
 {
   gtk_scrolled_window_add_with_viewport(NATIVE_SCROLLED, (struct _GtkWidget *)child.native);
+}
+
+//==================================================================================================================================
+// (Default) Signal Handlers
+//==================================================================================================================================
+-(BOOL)onScrollModifier:(GtkScrollDirection *)direction by:(OMCoordinate *)deltas at:(OMCoordinate *)local root:(OMCoordinate *)root modifiers:(GtkModifier *)modifiers
+{
+  if(_scrollScaleX < 0.0f)
+  {
+    if(*direction == GTKSCROLL_DIRECTION_LEFT)
+    {
+      deltas->x *= -1.0f;
+      *direction = GTKSCROLL_DIRECTION_RIGHT;
+    }
+    else if(*direction == GTKSCROLL_DIRECTION_RIGHT)
+    {
+      deltas->x *= -1.0f;
+      *direction = GTKSCROLL_DIRECTION_LEFT;
+    }
+  }
+
+  if(_scrollScaleY < 0.0f)
+  {
+    if(*direction == GTKSCROLL_DIRECTION_UP)
+    {
+      deltas->y *= -1.0f;
+      *direction = GTKSCROLL_DIRECTION_DOWN;
+    }
+    else if(*direction == GTKSCROLL_DIRECTION_DOWN)
+    {
+      deltas->y *= -1.0f;
+      *direction = GTKSCROLL_DIRECTION_UP;
+    }
+  }
+
+  deltas->x *= _scrollScaleX;
+  deltas->y *= _scrollScaleY;
+  return NO; //don't stop processing / do continue procesing
 }
 
 @end

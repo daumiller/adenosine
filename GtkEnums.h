@@ -158,5 +158,13 @@ typedef enum
   GTKTEXT_SEARCH_CASE_INSENSITIVE = 1<<2
 } GtkTextSearchFlags;
 //----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKSCROLL_DIRECTION_UP,
+  GTKSCROLL_DIRECTION_DOWN,
+  GTKSCROLL_DIRECTION_LEFT,
+  GTKSCROLL_DIRECTION_RIGHT,
+  GTKSCROLL_DIRECTION_SMOOTH
+} GtkScrollDirection;
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
