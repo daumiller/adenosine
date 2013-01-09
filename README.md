@@ -9,8 +9,8 @@ adenosine is an ObjFW specific, Objective-C wrapper for GTK+ 3. It's more than a
 adenosine is not yet complete, but can currently build some very basic applications.
 
 ##Dependencies
-[atropine](https://github.com/daumiller/atropine)
-[WebKitGTK+](http://webkitgtk.org) for WebKit controls
+[atropine](https://github.com/daumiller/atropine) required (Cairo + Pango)<br/>
+[WebKitGTK+](http://webkitgtk.org) if you want WebKit controls<br/>
 [OFExtensions](https://github.com/daumiller/ofextensions) (which depends on PCRE) for example applications
 
 ##Screenshots
