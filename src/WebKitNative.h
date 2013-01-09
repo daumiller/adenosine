@@ -65,6 +65,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkViewport              Native_GtkViewport
 #define GtkStateFlags            Native_GtkStateFlags
 #define GtkFontChooser           Native_GtkFontChooser
+#define GtkFontButton            Native_GtkFontButton
 
 #define WebKitWebView            Native_WebKitWebView
 #define WebKitNavigationResponse Native_WebKitNavigationResponse
@@ -81,6 +82,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef WebKitNavigationResponse
 #undef WebKitWebView
 
+#undef GtkFontButton
 #undef GtkFontChooser
 #undef GtkStateFlags
 #undef GtkViewport

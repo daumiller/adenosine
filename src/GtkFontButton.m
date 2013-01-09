@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkFontChooser.ReferenceImplementation.m
+// GtkFontButton.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -20,21 +20,24 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import "GtkNative.h"
 #import <adenosine/adenosine.h>
 #import <atropine/atropine.h>
-#include <pango/pango.h>
 
-/*
-@interface SomeClass : GtkWidget <GtkFontChooser>
+//==================================================================================================================================
+#define NATIVE_WIDGET     ((struct _GtkWidget      *)_native)
+#define NATIVE_BUTTON     ((struct _GtkButton      *)_native)
+#define NATIVE_CHOOSER    ((struct _GtkFontChooser *)_native)
+#define NATIVE_FONTBUTTON ((struct _GtkFontButton  *)_native)
+
+//==================================================================================================================================
+// Proxies
+//==================================================================================================================================
+static void ConnectionProxy_FontSet(struct _GtkFontButton *fontButton, void *data)
 {
-  OMFont *_font;
+  GtkFontButton *obj = (GtkFontButton *)[GtkWidget nativeToWrapper:(void *)fontButton];
+  [obj onFontSet:obj.font];
 }
-...
-*/
 
 //==================================================================================================================================
-#define NATIVE_CHOOSER ((struct _GtkFontChooser *)_native)
-
-//==================================================================================================================================
-// Callback -> Block Proxies
+// GtkFontChooser Proxies
 //==================================================================================================================================
 static gboolean BlockProxy_FilterCall(const PangoFontFamily *family, const PangoFontFace *face, gpointer data)
 {
@@ -55,13 +58,51 @@ static void BlockProxy_FilterClean(gpointer data)
   [(BOOL (^)(OMFont *))data release];
 }
 
-
 //==================================================================================================================================
-@implementation GtkFontChooser
+@implementation GtkFontButton
 
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
++ fontButton                                      { return [[[self alloc] init                         ] autorelease]; }
++ fontButtonWithFont:(OMFont *)font               { return [[[self alloc] initWithFont      :font      ] autorelease]; }
++ fontButtonWithFontString:(OFString *)fontString { return [[[self alloc] initWithFontString:fontString] autorelease]; }
+//----------------------------------------------------------------------------------------------------------------------------------
+- initFontButton
+{
+  self = [super init];
+  if(self)
+  {
+    _native = gtk_font_button_new();
+    [self installNativeLookup];
+  }
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithFont:(OMFont *)font
+{
+  self = [super init];
+  if(self)
+  {
+    _native = gtk_font_button_new();
+    [self installNativeLookup];
+    self.font = font;
+  }
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithFontString:(OFString *)fontString
+{
+  self = [super init];
+  if(self)
+  {
+    _native = gtk_font_button_new();
+    [self installNativeLookup];
+    self.fontString = fontString;
+  }
+  return self;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)dealloc
 {
   [_font release];
@@ -69,7 +110,50 @@ static void BlockProxy_FilterClean(gpointer data)
 }
 
 //==================================================================================================================================
-// Properties
+// Properites
+//==================================================================================================================================
+-(BOOL)showStyle                    { return gtk_font_button_get_show_style(NATIVE_FONTBUTTON);            }
+-(void)setShowStyle:(BOOL)showStyle {        gtk_font_button_set_show_style(NATIVE_FONTBUTTON, showStyle); }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)showSize                     { return gtk_font_button_get_show_size(NATIVE_FONTBUTTON);             }
+-(void)setShowSize:(BOOL)showSize   {        gtk_font_button_set_show_size(NATIVE_FONTBUTTON, showSize);   }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)useFont                      { return gtk_font_button_get_use_font(NATIVE_FONTBUTTON);              }
+-(void)setUseFont:(BOOL)useFont     {        gtk_font_button_set_use_font(NATIVE_FONTBUTTON, useFont);     }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)useSize                      { return gtk_font_button_get_use_size(NATIVE_FONTBUTTON);              }
+-(void)setUseSize:(BOOL)useSize     {        gtk_font_button_set_use_size(NATIVE_FONTBUTTON, useSize);     }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(OFString *)dialogTitle { return [OFString stringWithUTF8String:gtk_font_button_get_title(NATIVE_FONTBUTTON)]; }
+-(void)setDialogTitle:(OFString *)dialogTitle
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_font_button_set_title(NATIVE_FONTBUTTON, [dialogTitle UTF8String]);
+  [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)setDelegate:(id)delegate
+{
+  [super setDelegate:delegate];
+  
+  if(_delegate)
+  {
+    if([_delegate respondsToSelector:@selector(gtkFontButton:fontSet:)])
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "font-set", G_CALLBACK(ConnectionProxy_FontSet),NULL)]];
+  }
+}
+
+//==================================================================================================================================
+// Signal Handlers
+//==================================================================================================================================
+-(void)onFontSet:(OMFont *)font
+{
+  [_delegate gtkFontButton:self fontSet:font];
+}
+
+//==================================================================================================================================
+// GtkFontChooser Properites
 //==================================================================================================================================
 -(OFString *)previewText
 {
@@ -143,7 +227,7 @@ static void BlockProxy_FilterClean(gpointer data)
 }
 
 //==================================================================================================================================
-// Utilities
+// GtkFontChooser Utilities
 //==================================================================================================================================
 -(void)setFontFilter:(BOOL (^)(OMFont *))block
 {

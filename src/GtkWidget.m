@@ -102,6 +102,7 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   if(native_is_gtk_type_named(native, "GtkDialog"        )) return [[[GtkDialog         alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkWindow"        )) return [[[GtkWindow         alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkDrawingArea"   )) return [[[GtkDrawingArea    alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkFontButton"    )) return [[[GtkFontButton     alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkButton"        )) return [[[GtkButton         alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkLabel"         )) return [[[GtkLabel          alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkImage"         )) return [[[GtkImage          alloc] initWithExistingNative:native] autorelease];
