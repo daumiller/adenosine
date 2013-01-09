@@ -142,6 +142,13 @@ int main(int argc, char **argv)
   scrollSource.horizontalExpand = scrollSource.verticalExpand = YES;
   scrollSource.scrollScaleY = -1.0f; scrollSource.scrollScaled = REVERSE_VERTICAL_SCROLLING;
   [scrollSource add:textSource];
+  //set default font size
+  GtkTextTag *tagSourceSize = [GtkTextTag textTagWithName:@"fontSizeSetter"];
+  tagSourceSize.sizePoints = 12.0;
+  [textSource.buffer.tagTable add:tagSourceSize];
+  [textSource.buffer applyTagNamed: @"fontSizeSetter"
+                              from: [textSource.buffer createIteratorForStart]
+                                to: [textSource.buffer createIteratorForEnd]];
 
   //create destination TextView
   GtkTextView *textDest = [GtkTextView textView];
@@ -150,13 +157,20 @@ int main(int argc, char **argv)
   //and its highlighter
   GtkTextTag *tagHighlight   = [GtkTextTag textTagWithName:@"highlight"];
   tagHighlight.background    = OMMakeColorRGB(1.0f, 1.0f, 0.0f);
-  tagHighlight.backgroundSet = YES;
+  tagHighlight.foreground    = OMMakeColorRGB(0.0f, 0.0f, 0.0f);
   [textDest.buffer.tagTable add:tagHighlight];
   //and its container
   GtkScrolledWindow *scrollDest = [GtkScrolledWindow scrolledWindow];
   scrollDest.horizontalExpand   = scrollDest.verticalExpand = YES;
   scrollDest.scrollScaleY = -1.0f; scrollDest.scrollScaled = REVERSE_VERTICAL_SCROLLING;
   [scrollDest add:textDest];
+  //set default font size
+  GtkTextTag *tagDestSize = [GtkTextTag textTagWithName:@"fontSizeSetter"];
+  tagDestSize.sizePoints = 12.0;
+  [textDest.buffer.tagTable add:tagDestSize];
+  [textDest.buffer applyTagNamed: @"fontSizeSetter"
+                              from: [textDest.buffer createIteratorForStart]
+                                to: [textDest.buffer createIteratorForEnd]];
 
   //create Grid
   GtkGrid *layout = [GtkGrid grid];

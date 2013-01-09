@@ -42,10 +42,10 @@ test10 : test10.o libgtk
 # they're included for reference only, and not required for a "make all"
 # maybe the WebKit section should be in here?
 extest00 : extest00.o libgtk
-	clang extest00.o Gtk*.o ../../ofextensions/OFRegex.o -o extest00.bin -I../ -I../../ofextensions ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
+	clang extest00.o Gtk*.o ../../OFExtensions/OFRegex.o -o extest00.bin -I../ -I../../OFExtensions ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
 
 extest00.o : extest00.m
-	clang -c extest00.m -o extest00.o -I../ -I../../ofextensions `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
+	clang -c extest00.m -o extest00.o -I../ -I../../OFExtensions `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
 
 #===================================================================================================================================
 libgtk : objgtk

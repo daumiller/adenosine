@@ -24,7 +24,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 @interface GtkTextTag : OFObject
 {
-  void *_native;
+  void   *_native;
+  OMFont *_font;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -55,8 +56,8 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (assign) BOOL             editableSet;
 @property (assign) OFString        *family;
 @property (assign) BOOL             familySet;
-@property (assign) OFString        *font;
-//@property (assign) OMFontDescription *fontDescription; //TODO:
+@property (assign) OFString        *fontString;
+@property (retain) OMFont          *font;
 @property (assign) OMColor          foreground;
 @property (assign) BOOL             foregroundSet;
 @property (assign) int              indent;

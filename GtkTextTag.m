@@ -19,6 +19,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
 #import <adenosine/adenosine.h>
+#import <atropine/atropine.h>
 
 //==================================================================================================================================
 #define NATIVE_TEXTTAG ((struct _GtkTextTag *)_native)
@@ -112,6 +113,15 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void *)native { return _native; }
 //----------------------------------------------------------------------------------------------------------------------------------
+-(OMFont *)font { return _font; }
+-(void)setFont:(OMFont *)font
+{
+  [_font release];
+  _font = [font retain];
+  g_object_set(_native, "font-desc", _font.fontData, NULL);
+  //maybe atropine classes properties should be renamed to "native" (instead of "fontData"/...) for consistency?
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 -(int)priority                   { return gtk_text_tag_get_priority(NATIVE_TEXTTAG);    }
 -(void)setPriority:(int)priority { gtk_text_tag_set_priority(NATIVE_TEXTTAG, priority); }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -137,8 +147,8 @@ PROP_GET_STRING(family, "family")
 PROP_SET_STRING(family, "family", setFamily)
 PROP_GET_BOOL(familySet, "family-set")
 PROP_SET_BOOL(familySet, "family-set", setFamilySet)
-PROP_GET_STRING(font, "font")
-PROP_SET_STRING(font, "font", setFont)
+PROP_GET_STRING(fontString, "font")
+PROP_SET_STRING(fontString, "font", setFontString)
 PROP_GET_COLOR(foreground, "foreground-rgba")
 PROP_SET_COLOR(foreground, "foreground-rgba", setForeground)
 PROP_GET_BOOL(foregroundSet, "foreground-set")
