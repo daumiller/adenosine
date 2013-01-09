@@ -31,6 +31,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkDrawingArea.h>
 #import <adenosine/GtkEntry.h>
 #import <adenosine/GtkEntryBuffer.h>
+#import <adenosine/GtkFontChooser.h>
 #import <adenosine/GtkFrame.h>
 #import <adenosine/GtkGrid.h>
 #import <adenosine/GtkImage.h>

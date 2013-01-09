@@ -65,9 +65,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkTextSearchFlags       Native_GtkTextSearchFlags
 #define GtkViewport              Native_GtkViewport
 #define GtkStateFlags            Native_GtkStateFlags
+#define GtkFontChooser           Native_GtkFontChooser
 
 #include <gtk/gtk.h>
 
+#undef GtkFontChooser
 #undef GtkStateFlags
 #undef GtkViewport
 #undef GtkTextSearchFlags
