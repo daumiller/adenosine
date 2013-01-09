@@ -84,6 +84,7 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 -(void)setScrollScaled:(BOOL)scrollScaled
 {
   if(scrollScaled == _scrollScaled) return;
+  _scrollScaled = scrollScaled;
   if(scrollScaled)
     _scaleScrollingConnectionId = g_signal_connect(_native, "scroll-event", G_CALLBACK(ConnectionProxy_Scroll),NULL);
   else
