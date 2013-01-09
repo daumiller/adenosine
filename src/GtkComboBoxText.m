@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkContainer.m
+// GtkComboBoxText.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,98 +18,96 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkContainer.h"
+#import <adenosine/GtkComboBoxText.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET    ((struct _GtkWidget    *)_native)
-#define NATIVE_CONTAINER ((struct _GtkContainer *)_native)
+#define NATIVE_WIDGET       ((struct _GtkWidget       *)_native)
+#define NATIVE_COMBOBOX     ((struct _GtkComboBox     *)_native)
+#define NATIVE_COMBOBOXTEXT ((struct _GtkComboBoxText *)_native)
 
 //==================================================================================================================================
-static void WrapAllChildren_Proxy(Native_GtkWidget *child, gpointer gp)
-{
-  GtkContainer *me = (GtkContainer *)gp;
-  GtkWidget *wrap = [GtkWidget nativeToWrapper:child];
-  if(wrap != nil) if([me contains:wrap]) return;
-  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:child];
-  [(OFMutableArray *)(me.children) addObject:wrap];
-}
-
-//==================================================================================================================================
-@implementation GtkContainer
+@implementation GtkComboBoxText
 
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-- init
++ comboBoxText      { return [[[self alloc] initComboBoxText ] autorelease]; }
++ comboBoxTextEntry { return [[[self alloc] initWithEntry    ] autorelease]; }
+//----------------------------------------------------------------------------------------------------------------------------------
+- initComboBoxText
 {
   self = [super init];
   if(self)
-    _children = [[OFMutableArray alloc] init];
+  {
+    _native = (void *)gtk_combo_box_text_new();
+    [self installNativeLookup];
+  }
   return self;
 }
-//----------------------------------------------------------------------------------------------------------------------------------
-- initWithExistingNative:(void *)native
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithEntry
 {
-  self = [super initWithExistingNative:native];
+  self = [super init];
   if(self)
-    _children = [[OFMutableArray alloc] init];
+  {
+    _native = (void *)gtk_combo_box_text_new_with_entry();
+    [self installNativeLookup];
+  }
   return self;
-}
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)dealloc
-{
-  [_children release];
-  [super dealloc];
 }
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
-@synthesize children = _children;
-//----------------------------------------------------------------------------------------------------------------------------------
-- (unsigned int) borderWidth { return (unsigned int)gtk_container_get_border_width(NATIVE_CONTAINER); }
-- (void) setBorderWidth:(unsigned int)border { gtk_container_set_border_width(NATIVE_CONTAINER, (guint)border); }
+-(OFString *)activeText { return [OFString stringWithUTF8String:gtk_combo_box_text_get_active_text(NATIVE_COMBOBOXTEXT)]; }
 
 //==================================================================================================================================
 // Utilities
 //==================================================================================================================================
--(void)add:(GtkWidget *)widget
+-(void)appendText:(OFString *)text
 {
-  [_children addObject:widget];
-  gtk_container_add(NATIVE_CONTAINER, widget.native);
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_append_text(NATIVE_COMBOBOXTEXT, [text UTF8String]);
+  [pool drain];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)remove:(GtkWidget *)widget
+-(void)appendText:(OFString *)text withId:(OFString *)id
 {
-  [_children removeObjectIdenticalTo:widget];
-  gtk_container_remove(NATIVE_CONTAINER, widget.native);
-}
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)contains:(GtkWidget *)widget
-{
-  for(GtkWidget *child in _children)
-    if(child == widget)
-      return YES;
-  return NO;
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_append(NATIVE_COMBOBOXTEXT, [id UTF8String], [text UTF8String]);
+  [pool drain];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(GtkWidget *)wrapNativeChild:(void *)native
+-(void)prependText:(OFString *)text
 {
-  GtkWidget *wrap = [GtkWidget nativeToWrapper:native];
-  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:native];
-  [_children addObject:wrap];
-  return wrap;
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_prepend_text(NATIVE_COMBOBOXTEXT, [text UTF8String]);
+  [pool drain];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)wrapAllChildren
+-(void)prependText:(OFString *)text withId:(OFString *)id
 {
-  //iterate native children:
-  gtk_container_foreach(NATIVE_CONTAINER, WrapAllChildren_Proxy, self);
-  //recurse:
-  for(GtkWidget *child in _children)
-    if(native_is_gtk_type_named(child.native, "GtkContainer"))
-      [(GtkContainer *)child wrapAllChildren];
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_prepend(NATIVE_COMBOBOXTEXT, [id UTF8String], [text UTF8String]);
+  [pool drain];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)insertText:(OFString *)text atIndex:(int)index
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_insert_text(NATIVE_COMBOBOXTEXT, index, [text UTF8String]);
+  [pool drain];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)insertText:(OFString *)text withId:(OFString *)id atIndex:(int)index
+{
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_combo_box_text_insert(NATIVE_COMBOBOXTEXT, index, [id UTF8String], [text UTF8String]);
+  [pool drain];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)removeIndex:(int)index { gtk_combo_box_text_remove(NATIVE_COMBOBOXTEXT, index); }
+-(void)removeAll              { gtk_combo_box_text_remove_all(NATIVE_COMBOBOXTEXT);    }
 
 //==================================================================================================================================
 @end

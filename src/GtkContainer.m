@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkBox.m
+// GtkContainer.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,68 +18,97 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkBox.h"
+#import <adenosine/GtkContainer.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
-#define NATIVE_BOX    ((struct _GtkBox    *)_native)
+#define NATIVE_WIDGET    ((struct _GtkWidget    *)_native)
+#define NATIVE_CONTAINER ((struct _GtkContainer *)_native)
 
 //==================================================================================================================================
-@implementation GtkBox
+static void WrapAllChildren_Proxy(Native_GtkWidget *child, gpointer gp)
+{
+  GtkContainer *me = (GtkContainer *)gp;
+  GtkWidget *wrap = [GtkWidget nativeToWrapper:child];
+  if(wrap != nil) if([me contains:wrap]) return;
+  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:child];
+  [(OFMutableArray *)(me.children) addObject:wrap];
+}
+
+//==================================================================================================================================
+@implementation GtkContainer
 
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ boxWithOrientation:(GtkBoxOrientation)orientation
-{
-  return [[[self alloc] initWithOrientation:orientation] autorelease];
-}
-//----------------------------------------------------------------------------------------------------------------------------------
-- initWithOrientation:(GtkBoxOrientation)orientation
+- init
 {
   self = [super init];
   if(self)
-  {
-    _native = (void *)gtk_box_new((GtkOrientation)orientation, 0);
-    [self installNativeLookup];
-  }
+    _children = [[OFMutableArray alloc] init];
   return self;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+- initWithExistingNative:(void *)native
+{
+  self = [super initWithExistingNative:native];
+  if(self)
+    _children = [[OFMutableArray alloc] init];
+  return self;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)dealloc
+{
+  [_children release];
+  [super dealloc];
 }
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
--(BOOL)forceEqual                     { return gtk_box_get_homogeneous(NATIVE_BOX);      }
--(void)setForceEqual:(BOOL)forceEqual { gtk_box_set_homogeneous(NATIVE_BOX, forceEqual); }
+@synthesize children = _children;
 //----------------------------------------------------------------------------------------------------------------------------------
--(int)spacing                         { return gtk_box_get_spacing(NATIVE_BOX);          }
--(void)setSpacing:(int)spacing        { gtk_box_set_spacing(NATIVE_BOX, spacing);        }
+- (unsigned int) borderWidth { return (unsigned int)gtk_container_get_border_width(NATIVE_CONTAINER); }
+- (void) setBorderWidth:(unsigned int)border { gtk_container_set_border_width(NATIVE_CONTAINER, (guint)border); }
 
 //==================================================================================================================================
 // Utilities
 //==================================================================================================================================
--(void)addFromStart:(GtkWidget *)widget expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
+-(void)add:(GtkWidget *)widget
 {
-  gtk_box_pack_start(NATIVE_BOX, widget.native, expand, fill, padding);
   [_children addObject:widget];
+  gtk_container_add(NATIVE_CONTAINER, widget.native);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)addFromEnd  :(GtkWidget *)widget expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
+-(void)remove:(GtkWidget *)widget
 {
-  gtk_box_pack_end(NATIVE_BOX, widget.native, expand, fill, padding);
-  [_children addObject:widget];
+  [_children removeObjectIdenticalTo:widget];
+  gtk_container_remove(NATIVE_CONTAINER, widget.native);
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(BOOL)contains:(GtkWidget *)widget
+{
+  for(GtkWidget *child in _children)
+    if(child == widget)
+      return YES;
+  return NO;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)queryChild:(GtkWidget *)child expand:(BOOL *)expand fill:(BOOL *)fill padding:(unsigned int *)padding
+-(GtkWidget *)wrapNativeChild:(void *)native
 {
-  gtk_box_query_child_packing(NATIVE_BOX, child.native, (gboolean *)expand, (gboolean *)fill, padding, NULL);
+  GtkWidget *wrap = [GtkWidget nativeToWrapper:native];
+  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:native];
+  [_children addObject:wrap];
+  return wrap;
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)alterChild:(GtkWidget *)child expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
+-(void)wrapAllChildren
 {
-  GtkPackType packType;
-  gtk_box_query_child_packing(NATIVE_BOX, child.native, NULL, NULL, NULL, &packType);
-  gtk_box_set_child_packing(NATIVE_BOX, child.native, expand, fill, padding, packType);
+  //iterate native children:
+  gtk_container_foreach(NATIVE_CONTAINER, WrapAllChildren_Proxy, self);
+  //recurse:
+  for(GtkWidget *child in _children)
+    if(native_is_gtk_type_named(child.native, "GtkContainer"))
+      [(GtkContainer *)child wrapAllChildren];
 }
 
 //==================================================================================================================================

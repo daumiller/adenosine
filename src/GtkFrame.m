@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkBin.m
+// GtkFrame.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,57 +18,64 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkBin.h"
+#import <adenosine/GtkFrame.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET    ((struct _GtkWidget    *)_native)
-#define NATIVE_CONTAINER ((struct _GtkContainer *)_native)
-#define NATIVE_BIN       ((struct _GtkBin       *)_native)
+#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
+#define NATIVE_FRAME  ((struct _GtkFrame  *)_native)
 
 //==================================================================================================================================
-@implementation GtkBin
+@implementation GtkFrame
+
+//==================================================================================================================================
+// Constructors/Destructor
+//==================================================================================================================================
++ frame
+{
+  return [[[self alloc] initFrame] autorelease];
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++ frameWithText:(OFString *)text;
+{
+  return [[[self alloc] initWithText:text] autorelease];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+- initFrame
+{
+  self = [super init];
+  if(self)
+  {
+    _native = (void *)gtk_frame_new(NULL);
+    [self installNativeLookup];
+  }
+  return self;
+}
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- initWithText:(OFString *)text
+{
+  self = [super init];
+  if(self)
+  {
+    _native = (void *)gtk_frame_new(NULL);
+    [self installNativeLookup];
+    self.text = text;
+  }
+  return self;
+}
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
--(GtkWidget *)child { if(_children.count == 0) return nil; return [_children objectAtIndex:0]; }
--(void)setChild:(GtkWidget *)child
+-(OFString *)text { return [OFString stringWithUTF8String:gtk_frame_get_label(NATIVE_FRAME)];}
+-(void)setText:(OFString *)text
 {
-  if(_children.count > 0)
-  {
-    gtk_container_remove(NATIVE_CONTAINER, child.native);
-    [_children removeObjectAtIndex:0];
-  }
-  if(child != nil)
-  {
-    gtk_container_add(NATIVE_CONTAINER, child.native);
-    [_children addObject:child];
-  }
+  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
+  gtk_frame_set_label(NATIVE_FRAME, [text UTF8String]);
+  [pool drain];
 }
-
-//==================================================================================================================================
-// Overrides of GtkContainer
-//==================================================================================================================================
-- (void)add:(GtkWidget *)widget { self.child = widget; }
 //----------------------------------------------------------------------------------------------------------------------------------
--(GtkWidget *)wrapNativeChild:(void *)native
-{
-  GtkWidget *wrap = [GtkWidget nativeToWrapper:native];
-  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:native];
-  if(_children.count > 0) [_children removeObjectAtIndex:0];
-  if(wrap != nil)         [_children addObject:wrap];
-  return wrap;
-}
--(void)wrapAllChildren
-{
-  //wrap single child:
-  void *nativeChild = gtk_bin_get_child(NATIVE_BIN);
-  GtkWidget *child  = [self wrapNativeChild:nativeChild];
-  //recurse:
-  if(native_is_gtk_type_named(nativeChild, "GtkContainer"))
-    [(GtkContainer *)child wrapAllChildren];
-}
-
+-(GtkBorderShadow)shadow                 { return (GtkBorderShadow)gtk_frame_get_shadow_type(NATIVE_FRAME); }
+-(void)setShadow:(GtkBorderShadow)shadow { gtk_frame_set_shadow_type(NATIVE_FRAME, (GtkShadowType)shadow); }
 
 //==================================================================================================================================
 @end

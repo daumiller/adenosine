@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
   //create main Window
   wndMain = [[GtkWindow windowWithType:GTKWINDOWTYPE_TOPLEVEL] retain];
-  wndMain.title = @"OFRegexTester - adenosine - extra test 00";
+  wndMain.title = @"OFRegexTester";
   wndMain.size  = OMMakeSize(600.0f, 400.0f);
   wndMain.quitOnClose = YES;
 

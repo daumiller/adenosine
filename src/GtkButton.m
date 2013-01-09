@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkButton.h"
-#import "GtkLabel.h"
+#import <adenosine/GtkButton.h>
+#import <adenosine/GtkLabel.h>
 
 //==================================================================================================================================
 #define NATIVE_WIDGET ((struct _GtkWidget *)_native)

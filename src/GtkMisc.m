@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkRuntime.m
+// GtkMisc.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,33 +18,41 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkRuntime.h"
+#import <adenosine/GtkMisc.h>
 
 //==================================================================================================================================
-@implementation GtkRuntime
+#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
+#define NATIVE_MISC   ((struct _GtkMisc   *)_native)
 
 //==================================================================================================================================
-static GtkRuntime *GtkRuntime_shared = nil;
-static int    GtkRuntime_noargs_i = 0;
-static char **GtkRuntime_noargs_s = NULL;
+@implementation GtkMisc
 
-//----------------------------------------------------------------------------------------------------------------------------------
-+ sharedRuntime
+//==================================================================================================================================
+// Properties
+//==================================================================================================================================
+-(OMCoordinate)alignment
 {
-  if(GtkRuntime_shared == NULL)
-    GtkRuntime_shared = [[GtkRuntime alloc] init];
-  return GtkRuntime_shared;
+  OMCoordinate alignment;
+  gtk_misc_get_alignment(NATIVE_MISC, &alignment.x, &alignment.y);
+  return alignment;
 }
-
+-(void)setAlignment:(OMCoordinate)alignment
+{
+  gtk_misc_set_alignment(NATIVE_MISC, alignment.x, alignment.y);
+}
 //----------------------------------------------------------------------------------------------------------------------------------
-@synthesize isRunning = _isRunning;
-
-//----------------------------------------------------------------------------------------------------------------------------------
-- (void)startup { gtk_init(&GtkRuntime_noargs_i, &GtkRuntime_noargs_s); }
-- (void)startupWithArgC:(int *)argc andArgV:(char ***)argv { gtk_init(argc, argv); }
-//----------------------------------------------------------------------------------------------------------------------------------
-- (void)mainLoopBegin { _isRunning = YES; gtk_main();                        }
-- (void)mainLoopQuit  { if(_isRunning) { _isRunning = NO; gtk_main_quit(); } }
+-(OMSize)padding
+{
+  int width, height;
+  gtk_misc_get_padding(NATIVE_MISC, &width, &height);
+  return OMMakeSize((float)width, (float)height);
+}
+-(void)setPadding:(OMSize)padding
+{
+  int width  = (int)padding.width;
+  int height = (int)padding.height;
+  gtk_misc_set_padding(NATIVE_MISC, width, height);
+}
 
 @end
 //==================================================================================================================================

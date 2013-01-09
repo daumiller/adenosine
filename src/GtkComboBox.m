@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkComboBox.h"
+#import <adenosine/GtkComboBox.h>
 
 //==================================================================================================================================
 #define NATIVE_WIDGET   ((struct _GtkWidget   *)_native)

@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkComboBoxText.m
+// GtkBox.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,39 +18,29 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkComboBoxText.h"
+#import <adenosine/GtkBox.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET       ((struct _GtkWidget       *)_native)
-#define NATIVE_COMBOBOX     ((struct _GtkComboBox     *)_native)
-#define NATIVE_COMBOBOXTEXT ((struct _GtkComboBoxText *)_native)
+#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
+#define NATIVE_BOX    ((struct _GtkBox    *)_native)
 
 //==================================================================================================================================
-@implementation GtkComboBoxText
+@implementation GtkBox
 
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ comboBoxText      { return [[[self alloc] initComboBoxText ] autorelease]; }
-+ comboBoxTextEntry { return [[[self alloc] initWithEntry    ] autorelease]; }
-//----------------------------------------------------------------------------------------------------------------------------------
-- initComboBoxText
++ boxWithOrientation:(GtkBoxOrientation)orientation
 {
-  self = [super init];
-  if(self)
-  {
-    _native = (void *)gtk_combo_box_text_new();
-    [self installNativeLookup];
-  }
-  return self;
+  return [[[self alloc] initWithOrientation:orientation] autorelease];
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithEntry
+//----------------------------------------------------------------------------------------------------------------------------------
+- initWithOrientation:(GtkBoxOrientation)orientation
 {
   self = [super init];
   if(self)
   {
-    _native = (void *)gtk_combo_box_text_new_with_entry();
+    _native = (void *)gtk_box_new((GtkOrientation)orientation, 0);
     [self installNativeLookup];
   }
   return self;
@@ -59,55 +49,38 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
--(OFString *)activeText { return [OFString stringWithUTF8String:gtk_combo_box_text_get_active_text(NATIVE_COMBOBOXTEXT)]; }
+-(BOOL)forceEqual                     { return gtk_box_get_homogeneous(NATIVE_BOX);      }
+-(void)setForceEqual:(BOOL)forceEqual { gtk_box_set_homogeneous(NATIVE_BOX, forceEqual); }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(int)spacing                         { return gtk_box_get_spacing(NATIVE_BOX);          }
+-(void)setSpacing:(int)spacing        { gtk_box_set_spacing(NATIVE_BOX, spacing);        }
 
 //==================================================================================================================================
 // Utilities
 //==================================================================================================================================
--(void)appendText:(OFString *)text
+-(void)addFromStart:(GtkWidget *)widget expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
 {
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_append_text(NATIVE_COMBOBOXTEXT, [text UTF8String]);
-  [pool drain];
+  gtk_box_pack_start(NATIVE_BOX, widget.native, expand, fill, padding);
+  [_children addObject:widget];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)appendText:(OFString *)text withId:(OFString *)id
+-(void)addFromEnd  :(GtkWidget *)widget expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
 {
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_append(NATIVE_COMBOBOXTEXT, [id UTF8String], [text UTF8String]);
-  [pool drain];
+  gtk_box_pack_end(NATIVE_BOX, widget.native, expand, fill, padding);
+  [_children addObject:widget];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)prependText:(OFString *)text
+-(void)queryChild:(GtkWidget *)child expand:(BOOL *)expand fill:(BOOL *)fill padding:(unsigned int *)padding
 {
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_prepend_text(NATIVE_COMBOBOXTEXT, [text UTF8String]);
-  [pool drain];
+  gtk_box_query_child_packing(NATIVE_BOX, child.native, (gboolean *)expand, (gboolean *)fill, padding, NULL);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)prependText:(OFString *)text withId:(OFString *)id
+-(void)alterChild:(GtkWidget *)child expand:(BOOL)expand fill:(BOOL)fill padding:(unsigned int)padding
 {
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_prepend(NATIVE_COMBOBOXTEXT, [id UTF8String], [text UTF8String]);
-  [pool drain];
+  GtkPackType packType;
+  gtk_box_query_child_packing(NATIVE_BOX, child.native, NULL, NULL, NULL, &packType);
+  gtk_box_set_child_packing(NATIVE_BOX, child.native, expand, fill, padding, packType);
 }
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)insertText:(OFString *)text atIndex:(int)index
-{
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_insert_text(NATIVE_COMBOBOXTEXT, index, [text UTF8String]);
-  [pool drain];
-}
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(void)insertText:(OFString *)text withId:(OFString *)id atIndex:(int)index
-{
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_combo_box_text_insert(NATIVE_COMBOBOXTEXT, index, [id UTF8String], [text UTF8String]);
-  [pool drain];
-}
-//----------------------------------------------------------------------------------------------------------------------------------
--(void)removeIndex:(int)index { gtk_combo_box_text_remove(NATIVE_COMBOBOXTEXT, index); }
--(void)removeAll              { gtk_combo_box_text_remove_all(NATIVE_COMBOBOXTEXT);    }
 
 //==================================================================================================================================
 @end

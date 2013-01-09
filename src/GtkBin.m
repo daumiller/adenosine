@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkMisc.m
+// GtkBin.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,43 +18,61 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkMisc.h"
+#import <adenosine/GtkBin.h>
 
 //==================================================================================================================================
-#define NATIVE_WIDGET ((struct _GtkWidget *)_native)
-#define NATIVE_MISC   ((struct _GtkMisc   *)_native)
+#define NATIVE_WIDGET    ((struct _GtkWidget    *)_native)
+#define NATIVE_CONTAINER ((struct _GtkContainer *)_native)
+#define NATIVE_BIN       ((struct _GtkBin       *)_native)
 
 //==================================================================================================================================
-@implementation GtkMisc
+@implementation GtkBin
 
 //==================================================================================================================================
 // Properties
 //==================================================================================================================================
--(OMCoordinate)alignment
+-(GtkWidget *)child { if(_children.count == 0) return nil; return [_children objectAtIndex:0]; }
+-(void)setChild:(GtkWidget *)child
 {
-  OMCoordinate alignment;
-  gtk_misc_get_alignment(NATIVE_MISC, &alignment.x, &alignment.y);
-  return alignment;
-}
--(void)setAlignment:(OMCoordinate)alignment
-{
-  gtk_misc_set_alignment(NATIVE_MISC, alignment.x, alignment.y);
-}
-//----------------------------------------------------------------------------------------------------------------------------------
--(OMSize)padding
-{
-  int width, height;
-  gtk_misc_get_padding(NATIVE_MISC, &width, &height);
-  return OMMakeSize((float)width, (float)height);
-}
--(void)setPadding:(OMSize)padding
-{
-  int width  = (int)padding.width;
-  int height = (int)padding.height;
-  gtk_misc_set_padding(NATIVE_MISC, width, height);
+  if(_children.count > 0)
+  {
+    gtk_container_remove(NATIVE_CONTAINER, child.native);
+    [_children removeObjectAtIndex:0];
+  }
+  if(child != nil)
+  {
+    gtk_container_add(NATIVE_CONTAINER, child.native);
+    [_children addObject:child];
+  }
 }
 
+//==================================================================================================================================
+// Overrides of GtkContainer
+//==================================================================================================================================
+- (void)add:(GtkWidget *)widget { self.child = widget; }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(GtkWidget *)wrapNativeChild:(void *)native
+{
+  GtkWidget *wrap = [GtkWidget nativeToWrapper:native];
+  if(wrap == nil) wrap = [GtkWidget wrapExistingNative:native];
+  if(_children.count > 0) [_children removeObjectAtIndex:0];
+  if(wrap != nil)         [_children addObject:wrap];
+  return wrap;
+}
+-(void)wrapAllChildren
+{
+  //wrap single child:
+  void *nativeChild = gtk_bin_get_child(NATIVE_BIN);
+  GtkWidget *child  = [self wrapNativeChild:nativeChild];
+  //recurse:
+  if(native_is_gtk_type_named(nativeChild, "GtkContainer"))
+    [(GtkContainer *)child wrapAllChildren];
+}
+
+
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkNotebook.h"
+#import <adenosine/GtkNotebook.h>
 
 //==================================================================================================================================
 #define NATIVE_WIDGET   ((struct _GtkWidget   *)_native)

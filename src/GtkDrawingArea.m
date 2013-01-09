@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkFrame.m
+// GtkDrawingArea.m
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,64 +18,32 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import "GtkNative.h"
-#import "GtkFrame.h"
+#import <adenosine/GtkDrawingArea.h>
 
 //==================================================================================================================================
 #define NATIVE_WIDGET ((struct _GtkWidget *)_native)
-#define NATIVE_FRAME  ((struct _GtkFrame  *)_native)
 
 //==================================================================================================================================
-@implementation GtkFrame
+@implementation GtkDrawingArea
 
 //==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
-+ frame
++ (GtkDrawingArea *)drawingArea
 {
-  return [[[self alloc] initFrame] autorelease];
+  return [[[self alloc] initDrawingArea] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-+ frameWithText:(OFString *)text;
-{
-  return [[[self alloc] initWithText:text] autorelease];
-}
-//----------------------------------------------------------------------------------------------------------------------------------
-- initFrame
+- initDrawingArea
 {
   self = [super init];
   if(self)
   {
-    _native = (void *)gtk_frame_new(NULL);
+    _native = (void *)gtk_drawing_area_new();
     [self installNativeLookup];
   }
   return self;
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initWithText:(OFString *)text
-{
-  self = [super init];
-  if(self)
-  {
-    _native = (void *)gtk_frame_new(NULL);
-    [self installNativeLookup];
-    self.text = text;
-  }
-  return self;
-}
-
-//==================================================================================================================================
-// Properties
-//==================================================================================================================================
--(OFString *)text { return [OFString stringWithUTF8String:gtk_frame_get_label(NATIVE_FRAME)];}
--(void)setText:(OFString *)text
-{
-  OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
-  gtk_frame_set_label(NATIVE_FRAME, [text UTF8String]);
-  [pool drain];
-}
-//----------------------------------------------------------------------------------------------------------------------------------
--(GtkBorderShadow)shadow                 { return (GtkBorderShadow)gtk_frame_get_shadow_type(NATIVE_FRAME); }
--(void)setShadow:(GtkBorderShadow)shadow { gtk_frame_set_shadow_type(NATIVE_FRAME, (GtkShadowType)shadow); }
 
 //==================================================================================================================================
 @end

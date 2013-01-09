@@ -18,7 +18,7 @@ int main(int argc, char **argv)
   OFAutoreleasePool *pool = [[OFAutoreleasePool alloc] init];
   [[GtkRuntime sharedRuntime] startup];
 
-  GtkBuilder *builder = [GtkBuilder builderWithFile:@"test5.ui"];
+  GtkBuilder *builder = [GtkBuilder builderWithFile:@"test05.ui"];
 
   GtkWindow *wndMain  = [builder widgetByName:@"wndMain"];
   [wndMain wrapAllChildren];
