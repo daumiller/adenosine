@@ -57,6 +57,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (assign)   GtkAlign  verticalAlign;
 @property (assign)   BOOL      verticalExpand;
 @property (assign)   OFString *tooltipText;
+@property (assign)   BOOL      isSensitive;
 @property (assign)   BOOL      canGrabFocus;
 @property (assign)   BOOL      canGrabDefault;
 

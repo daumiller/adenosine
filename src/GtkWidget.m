@@ -302,6 +302,9 @@ static BOOL ConnectionProxy_KeyRelease(struct _GtkWidget *widget, GdkEventKey *e
   [pool drain];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)isSensitive                            { return gtk_widget_get_sensitive(NATIVE_WIDGET);            }
+-(void)setIsSensitive:(BOOL)isSensitive       { gtk_widget_set_sensitive(NATIVE_WIDGET, isSensitive);      }
+//----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)canGrabFocus                           { return gtk_widget_get_can_focus(NATIVE_WIDGET);            }
 -(void)setCanGrabFocus:(BOOL)canGrabFocus     { gtk_widget_set_can_focus(NATIVE_WIDGET, canGrabFocus);     }
 //----------------------------------------------------------------------------------------------------------------------------------
