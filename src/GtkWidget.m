@@ -168,11 +168,13 @@ static BOOL ConnectionProxy_KeyRelease(struct _GtkWidget *widget, GdkEventKey *e
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(void)installNativeLookup
 {
+  g_object_ref((gpointer)_native); //don't let GTK kill our widget while we're still referencing it...
   g_object_set_data((gpointer)_native, ADENOSINE_NATIVE_LOOKUP_STRING, (gpointer)self);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)destroy
 {
+  g_object_unref((gpointer)_native); //remove extra reference added with [installNativeLookup]
   if(GTK_IS_WIDGET(NATIVE_WIDGET)) gtk_widget_destroy(NATIVE_WIDGET);
 }
 //----------------------------------------------------------------------------------------------------------------------------------

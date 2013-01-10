@@ -38,8 +38,8 @@ typedef enum
 @optional
 -(void)gtkListBox:(GtkListBox *)list indexChangedFrom:(int)oldIndex to:(int)newIndex;       //left-click or arrow keys
 -(void)gtkListBox:(GtkListBox *)list indexActivated:(int)index;                             //enter or double click
-//-(BOOL)gtkListBox:(GtkListBox *)list indexKeyPressed:(int)index ...                           //stop processing/did eat event?
-//-(void)gtkListBox:(GtkListBox *)list populateContextMenu:(GMenu *)menu forIndex:(int)index; //right-click
+-(BOOL)gtkListBox:(GtkListBox *)list index:(int)index keyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkListBox:(GtkListBox *)list index:(int)index clickedWithButton:(int)button;       //can be used for context-menus/...
 @end
 
 //==================================================================================================================================
@@ -95,6 +95,7 @@ typedef enum
 -(void)insertItemWithText:(OFString *)text andImage:(GtkImage *)image atIndex:(int)index;
 -(void)appendItemsWithText:(OFArray *)textItems;
 -(void)appendItemsWithText:(OFArray *)textItems andImages:(OFArray *)imageItems;
+-(void)swapItemAtIndex:(int)indexA withItemAtIndex:(int)indexB;
 -(void)removeItemAtIndex:(int)index;
 -(void)removeItemWithText:(OFString *)text;
 -(void)removeAllItems;
@@ -102,8 +103,8 @@ typedef enum
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)onIndexChangedFrom:(int)oldIndex to:(int)newIndex;
 -(void)onIndexActivated:(int)index;
-//-(BOOL)onIndexKeyPressed:(int)index ...;
-//-(void)onPopulateContextMenu:(GtkMenu *)menu forIndex:(int)index;
+-(BOOL)onIndex:(int)index keyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
+-(BOOL)onIndex:(int)index clickedWithButton:(int)button;
 
 @end
 //==================================================================================================================================

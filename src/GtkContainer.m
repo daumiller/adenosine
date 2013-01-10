@@ -82,7 +82,7 @@ static void WrapAllChildren_Proxy(Native_GtkWidget *child, gpointer gp)
 -(void)remove:(GtkWidget *)widget
 {
   [_children removeObjectIdenticalTo:widget];
-  gtk_container_remove(NATIVE_CONTAINER, widget.native);
+  if(GTK_IS_WIDGET(widget.native)) gtk_container_remove(NATIVE_CONTAINER, widget.native);
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(BOOL)contains:(GtkWidget *)widget

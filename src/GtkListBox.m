@@ -38,14 +38,13 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
     else if(listbox.iconMode == GTKLISTBOX_ICONMODE_RIGHT) [grid attachWidget:image left:2 top:0];
   }
   label.horizontalExpand = YES;
-  label.useWrapping  = listbox.labelsWrap;
-  label.useMarkup    = listbox.labelsUseMarkup;
-  label.useEllipsis  = listbox.labelsUseEllipsis;
-  label.isSelectable = listbox.labelsSelectable;
-  label.textAlign    = listbox.labelTextAlign;
+  label.useWrapping   = listbox.labelsWrap;
+  label.useMarkup     = listbox.labelsUseMarkup;
+  label.useEllipsis   = listbox.labelsUseEllipsis;
+  label.isSelectable  = listbox.labelsSelectable;
+  label.textAlign     = listbox.labelTextAlign;
   [grid attachWidget:label left:1 top:0];
   [parent add:grid];
-  [parent setProperty:@"adenosine-listbox-itemIndex" toValue:(void *)(unsigned long)index];
   parent.canGrabFocus  = YES;
   parent.aboveChild    = YES;
   parent.visibleWindow = YES;
@@ -203,47 +202,43 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
 -(void)setIconMode:(GtkListBoxIconMode)iconMode
 {
   if(_iconMode == iconMode) return;
+  
+  GtkListBoxIconMode oldIconMode = _iconMode;
   _iconMode = iconMode;
-  if(_iconMode == GTKLISTBOX_ICONMODE_NONE)
-  {
-    for(id imgItem in _images)
-      if(imgItem != [OFNull null])
-        [(GtkWidget *)imgItem hide];
-    return;
-  }
 
-  if(_iconMode == GTKLISTBOX_ICONMODE_LEFT)
+  //if new mode is none, then remove everything
+  //if old mode was Not none, then we'll need to remove before repositioning
+  if((_iconMode == GTKLISTBOX_ICONMODE_NONE) || (oldIconMode != GTKLISTBOX_ICONMODE_NONE))
   {
-    GtkGrid *grid;
+    GtkGrid *grid; GtkImage *image;
     for(int i=0; i<_count; i++)
     {
-      id imgItem = [_images objectAtIndex:i];
-      if(imgItem != [OFNull null])
+      image = [_images objectAtIndex:i];
+      if((id)image != (id)[OFNull null])
       {
-        grid = (GtkGrid *)((GtkEventBox *)[_items objectAtIndex:i]).child;
-        [grid remove:imgItem];
-        [grid attachWidget:imgItem left:0 top:i];
-        [(GtkWidget *)imgItem show];
+        //_item is GtkEventBox, which is GtkBin with single child GtkGrid
+        grid = (GtkGrid *)[[_items objectAtIndex:i] child];
+        [grid remove:image];
       }
     }
-    return;
+    //if new mode, then we're done here
+    if(_iconMode == GTKLISTBOX_ICONMODE_NONE)
+      return;
   }
 
-  if(_iconMode == GTKLISTBOX_ICONMODE_RIGHT)
+  //icon mode is now Left | Right
+  int left = (_iconMode == GTKLISTBOX_ICONMODE_LEFT) ? 0 : 2;
+  GtkGrid *grid; GtkImage *image;
+  for(int i=0; i<_count; i++)
   {
-    GtkGrid *grid;
-    for(int i=0; i<_count; i++)
+    image = [_images objectAtIndex:i];
+    if((id)image != (id)[OFNull null])
     {
-      id imgItem = [_images objectAtIndex:i];
-      if(imgItem != [OFNull null])
-      {
-        grid = (GtkGrid *)((GtkEventBox *)[_items objectAtIndex:i]).child;
-        [grid remove:imgItem];
-        [grid attachWidget:imgItem left:2 top:i];
-        [(GtkWidget *)imgItem show];
-      }
+      //_item is GtkEventBox, which is GtkBin with single child GtkGrid
+      grid = (GtkGrid *)[[_items objectAtIndex:i] child];
+      [grid attachWidget:image left:left top:0];
+      [image show];
     }
-    return;
   }
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -264,6 +259,7 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
   [_images addObject:[OFNull null]];
   [_items addObject:item];
   [_grid attachWidget:item left:0 top:_count];
+  [item showAll];
   _count++;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -275,6 +271,7 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
   [_images addObject:image];
   [_items addObject:item];
   [_grid attachWidget:item left:0 top:_count];
+  [item showAll];
   _count++;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -290,6 +287,8 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
   [_items  insertObject:item          atIndex:index];
   [_grid insertRowAtIndex:index];
   [_grid attachWidget:item left:0 top:index];
+  [item showAll];
+  if(index <= _selectedIndex) _selectedIndex++;
   _count++;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -305,6 +304,8 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
   [_items  insertObject:item  atIndex:index];
   [_grid insertRowAtIndex:index];
   [_grid attachWidget:item left:0 top:index];
+  [item showAll];
+  if(index <= _selectedIndex) _selectedIndex++;
   _count++;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -322,15 +323,52 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
     [self appendItemWithText:[textItems objectAtIndex:i] andImage:[imageItems objectAtIndex:i]];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
+-(void)swapItemAtIndex:(int)indexA withItemAtIndex:(int)indexB;
+{
+  if(indexA < 0) return; if(indexA >= _count) return;
+  if(indexB < 0) return; if(indexB >= _count) return;
+  
+  //first do a visual swap
+  //NOTE: our listbox doesn't hold any reference to these Grids, so we'll need to make sure to keep them alive during reassignment
+  GtkEventBox *itemA = (GtkEventBox *)[_items objectAtIndex:indexA]; GtkGrid *gridA = [(GtkGrid *)itemA.child retain]; [itemA remove:gridA];
+  GtkEventBox *itemB = (GtkEventBox *)[_items objectAtIndex:indexB]; GtkGrid *gridB = [(GtkGrid *)itemB.child retain]; [itemB remove:gridB];
+  [itemA add:gridB]; [gridB release];
+  [itemB add:gridA]; [gridA release];
+
+  //then swap our non-affected arrays
+  [_labels exchangeObjectAtIndex:indexA withObjectAtIndex:indexB];
+  [_images exchangeObjectAtIndex:indexA withObjectAtIndex:indexB];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)removeItemAtIndex:(int)index
 {
   if(index >= _count) return;
   if(index < 0) return;
+  if(index == _selectedIndex) _selectedIndex = -1;
+  if(index <  _selectedIndex) _selectedIndex--;
   GtkEventBox *item = (GtkEventBox *)[_items objectAtIndex:index];
-  [_grid remove:item];
   [_labels removeObjectAtIndex:index];
   [_images removeObjectAtIndex:index];
   [_items  removeObjectAtIndex:index];
+
+  //unfortunately, it seems rebuilding the grid is the only sane thing to do here...
+  //i really wish there was a gtk_grid_delete_row/gtk_grid_remove_row.
+  //(the real solution is probably not using a GtkGrid at all...)
+  GtkGrid *newGrid = [GtkGrid grid];
+  newGrid.forceEqualRows    = _grid.forceEqualRows;
+  newGrid.forceEqualColumns = _grid.forceEqualColumns;
+  newGrid.rowSpacing        = _grid.rowSpacing;
+  newGrid.columnSpacing     = _grid.columnSpacing;
+  int newGridIndex = 0;
+  for(GtkWidget *widget in _items)
+  {
+    [_grid remove:widget];
+    [newGrid attachWidget:widget left:0 top:newGridIndex++];
+  }
+  [_viewport remove:_grid];
+  _grid = newGrid;
+  [_viewport add:_grid];
+  [_viewport showAll];
   _count--;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -385,9 +423,19 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
     [_delegate gtkListBox:self indexActivated:index];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-//-(BOOL)onIndexKeyPressed:(int)index ...;
+-(BOOL)onIndex:(int)index keyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers
+{
+  if([_delegate respondsToSelector:@selector(gtkListBox:index:keyPressed:raw:group:isModifier:modifiers:)])
+    return [_delegate gtkListBox:self index:index keyPressed:keyCode raw:rawCode group:group isModifier:isModifier modifiers:modifiers];
+  return NO; //we didn't eat this event
+}
 //----------------------------------------------------------------------------------------------------------------------------------
-//-(void)onPopulateContextMenu:(GtkMenu *)menu forIndex:(int)index;
+-(BOOL)onIndex:(int)index clickedWithButton:(int)button
+{
+  if([_delegate respondsToSelector:@selector(gtkListBox:index:clickedWithButton:)])
+    return [_delegate gtkListBox:self index:index clickedWithButton:button];
+  return NO; //continue processing
+}
 
 //==================================================================================================================================
 // Child Events
@@ -395,29 +443,51 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
 -(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button clickCount:(int)clickCount local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   if(!native_is_gtk_type_named(widget.native,"GtkEventBox")) return NO;
-  int index = (int)(unsigned long)[widget getProperty:@"adenosine-listbox-itemIndex"];
-  if(clickCount == 2) [self onIndexActivated:index];
-  return YES;
-}
-//----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
-{
-  if(!native_is_gtk_type_named(widget.native,"GtkEventBox")) return NO;
-  int newIndex = (int)(unsigned long)[widget getProperty:@"adenosine-listbox-itemIndex"];
-  [self onIndexChangedFrom:_selectedIndex to:newIndex];
-  return YES;
+  int keyedIndex = (int)[_items indexOfObjectIdenticalTo:widget];
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  if(clickCount == 2)
+  {
+    if(button == 1)
+    {
+      [self onIndexActivated:keyedIndex];
+      return YES;
+    }
+    return NO;
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  if(clickCount == 1)
+  {
+    BOOL retval = NO;
+    if(button == 1)
+    {
+      [self onIndexChangedFrom:_selectedIndex to:keyedIndex];
+      retval = YES;
+    }
+    return retval ? YES : [self onIndex:keyedIndex clickedWithButton:button];
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  return NO;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)gtkWidget:(GtkWidget *)widget keyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers
 {
   if(!native_is_gtk_type_named(widget.native,"GtkEventBox")) return NO;
+  int keyedIndex = (int)[_items indexOfObjectIdenticalTo:widget];
+
+  //allow delegate to process key event first; and stop processing if they eat it
+  if([self onIndex:keyedIndex keyPressed:keyCode raw:rawCode group:group isModifier:isModifier modifiers:modifiers])
+    return YES;
+
   switch(keyCode)
   {
     //http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms.h
-    case 0xFF52: if(_selectedIndex > 0) self.selectedIndex--; break; //UP
-    case 0xFF54:                        self.selectedIndex++; break; //DOWN
+    case GDK_KEY_Up       : if(_selectedIndex > 0) self.selectedIndex--; return YES;
+    case GDK_KEY_Down     :                        self.selectedIndex++; return YES;
+    case GDK_KEY_Return   : [self onIndexActivated:keyedIndex];          return YES;
+    case GDK_KEY_KP_Enter : [self onIndexActivated:keyedIndex];          return YES;
   }
-  return YES; 
+  
+  return NO; //not something we were interested in...
 }
 
 //==================================================================================================================================
@@ -431,6 +501,12 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
 -(void)show
 {
   gtk_widget_show_all(NATIVE_WIDGET); //always want our children shown w/ us
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)grabFocus
+{
+  if(_selectedIndex == -1) { [super grabFocus]; return; }
+  [(GtkEventBox *)[_items objectAtIndex:_selectedIndex] grabFocus];
 }
 
 //==================================================================================================================================
