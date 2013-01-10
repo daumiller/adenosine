@@ -70,9 +70,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkLayout                Native_GtkLayout
 #define GtkEventBox              Native_GtkEventBox
 #define GtkListBox               Native_GtkListBox
+#define GtkWindowPosition        Native_GtkWindowPosition
 
 #include <gtk/gtk.h>
 
+#undef GtkWindowPosition
 #undef GtkListBox
 #undef GtkEventBox
 #undef GtkLayout

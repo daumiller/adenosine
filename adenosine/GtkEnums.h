@@ -179,3 +179,10 @@ typedef enum
   GTKWIDGET_STATE_BACKDROP     = 1<<6
 } GtkWidgetState;
 //----------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  GTKWINDOW_POSITION_CENTER = 1,
+  GTKWINDOW_POSITION_MOUSE,
+  GTKWINDOW_POSITION_CENTER_PARENT
+} GtkWindowPosition;
+//----------------------------------------------------------------------------------------------------------------------------------
