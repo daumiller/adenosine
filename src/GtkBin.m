@@ -63,6 +63,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 {
   //wrap single child:
   void *nativeChild = gtk_bin_get_child(NATIVE_BIN);
+  if(!nativeChild) return;
   GtkWidget *child  = [self wrapNativeChild:nativeChild];
   //recurse:
   if(native_is_gtk_type_named(nativeChild, "GtkContainer"))

@@ -57,6 +57,8 @@ extras/OFRegexTester.o : extras/OFRegexTester.m
 
 #===================================================================================================================================
 libgtk : objgtk
+	ar rcs libadenosine.a src/*.o
+	clang -shared src/*.o -o libadenosine.so `objfw-config --libs` `pkg-config --libs gdk-3.0 pango`
 
 objgtk : src/GtkBin.o              \
          src/GtkBox.o              \
@@ -117,6 +119,8 @@ src/WebKitWebView.o : src/WebKitWebView.m
 
 #===================================================================================================================================
 clean :
+	rm -f *.a
+	rm -f *.so
 	rm -f src/*.o
 	rm -f tests/*.o
 	rm -f tests/*.bin
