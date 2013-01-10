@@ -4,7 +4,7 @@ webkit : testwebkit libwebkit
 extra  : extras
 
 #===================================================================================================================================
-tests : test00 test01 test02 test03 test04 test05 test06 test08 test09 test10
+tests : test00 test01 test02 test03 test04 test05 test06 test08 test09 test10 test11
 
 test00 : tests/test00.o libgtk
 	clang tests/test00.o src/Gtk*.o -o tests/test00.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
@@ -35,6 +35,9 @@ test09 : tests/test09.o libgtk
 
 test10 : tests/test10.o libgtk
 	clang tests/test10.o src/Gtk*.o -o tests/test10.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+
+test11 : tests/test11.o libgtk
+	clang tests/test11.o src/Gtk*.o -o tests/test11.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 #===================================================================================================================================
 testwebkit : libwebkit test07
@@ -74,6 +77,7 @@ objgtk : src/GtkBin.o              \
          src/GtkImage.o            \
          src/GtkLabel.o            \
          src/GtkLayout.o           \
+         src/GtkListBox.o          \
          src/GtkMenu.o             \
          src/GtkMenuBar.o          \
          src/GtkMenuCheck.o        \

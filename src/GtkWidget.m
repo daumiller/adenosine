@@ -49,7 +49,10 @@ static BOOL ConnectionProxy_ButtonPress(struct _GtkWidget *widget, GdkEventButto
   GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
   OMCoordinate local = OMMakeCoordinate((float)event->x, (float)event->y);
   OMCoordinate root  = OMMakeCoordinate((float)event->x_root, (float)event->y_root);
-  return [obj onButtonPressed:event->button local:local root:root modifiers:(GtkModifier)event->state];
+  int clickCount = 1;
+  if(event->type == GDK_2BUTTON_PRESS) clickCount = 2;
+  if(event->type == GDK_3BUTTON_PRESS) clickCount = 3;
+  return [obj onButtonPressed:event->button clickCount:clickCount local:local root:root modifiers:(GtkModifier)event->state];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 static BOOL ConnectionProxy_ButtonRelease(struct _GtkWidget *widget, GdkEventButton *event, void *data)
@@ -76,6 +79,18 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   double dX, dY; gdk_event_get_scroll_deltas((GdkEvent *)event, &dX, &dY); OMCoordinate deltas = OMMakeCoordinate((float)dX, (float)dY);
   return [obj onScrolled:(GtkScrollDirection)event->direction by:deltas at:local root:root modifiers:(GtkModifier)event->state];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_KeyPress(struct _GtkWidget *widget, GdkEventKey *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  return [obj onKeyPressed:event->keyval raw:event->hardware_keycode group:event->group isModifier:event->is_modifier modifiers:(GtkModifier)event->state];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+static BOOL ConnectionProxy_KeyRelease(struct _GtkWidget *widget, GdkEventKey *event, void *data)
+{
+  GtkWidget *obj = (GtkWidget *)[GtkWidget nativeToWrapper:(void *)widget];
+  return [obj onKeyReleased:event->keyval raw:event->hardware_keycode group:event->group isModifier:event->is_modifier modifiers:(GtkModifier)event->state];
+}
 
 //==================================================================================================================================
 @implementation GtkWidget
@@ -94,8 +109,7 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 
   //NOTE: be sure to check types in reverse hierarchical order.
   //(that is, native_is_gtk_type_named() will return YES for any valid ancenstor names)
-  //also, left side strings are Gtk internal names (ex: "GtkMessageDialog" <-> GtkDialogMessage)
-  if(native_is_gtk_type_named(native, "GtkViewport"      )) return [[[GtkViewport       alloc] initWithExistingNative:native] autorelease];
+  //also, left side strings are Gtk internal names (ex: "GtkMessageDialog" <-> GtkDialogMessage)  
   if(native_is_gtk_type_named(native, "GtkTextView"      )) return [[[GtkTextView       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkScrolledWindow")) return [[[GtkScrolledWindow alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkMessageDialog" )) return [[[GtkDialogMessage  alloc] initWithExistingNative:native] autorelease];
@@ -115,8 +129,10 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   if(native_is_gtk_type_named(native, "GtkMenu"          )) return [[[GtkMenu           alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkGrid"          )) return [[[GtkGrid           alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkBox"           )) return [[[GtkBox            alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkLayout"        )) return [[[GtkLayout         alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkEventBox"      )) return [[[GtkEventBox       alloc] initWithExistingNative:native] autorelease];
+  if(native_is_gtk_type_named(native, "GtkViewport"      )) return [[[GtkViewport       alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkFrame"         )) return [[[GtkFrame          alloc] initWithExistingNative:native] autorelease];
-  if(native_is_gtk_type_named(native, "GtkGrid"          )) return [[[GtkGrid           alloc] initWithExistingNative:native] autorelease];
   if(native_is_gtk_type_named(native, "GtkEntry"         )) return [[[GtkEntry          alloc] initWithExistingNative:native] autorelease];
 
   return [[[self alloc] initWithExistingNative:native] autorelease];
@@ -200,7 +216,7 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
       [_connections addObject:[OFNumber numberWithUnsignedLong:
         g_signal_connect(_native, "configure-event", G_CALLBACK(ConnectionProxy_Configure),NULL)]];
 
-    if([_delegate respondsToSelector:@selector(gtkWidget:buttonPressed:local:root:modifiers:)])
+    if([_delegate respondsToSelector:@selector(gtkWidget:buttonPressed:clickCount:local:root:modifiers:)])
     {
       eventFlags |= GDK_BUTTON_PRESS_MASK;
       [_connections addObject:[OFNumber numberWithUnsignedLong:
@@ -226,6 +242,20 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
       eventFlags |= GDK_SCROLL_MASK;
       [_connections addObject:[OFNumber numberWithUnsignedLong:
         g_signal_connect(_native, "scroll-event", G_CALLBACK(ConnectionProxy_Scroll),NULL)]];
+    }
+
+    if([_delegate respondsToSelector:@selector(gtkWidget:keyPressed:raw:group:isModifier:modifiers:)])
+    {
+      eventFlags |= GDK_KEY_PRESS_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "key-press-event", G_CALLBACK(ConnectionProxy_KeyPress),NULL)]];
+    }
+
+    if([_delegate respondsToSelector:@selector(ggtkWidget:keyReleased:raw:group:isModifier:modifiers:)])
+    {
+      eventFlags |= GDK_KEY_RELEASE_MASK;
+      [_connections addObject:[OFNumber numberWithUnsignedLong:
+        g_signal_connect(_native, "key-release-event", G_CALLBACK(ConnectionProxy_KeyRelease),NULL)]];
     }
 
     if(eventFlags != original)
@@ -269,6 +299,9 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   gtk_widget_set_tooltip_text(NATIVE_WIDGET, [tooltipText UTF8String]);
   [pool drain];
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)canGrabFocus                           { return gtk_widget_get_can_focus(NATIVE_WIDGET);            }
+-(void)setCanGrabFocus:(BOOL)canGrabFocus     { gtk_widget_set_can_focus(NATIVE_WIDGET, canGrabFocus);     }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)canGrabDefault                         { return gtk_widget_get_can_default(NATIVE_WIDGET);          }
 -(void)setCanGrabDefault:(BOOL)canGrabDefault { gtk_widget_set_can_default(NATIVE_WIDGET, canGrabDefault); }
@@ -344,9 +377,9 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
   return [_delegate gtkWidget:self dimensionsChanged:dimension];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
+-(BOOL)onButtonPressed:(int)button clickCount:(int)clickCount local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
-  return [_delegate gtkWidget:self buttonPressed:button local:local root:root modifiers:modifiers];
+  return [_delegate gtkWidget:self buttonPressed:button clickCount:clickCount local:local root:root modifiers:modifiers];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
@@ -362,6 +395,16 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 -(BOOL)onScrolled:(GtkScrollDirection)direction by:(OMCoordinate)deltas at:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers
 {
   return [_delegate gtkWidget:self scrolled:direction by:deltas at:local root:root modifiers:modifiers];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onKeyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers
+{
+  return [_delegate gtkWidget:self keyPressed:keyCode raw:rawCode group:group isModifier:isModifier modifiers:modifiers];
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(BOOL)onKeyReleased:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers
+{
+  return [_delegate gtkWidget:self keyPressed:keyCode raw:rawCode group:group isModifier:isModifier modifiers:modifiers];
 }
 
 //==================================================================================================================================

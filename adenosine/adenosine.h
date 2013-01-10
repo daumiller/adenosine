@@ -39,6 +39,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #import <adenosine/GtkImage.h>
 #import <adenosine/GtkLabel.h>
 #import <adenosine/GtkLayout.h>
+#import <adenosine/GtkListBox.h>
 #import <adenosine/GtkMenu.h>
 #import <adenosine/GtkMenuBar.h>
 #import <adenosine/GtkMenuCheck.h>

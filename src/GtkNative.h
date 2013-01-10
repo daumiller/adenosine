@@ -69,9 +69,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkFontButton            Native_GtkFontButton
 #define GtkLayout                Native_GtkLayout
 #define GtkEventBox              Native_GtkEventBox
+#define GtkListBox               Native_GtkListBox
 
 #include <gtk/gtk.h>
 
+#undef GtkListBox
 #undef GtkEventBox
 #undef GtkLayout
 #undef GtkFontButton

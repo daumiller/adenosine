@@ -32,10 +32,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 -(BOOL)gtkWidget:(GtkWidget *)widget drawToSurface:(OMSurface *)surface;
 -(BOOL)gtkWidget:(GtkWidget *)widget dimensionsChanged:(OMDimension)dimension;
--(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget buttonPressed:(int)button clickCount:(int)clickCount local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)gtkWidget:(GtkWidget *)widget buttonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)gtkWidget:(GtkWidget *)widget pointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)gtkWidget:(GtkWidget *)widget scrolled:(GtkScrollDirection)direction by:(OMCoordinate)deltas at:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget keyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
+-(BOOL)gtkWidget:(GtkWidget *)widget keyReleased:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
 @end
 
 //==================================================================================================================================
@@ -55,6 +57,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (assign)   GtkAlign  verticalAlign;
 @property (assign)   BOOL      verticalExpand;
 @property (assign)   OFString *tooltipText;
+@property (assign)   BOOL      canGrabFocus;
 @property (assign)   BOOL      canGrabDefault;
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -86,10 +89,12 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)onDrawToSurface:(OMSurface *)surface;
 -(BOOL)onDimensionsChanged:(OMDimension)dimension;
--(BOOL)onButtonPressed:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)onButtonPressed:(int)button clickCount:(int)clickCount local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)onButtonReleased:(int)button local:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)onPointerMovedAt:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
 -(BOOL)onScrolled:(GtkScrollDirection)direction by:(OMCoordinate)deltas at:(OMCoordinate)local root:(OMCoordinate)root modifiers:(GtkModifier)modifiers;
+-(BOOL)onKeyPressed:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
+-(BOOL)onKeyReleased:(unsigned int)keyCode raw:(uint16_t)rawCode group:(uint8_t)group isModifier:(BOOL)isModifier modifiers:(GtkModifier)modifiers;
 
 //==================================================================================================================================
 @end
