@@ -67,6 +67,7 @@ objgtk : src/GtkBin.o              \
          src/GtkDrawingArea.o      \
          src/GtkEntry.o            \
          src/GtkEntryBuffer.o      \
+         src/GtkEventBox.o         \
          src/GtkFontButton.o       \
          src/GtkFrame.o            \
          src/GtkGrid.o             \
