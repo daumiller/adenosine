@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkLabel.h
+// GtkLayout.h
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,47 +18,21 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <ObjFW/ObjFW.h>
-#import <adenosine/GtkMisc.h>
+#import <adenosine/GtkContainer.h>
 
 //==================================================================================================================================
-@class GtkLabel;
-@protocol GtkLabelDelegate <OFObject>
-@optional
--(BOOL)gtkLabel:(GtkLabel *)label linkActivated:(OFString *)link;
--(void)gtkLabel:(GtkLabel *)label populateContextMenu:(void *)nativeMenu;
-@end
-
-//==================================================================================================================================
-@interface GtkLabel : GtkMisc
+@interface GtkLayout : GtkContainer
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) OFString    *text;
-@property (assign) int          maxCharLength;
-@property (assign) BOOL         useMarkup;
-@property (assign) BOOL         useEllipsis;
-@property (assign) BOOL         useWrapping;
-@property (assign) BOOL         isSelectable;
-@property (assign) BOOL         markVisitedLinks;
-@property (assign) float        angle;
-@property (assign) GtkTextAlign textAlign;
-@property (assign) GtkWidget    *accelWidget;
++ layout;
+- initLayout;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+ label;
-+ labelWithText:(OFString *)text;
-+ labelWithMarkup:(OFString *)markup;
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- initLabel;
-- initWithText:(OFString *)text;
-- initWithMarkup:(OFString *)markup;
+@property (assign) int scrollWidth;
+@property (assign) int scrollHeight;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)setMarkup:(OFString *)markup;
--(void)setMarkupWithAccel:(OFString *)markup;
-
-//----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onLinkActivated:(char *)uri;
--(void)onPopulateContextMenu:(void *)nativeMenu;
+-(void)putChild:(GtkWidget *)child atX:(int)x andY:(int)y;
 
 @end
 //==================================================================================================================================

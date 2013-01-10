@@ -67,9 +67,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkStateFlags            Native_GtkStateFlags
 #define GtkFontChooser           Native_GtkFontChooser
 #define GtkFontButton            Native_GtkFontButton
+#define GtkLayout                Native_GtkLayout
 
 #include <gtk/gtk.h>
 
+#undef GtkLayout
 #undef GtkFontButton
 #undef GtkFontChooser
 #undef GtkStateFlags

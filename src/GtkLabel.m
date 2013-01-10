@@ -109,29 +109,32 @@ static void ConnectionProxy_PopulateContext(struct _GtkLabel *label, struct _Gtk
   [pool drain];
 }
 //----------------------------------------------------------------------------------------------------------------------------------
--(int)maxCharLength                               { return gtk_label_get_max_width_chars(NATIVE_LABEL);                }
--(void)setMaxCharLength:(int)maxCharLength        { gtk_label_set_max_width_chars(NATIVE_LABEL, maxCharLength);        }
+-(int)maxCharLength                               { return gtk_label_get_max_width_chars(NATIVE_LABEL);                  }
+-(void)setMaxCharLength:(int)maxCharLength        { gtk_label_set_max_width_chars(NATIVE_LABEL, maxCharLength);          }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)useMarkup                                  { return gtk_label_get_use_markup(NATIVE_LABEL);                     }
--(void)setUseMarkup:(BOOL)useMarkup               { gtk_label_set_use_markup(NATIVE_LABEL, useMarkup);                 }
+-(BOOL)useMarkup                                  { return gtk_label_get_use_markup(NATIVE_LABEL);                       }
+-(void)setUseMarkup:(BOOL)useMarkup               { gtk_label_set_use_markup(NATIVE_LABEL, useMarkup);                   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)useEllipsis                                { return (gtk_label_get_ellipsize(NATIVE_LABEL) != 0);               }
--(void)setUseEllipsis:(BOOL)useEllipsis           { gtk_label_set_ellipsize(NATIVE_LABEL, useEllipsis ? 3 : 0);        }
+-(BOOL)useEllipsis                                { return (gtk_label_get_ellipsize(NATIVE_LABEL) != 0);                 }
+-(void)setUseEllipsis:(BOOL)useEllipsis           { gtk_label_set_ellipsize(NATIVE_LABEL, useEllipsis ? 3 : 0);          }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)useWrapping                                { return gtk_label_get_line_wrap(NATIVE_LABEL);                      }
--(void)setUseWrapping:(BOOL)useWrapping           { gtk_label_set_line_wrap(NATIVE_LABEL, useWrapping);                }
+-(BOOL)useWrapping                                { return gtk_label_get_line_wrap(NATIVE_LABEL);                        }
+-(void)setUseWrapping:(BOOL)useWrapping           { gtk_label_set_line_wrap(NATIVE_LABEL, useWrapping);                  }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)isSelectable                               { return gtk_label_get_selectable(NATIVE_LABEL);                     }
--(void)setIsSelectable:(BOOL)isSelectable         { gtk_label_set_selectable(NATIVE_LABEL, isSelectable);              }
+-(BOOL)isSelectable                               { return gtk_label_get_selectable(NATIVE_LABEL);                       }
+-(void)setIsSelectable:(BOOL)isSelectable         { gtk_label_set_selectable(NATIVE_LABEL, isSelectable);                }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(BOOL)markVisitedLinks                           { return gtk_label_get_track_visited_links(NATIVE_LABEL);            }
--(void)setMarkVisitedLinks:(BOOL)markVisitedLinks { gtk_label_set_track_visited_links(NATIVE_LABEL, markVisitedLinks); }
+-(BOOL)markVisitedLinks                           { return gtk_label_get_track_visited_links(NATIVE_LABEL);              }
+-(void)setMarkVisitedLinks:(BOOL)markVisitedLinks { gtk_label_set_track_visited_links(NATIVE_LABEL, markVisitedLinks);   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--(float)angle                                     { return (float)gtk_label_get_angle(NATIVE_LABEL);                   }
--(void)setAngle:(float)angle                      { gtk_label_set_angle(NATIVE_LABEL, (double)angle);                  }
+-(float)angle                                     { return (float)gtk_label_get_angle(NATIVE_LABEL);                     }
+-(void)setAngle:(float)angle                      { gtk_label_set_angle(NATIVE_LABEL, (double)angle);                    }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(GtkTextAlign)textAlign                          { return (GtkTextAlign)gtk_label_get_justify(NATIVE_LABEL);            }
+-(void)setTextAlign:(GtkTextAlign)textAlign       { gtk_label_set_justify(NATIVE_LABEL, (GtkJustification)textAlign); }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -(GtkWidget *)accelWidget                         { return [GtkWidget nativeToWrapper:gtk_label_get_mnemonic_widget(NATIVE_LABEL)]; }
--(void)setAccelWidget:(GtkWidget *)accelWidget    { gtk_label_set_mnemonic_widget(NATIVE_LABEL, accelWidget.native);   }
+-(void)setAccelWidget:(GtkWidget *)accelWidget    { gtk_label_set_mnemonic_widget(NATIVE_LABEL, accelWidget.native);     }
 
 //==================================================================================================================================
 // Utilities

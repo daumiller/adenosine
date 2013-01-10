@@ -72,6 +72,7 @@ objgtk : src/GtkBin.o              \
          src/GtkGrid.o             \
          src/GtkImage.o            \
          src/GtkLabel.o            \
+         src/GtkLayout.o           \
          src/GtkMenu.o             \
          src/GtkMenuBar.o          \
          src/GtkMenuCheck.o        \
