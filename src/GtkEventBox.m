@@ -32,7 +32,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 + (GtkEventBox *)eventBox
 {
-  return [[[self alloc] initLayout] autorelease];
+  return [[[self alloc] initEventBox] autorelease];
 }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - initEventBox
