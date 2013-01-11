@@ -66,16 +66,19 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 //==================================================================================================================================
 -(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top
 {
+  [_children addObject:widget];
   gtk_grid_attach(NATIVE_GRID, widget.native, left, top, 1, 1);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)attachWidget:(GtkWidget *)widget left:(int)left top:(int)top width:(int)width height:(int)height
 {
+  [_children addObject:widget];
   gtk_grid_attach(NATIVE_GRID, widget.native, left, top, width, height);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 -(void)attachWidget:(GtkWidget *)widget nextTo:(GtkWidget *)sibling onSide:(GtkPosition)position width:(int)colWidth height:(int)rowHeight
 {
+  [_children addObject:widget];
   gtk_grid_attach_next_to(NATIVE_GRID, widget.native, sibling.native, (GtkPositionType)position, colWidth, rowHeight);
 }
 //----------------------------------------------------------------------------------------------------------------------------------
