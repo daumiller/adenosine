@@ -171,6 +171,18 @@ static void ConnectionProxy_DidClose(struct _GtkWindow *window, void *data)
 {
   //TODO:
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void *)hotkeyId
+{
+  void *hkid = [self getProperty:@"adenosine-window-hotkeyId"];
+  if(hkid == NULL)
+  {
+    hkid = gtk_accel_group_new();
+    gtk_window_add_accel_group(NATIVE_WINDOW, hkid);
+    [self setProperty:@"adenosine-window-hotkeyId" toValue:hkid];
+  }
+  return hkid;
+}
 
 //==================================================================================================================================
 // Utilities

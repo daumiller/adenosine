@@ -45,7 +45,6 @@ testwebkit : libwebkit test07
 test07 : tests/test07.o libgtk libwebkit
 	clang tests/test07.o src/Gtk*.o src/WebKit*.o -o tests/test07.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0 webkitgtk-3.0` `objfw-config --libs`	
 
-
 #===================================================================================================================================
 extras : OFRegexTester
 
@@ -58,7 +57,7 @@ extras/OFRegexTester.o : extras/OFRegexTester.m
 #===================================================================================================================================
 libgtk : objgtk
 	ar rcs libadenosine.a src/*.o
-	clang -shared src/*.o -o libadenosine.so `objfw-config --libs` `pkg-config --libs gdk-3.0 pango`
+	clang -shared src/*.o -o libadenosine.so `objfw-config --libs` `pkg-config --libs gtk+-3.0`
 
 objgtk : src/GtkBin.o              \
          src/GtkBox.o              \
@@ -115,7 +114,7 @@ src/WebKitWebView.o : src/WebKitWebView.m
 
 #===================================================================================================================================
 %.o : %.m
-	clang -c $^ -o $@ -I./ -I../ `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
+	clang -c $^ -o $@ -I./ -I../ -fPIC `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
 
 #===================================================================================================================================
 clean :

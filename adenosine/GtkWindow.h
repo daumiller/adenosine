@@ -49,18 +49,19 @@ typedef enum
 @interface GtkWindow : GtkBin
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (assign) OFString *title;
-@property (assign) GtkWidget *modalParent;
-@property (assign) GtkWindowState state;
-@property (assign) BOOL isResizable;
-@property (assign) BOOL isModal;
-@property (assign) BOOL isUrgent;
-@property (assign) BOOL isDecorated;
-@property (assign) BOOL showInTaskbar;
-@property (assign) BOOL showInPager;
-@property (assign) BOOL quitOnClose;
-@property (assign) OMSize       size;
-@property (assign) OMCoordinate position;
+@property (assign)   OFString *title;
+@property (assign)   GtkWidget *modalParent;
+@property (assign)   GtkWindowState state;
+@property (assign)   BOOL isResizable;
+@property (assign)   BOOL isModal;
+@property (assign)   BOOL isUrgent;
+@property (assign)   BOOL isDecorated;
+@property (assign)   BOOL showInTaskbar;
+@property (assign)   BOOL showInPager;
+@property (assign)   BOOL quitOnClose;
+@property (assign)   OMSize       size;
+@property (assign)   OMCoordinate position;
+@property (readonly) void        *hotkeyId;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 + window;

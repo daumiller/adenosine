@@ -139,6 +139,19 @@ static void ConnectionProxy_Activated(struct _GtkMenuItem *menuItem, void *data)
 }
 
 //==================================================================================================================================
+// Utilities
+//==================================================================================================================================
+-(void)addHotkey:(unsigned int)keyCode withModifiers:(GtkModifier)modifiers toWindow:(GtkWindow *)window
+{
+  gtk_widget_add_accelerator(NATIVE_WIDGET, "activate", window.hotkeyId, keyCode, (GdkModifierType)modifiers, GTK_ACCEL_VISIBLE);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+-(void)removeHotkey:(unsigned int)keyCode withModifiers:(GtkModifier)modifiers fromWindow:(GtkWindow *)window
+{
+  gtk_widget_remove_accelerator(NATIVE_WIDGET, window.hotkeyId, keyCode, (GdkModifierType)modifiers);
+}
+
+//==================================================================================================================================
 // Signal Handlers
 //==================================================================================================================================
 -(void)onActivated

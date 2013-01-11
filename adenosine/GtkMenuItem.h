@@ -49,6 +49,11 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 @property (retain) GtkWidget *submenu;
 
 //----------------------------------------------------------------------------------------------------------------------------------
+//TODO: we need a wrapper Key Enumeration (not depending on GTK/GDK for this...)
+-(void)addHotkey:(unsigned int)keyCode withModifiers:(GtkModifier)modifiers toWindow:(GtkWindow *)window;
+-(void)removeHotkey:(unsigned int)keyCode withModifiers:(GtkModifier)modifiers fromWindow:(GtkWindow *)window;
+
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)onActivated;
 
 @end
