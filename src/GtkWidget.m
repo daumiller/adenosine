@@ -368,6 +368,16 @@ static BOOL ConnectionProxy_KeyRelease(struct _GtkWidget *widget, GdkEventKey *e
   [pool drain];
   return data;
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+-(OMCoordinate) translateCoordinate:(OMCoordinate)local toFamily:(GtkWidget *)relative
+{
+  int srcX = (int)local.x,
+      srcY = (int)local.y,
+      dstX = 0,
+      dstY = 0;
+  gtk_widget_translate_coordinates(NATIVE_WIDGET, relative.native, srcX, srcY, &dstX, &dstY);
+  return OMMakeCoordinate((float)dstX, (float)dstY);
+}
 
 //==================================================================================================================================
 // (Default) Signal Handlers

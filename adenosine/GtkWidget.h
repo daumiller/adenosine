@@ -86,6 +86,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 - (void  ) queueDrawAll;
 - (void  ) setProperty:(OFString *)property toValue:(void *)value;
 - (void *) getProperty:(OFString *)property;
+- (OMCoordinate) translateCoordinate:(OMCoordinate)local toFamily:(GtkWidget *)relative;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 -(BOOL)onDrawToSurface:(OMSurface *)surface;

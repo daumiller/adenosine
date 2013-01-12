@@ -411,31 +411,24 @@ static GtkEventBox *GtkListBox_createItem(GtkListBox *listbox, GtkLabel *label, 
       [item grabFocus];
       //make sure currently selected item is visible
       {
-        //TODO: once we get GtkAdjustments implemented (DO NEED!), rewrite this block
-        //NOTE: and maybe some helpers in GtkWidget or GtkViewport?
-        void *vAdjust   = gtk_scrolled_window_get_vadjustment(NATIVE_SCROLLED);
-        float maxScroll = (float)gtk_adjustment_get_upper(vAdjust);
-        
-             if(_selectedIndex == 0)          { gtk_adjustment_set_value(vAdjust, 0.0      ); } //easy case
-        else if(_selectedIndex == (_count-1)) { gtk_adjustment_set_value(vAdjust, maxScroll); } //easy case
+             if(_selectedIndex == 0)           { self.verticalAdjustment.value = 0.0f;                          } //simple case
+        else if(_selectedIndex == (_count -1)) { self.verticalAdjustment.value = self.verticalAdjustment.upper; } //simple case
         else
         {
           GtkEventBox *nextItem = (GtkEventBox *)[_items objectAtIndex:_selectedIndex+1];
-          int canvasInt; 
-          gtk_widget_translate_coordinates(item.native, _grid.native, 0,0, NULL,&canvasInt);
-          float canvasTop    = (float)canvasInt;
-          gtk_widget_translate_coordinates(nextItem.native, _grid.native, 0,0, NULL,&canvasInt);
-          float canvasBottom = (float)canvasInt;
+          OMCoordinate top    = [item     translateCoordinate:OMMakeCoordinate(0.0f,0.0f) toFamily:_grid];
+          OMCoordinate bottom = [nextItem translateCoordinate:OMMakeCoordinate(0.0f,0.0f) toFamily:_grid];
 
-          float windowSize   = (float)gtk_adjustment_get_page_size(vAdjust);
-          float windowTop    = (float)gtk_adjustment_get_value(vAdjust);
-          float windowBottom = windowTop + windowSize;
+          // Manual
+          /*
+          float windowBottom = self.verticalAdjustment.value + self.verticalAdjustment.pageSize;
+          printf("windowBottom: %3.0f, value: %3.0f, top: %3.0f, bottom: %3.0f\n", windowBottom, self.verticalAdjustment.value, top.y, bottom.y);
+               if(self.verticalAdjustment.value > top.y) self.verticalAdjustment.value = top.y;
+          else if(windowBottom < bottom.y) self.verticalAdjustment.value += (bottom.y - windowBottom);
+          */
+          // Automatic
+          [self.verticalAdjustment movePageOverRangeLower:top.y upper:bottom.y];
 
-          //see if we need to scroll into view
-          if(windowTop > canvasTop)
-            gtk_adjustment_set_value(vAdjust, (double)canvasTop);
-          else if(windowBottom < canvasBottom)
-            gtk_adjustment_set_value(vAdjust, (double)(windowTop + (canvasBottom - windowBottom)));
         }
       }
     }

@@ -1,5 +1,5 @@
 //==================================================================================================================================
-// GtkScrolledWindow.h
+// GtkAdjustment.h
 /*==================================================================================================================================
 Copyright © 2013 Dillon Aumiller <dillonaumiller@gmail.com>
 
@@ -18,42 +18,57 @@ You should have received a copy of the GNU General Public License
 along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <ObjFW/ObjFW.h>
-#import <adenosine/GtkBin.h>
+
 
 //==================================================================================================================================
-@interface GtkScrolledWindow : GtkBin
+@class GtkAdjustment;
+@protocol GtkAdjustmentDelegate <OFObject>
+@optional
+-(void)gtkAdjustmentChanged:(GtkAdjustment *)adjustment;
+-(void)gtkAdjustment:(GtkAdjustment *)adjustment valueChangedTo:(float)value;
+@end
+
+//==================================================================================================================================
+@interface GtkAdjustment : OFObject
 {
-  GtkAdjustment *_horizontalAdjustment;
-  GtkAdjustment *_verticalAdjustment;
-  float _scrollScaleX;
-  float _scrollScaleY;
-  BOOL  _scrollScaled;
-  unsigned long _scaleScrollingConnectionId;
+  void           *_native;
+  id              _delegate;
+  OFMutableArray *_connections;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
-+scrolledWindow;
--initScrolledWindow;
++ (BOOL) isWrapped:(void *)native;
++ nativeToWrapper:(void *)native;
++ wrapExistingNative:(void *)native;
+- initWithExistingNative:(void *)native;
+-(void)installNativeLookup;
+-(void)destroy;
 
 //----------------------------------------------------------------------------------------------------------------------------------
-@property (readonly) GtkAdjustment   *horizontalAdjustment;
-@property (readonly) GtkAdjustment   *verticalAdjustment;
-@property (assign)   GtkBorderShadow  shadow;
-@property (assign)   GtkCorner        placement;
-@property (assign)   GtkScrollbarShow horizontalPolicy;
-@property (assign)   GtkScrollbarShow verticalPolicy;
-@property (assign)   OMSize           minimumContentSize;
-@property (assign)   float            scrollScaleX;
-@property (assign)   float            scrollScaleY;
-@property (assign)   BOOL             scrollScaled;
+@property (readonly) void *native;
+@property (assign)   float value;
+@property (assign)   float lower;
+@property (assign)   float upper;
+@property (assign)   float pageSize;
+@property (assign)   float pageIncrement;
+@property (assign)   float stepIncrement;
+@property (assign)   id    delegate;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(void)addWithViewport:(GtkWidget *)child;
+-(void)movePageOverRangeLower:(float)lower upper:(float)upper;
+-(void)configureValue:(float)value lower:(float)lower upper:(float)upper pageSize:(float)pageSize pageIncrement:(float)pageInc stepIncrement:(float)stepInc;
+-(float)minimumIncrement;
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-(void)emitChanged;
+-(void)emitValueChanged;
 
 //----------------------------------------------------------------------------------------------------------------------------------
--(BOOL)onScrollModifier:(GtkScrollDirection *)direction by:(OMCoordinate *)deltas at:(OMCoordinate *)local root:(OMCoordinate *)root modifiers:(GtkModifier *)modifiers;
+-(void)onChanged;
+-(void)onValueChanged;
 
+//==================================================================================================================================
 @end
+
 //==================================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------------------
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

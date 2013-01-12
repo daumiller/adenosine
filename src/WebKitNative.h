@@ -70,6 +70,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #define GtkEventBox              Native_GtkEventBox
 #define GtkListBox               Native_GtkListBox
 #define GtkWindowPosition        Native_GtkWindowPosition
+#define GtkAdjustment            Native_GtkAdjustment
 
 #define WebKitWebView            Native_WebKitWebView
 #define WebKitNavigationResponse Native_WebKitNavigationResponse
@@ -86,6 +87,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 #undef WebKitNavigationResponse
 #undef WebKitWebView
 
+#undef GtkAdjustment
 #undef GtkWindowPosition
 #undef GtkListBox
 #undef GtkEventBox

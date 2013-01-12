@@ -59,7 +59,8 @@ libgtk : objgtk
 	ar rcs libadenosine.a src/*.o
 	clang -shared src/*.o -o libadenosine.so `objfw-config --libs` `pkg-config --libs gtk+-3.0`
 
-objgtk : src/GtkBin.o              \
+objgtk : src/GtkAdjustment.o       \
+         src/GtkBin.o              \
          src/GtkBox.o              \
          src/GtkBuilder.o          \
          src/GtkButton.o           \

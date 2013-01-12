@@ -19,6 +19,7 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 ==================================================================================================================================*/
 #import <adenosine/GtkEnums.h>
 
+#import <adenosine/GtkAdjustment.h>
 #import <adenosine/GtkBin.h>
 #import <adenosine/GtkBox.h>
 #import <adenosine/GtkBuilder.h>

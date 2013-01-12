@@ -54,6 +54,16 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 @implementation GtkScrolledWindow
 
 //==================================================================================================================================
+// Wrapper (overrides)
+//==================================================================================================================================
+-(void)destroy
+{
+  [_horizontalAdjustment release];
+  [_verticalAdjustment release];
+  [super destroy];
+}
+
+//==================================================================================================================================
 // Constructors/Destructor
 //==================================================================================================================================
 + scrolledWindow { return [[[self alloc] initScrolledWindow] autorelease]; }
@@ -77,6 +87,21 @@ static BOOL ConnectionProxy_Scroll(struct _GtkWidget *widget, GdkEventScroll *ev
 //==================================================================================================================================
 // Properites
 //==================================================================================================================================
+-(GtkAdjustment *)horizontalAdjustment
+{
+  if(_horizontalAdjustment) return _horizontalAdjustment;
+  GtkAdjustment *adj = [GtkAdjustment wrapExistingNative:gtk_scrolled_window_get_hadjustment(NATIVE_SCROLLED)];
+  _horizontalAdjustment = [adj retain];
+  return _horizontalAdjustment;
+}
+-(GtkAdjustment *)verticalAdjustment
+{
+  if(_verticalAdjustment) return _verticalAdjustment;
+  GtkAdjustment *adj = [GtkAdjustment wrapExistingNative:gtk_scrolled_window_get_vadjustment(NATIVE_SCROLLED)];
+  _verticalAdjustment = [adj retain];
+  return _verticalAdjustment;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
 @synthesize scrollScaleX = _scrollScaleX;
 @synthesize scrollScaleY = _scrollScaleY;
 //----------------------------------------------------------------------------------------------------------------------------------
