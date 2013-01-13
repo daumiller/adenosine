@@ -32,6 +32,9 @@ along with adenosine.  If not, see <http://www.gnu.org/licenses/>.
 - initFromStock:(OFString *)stock size:(GtkIconSize)size;
 
 //----------------------------------------------------------------------------------------------------------------------------------
+@property (readonly) void *nativePixbuf;
+
+//----------------------------------------------------------------------------------------------------------------------------------
 -(void)clearImage;
 -(void)setImageFromFile:(OFString *)file;
 -(void)setImageFromStock:(OFString *)stock size:(GtkIconSize)size;
