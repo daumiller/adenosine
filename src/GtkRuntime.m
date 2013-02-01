@@ -40,8 +40,13 @@ static char **GtkRuntime_noargs_s = NULL;
 @synthesize isRunning = _isRunning;
 
 //----------------------------------------------------------------------------------------------------------------------------------
+//preprocessor work-around for some newer (windows-only?) Macro issues...
+#define GtkWindow Native_GtkWindow
+#define GtkBox    Native_GtkBox
 - (void)startup { gtk_init(&GtkRuntime_noargs_i, &GtkRuntime_noargs_s); }
 - (void)startupWithArgC:(int *)argc andArgV:(char ***)argv { gtk_init(argc, argv); }
+#undef GtkBox
+#undef GtkWindow
 //----------------------------------------------------------------------------------------------------------------------------------
 - (void)mainLoopBegin { _isRunning = YES; gtk_main();                        }
 - (void)mainLoopQuit  { if(_isRunning) { _isRunning = NO; gtk_main_quit(); } }
