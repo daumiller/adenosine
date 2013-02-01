@@ -61,7 +61,7 @@ test07 : tests/test07.o libgtk libwebkit
 extras : OFRegexTester
 
 OFRegexTester : extras/OFRegexTester.o libgtk
-	clang extras/OFRegexTester.o src/Gtk*.o ../../OFExtensions/OFRegex.o -o extras/OFRegexTester$(EXTBINARY) -I./ -I../ -I../../OFExtensions $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
+	clang extras/OFRegexTester.o libadenosine$(EXTSHARED) $(LIBATROPINE) ../../OFExtensions/OFRegex.o -o extras/OFRegexTester$(EXTBINARY) -I./ -I../ -I../../OFExtensions `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
 
 extras/OFRegexTester.o : extras/OFRegexTester.m
 	clang -c extras/OFRegexTester.m -o extras/OFRegexTester.o -I./ -I../ -I../../OFExtensions `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
