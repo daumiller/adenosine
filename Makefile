@@ -4,52 +4,64 @@ webkit : testwebkit libwebkit
 extra  : extras
 
 #===================================================================================================================================
+# Linux
+EXTSHARED=.so
+EXTBINARY=.bin
+#--------------------------------------------------
+# Windows
+#EXTSHARED=.dll
+#EXTBINARY=.exe
+#--------------------------------------------------
+# Common
+LIBATROPINE=../atropine/libatropine$(EXTSHARED)
+
+#===================================================================================================================================
 tests : test00 test01 test02 test03 test04 test05 test06 test08 test09 test10 test11
 
 test00 : tests/test00.o libgtk
-	clang tests/test00.o src/Gtk*.o -o tests/test00.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test00.o src/Gtk*.o -o tests/test00$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test01 : tests/test01.o libgtk
-	clang tests/test01.o src/Gtk*.o -o tests/test01.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test01.o src/Gtk*.o -o tests/test01$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test02 : tests/test02.o libgtk
-	clang tests/test02.o src/Gtk*.o -o tests/test02.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test02.o src/Gtk*.o -o tests/test02$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test03 : tests/test03.o libgtk
-	clang tests/test03.o src/Gtk*.o -o tests/test03.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test03.o src/Gtk*.o -o tests/test03$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test04 : tests/test04.o libgtk
-	clang tests/test04.o src/Gtk*.o -o tests/test04.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test04.o src/Gtk*.o -o tests/test04$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test05 : tests/test05.o libgtk
-	clang tests/test05.o src/Gtk*.o -o tests/test05.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test05.o src/Gtk*.o -o tests/test05$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test06 : tests/test06.o libgtk
-	clang tests/test06.o src/Gtk*.o -o tests/test06.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test06.o src/Gtk*.o -o tests/test06$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test08 : tests/test08.o libgtk
-	clang tests/test08.o src/Gtk*.o -o tests/test08.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test08.o src/Gtk*.o -o tests/test08$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test09 : tests/test09.o libgtk
-	clang tests/test09.o src/Gtk*.o -o tests/test09.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test09.o src/Gtk*.o -o tests/test09$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test10 : tests/test10.o libgtk
-	clang tests/test10.o src/Gtk*.o -o tests/test10.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test10.o src/Gtk*.o -o tests/test10$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 test11 : tests/test11.o libgtk
-	clang tests/test11.o src/Gtk*.o -o tests/test11.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs`
+	clang tests/test11.o src/Gtk*.o -o tests/test11$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs`
 
 #===================================================================================================================================
 testwebkit : libwebkit test07
 
 test07 : tests/test07.o libgtk libwebkit
-	clang tests/test07.o src/Gtk*.o src/WebKit*.o -o tests/test07.bin -I./ -I../ ../atropine/libatropine.so `pkg-config --libs gtk+-3.0 webkitgtk-3.0` `objfw-config --libs`	
+	clang tests/test07.o src/Gtk*.o src/WebKit*.o -o tests/test07$(EXTBINARY) -I./ -I../ $(LIBATROPINE) `pkg-config --libs gtk+-3.0 webkitgtk-3.0` `objfw-config --libs`	
 
 #===================================================================================================================================
 extras : OFRegexTester
 
 OFRegexTester : extras/OFRegexTester.o libgtk
-	clang extras/OFRegexTester.o src/Gtk*.o ../../OFExtensions/OFRegex.o -o extras/OFRegexTester.bin -I./ -I../ -I../../OFExtensions ../atropine/libatropine.so `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
+	clang extras/OFRegexTester.o src/Gtk*.o ../../OFExtensions/OFRegex.o -o extras/OFRegexTester$(EXTBINARY) -I./ -I../ -I../../OFExtensions $(LIBATROPINE) `pkg-config --libs gtk+-3.0` `objfw-config --libs` -lpcre
 
 extras/OFRegexTester.o : extras/OFRegexTester.m
 	clang -c extras/OFRegexTester.m -o extras/OFRegexTester.o -I./ -I../ -I../../OFExtensions `objfw-config --cflags --objcflags` `pkg-config --cflags gtk+-3.0`
@@ -57,7 +69,7 @@ extras/OFRegexTester.o : extras/OFRegexTester.m
 #===================================================================================================================================
 libgtk : objgtk
 	ar rcs libadenosine.a src/*.o
-	clang -shared src/*.o -o libadenosine.so `objfw-config --libs` `pkg-config --libs gtk+-3.0`
+	clang -shared $(LIBATROPINE) src/*.o -o libadenosine$(EXTSHARED) `objfw-config --libs` `pkg-config --libs gtk+-3.0`
 
 objgtk : src/GtkAdjustment.o       \
          src/GtkBin.o              \
@@ -120,10 +132,10 @@ src/WebKitWebView.o : src/WebKitWebView.m
 #===================================================================================================================================
 clean :
 	rm -f *.a
-	rm -f *.so
+	rm -f *$(EXTSHARED)
 	rm -f src/*.o
 	rm -f tests/*.o
-	rm -f tests/*.bin
+	rm -f tests/*$(EXTBINARY)
 	rm -f extras/*.o
-	rm -f extras/*.bin
+	rm -f extras/*$(EXTBINARY)
 	rm -f dump.png
