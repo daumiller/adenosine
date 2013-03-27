@@ -21,4 +21,4 @@ Windows:<br/>
 <img src="https://raw.github.com/daumiller/adenosine/master/screenshots/screenshot01.png" />
 
 ##License
-GPLv3
+BSD
